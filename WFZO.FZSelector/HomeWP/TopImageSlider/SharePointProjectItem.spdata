@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="TopImageSliderUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="TopImageSlider\" Type="ElementManifest" />
+    <ProjectItemFile Source="TopImageSlider.webpart" Target="TopImageSlider\" Type="ElementFile" />
+    <ProjectItemFile Source="TopImageSliderUserControl.ascx" Target="CONTROLTEMPLATES\WFZO.FZSelector.HomeWP\TopImageSlider\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="WFZO.FZSelector.HomeWP.TopImageSlider" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

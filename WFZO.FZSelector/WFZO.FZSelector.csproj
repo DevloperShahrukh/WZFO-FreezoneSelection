@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2524CCF0-8AD1-4F35-8901-69F85B055BBA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WFZO.FZSelector</RootNamespace>
+    <AssemblyName>WFZO.FZSelector</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetOfficeVersion>15.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\Category.cs" />
+    <Compile Include="Classes\ClsDBAccess.cs" />
+    <Compile Include="Classes\Connection.cs" />
+    <Compile Include="Classes\Subcategory.cs" />
+    <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.cs">
+      <DependentUpon>LoginUC.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.designer.cs">
+      <DependentUpon>LoginUC.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\BenchmarkingWP\BenchmarkingWP.cs" />
+    <Compile Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx.cs">
+      <DependentUpon>BenchmarkingWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx.designer.cs">
+      <DependentUpon>BenchmarkingWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWP.cs" />
+    <Compile Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWPUserControl.ascx.cs">
+      <DependentUpon>BenchmarkWithWeightWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWPUserControl.ascx.designer.cs">
+      <DependentUpon>BenchmarkWithWeightWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Commons.cs" />
+    <Compile Include="Classes\Constants.cs" />
+    <Compile Include="ControlTemplates\WFZO.FZSelector\FooterUC.ascx.cs">
+      <DependentUpon>FooterUC.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlTemplates\WFZO.FZSelector\FooterUC.ascx.designer.cs">
+      <DependentUpon>FooterUC.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWP.cs" />
+    <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx.cs">
+      <DependentUpon>FeedbackFormWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx.designer.cs">
+      <DependentUpon>FeedbackFormWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\FreeZoneWP\FreeZoneWP.cs" />
+    <Compile Include="OtherWP\FreeZoneWP\FreeZoneWPUserControl.ascx.cs">
+      <DependentUpon>FreeZoneWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\FreeZoneWP\FreeZoneWPUserControl.ascx.designer.cs">
+      <DependentUpon>FreeZoneWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HomeWP\BottomImageSlider\BottomImageSlider.cs" />
+    <Compile Include="HomeWP\BottomImageSlider\BottomImageSliderUserControl.ascx.cs">
+      <DependentUpon>BottomImageSliderUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeWP\BottomImageSlider\BottomImageSliderUserControl.ascx.designer.cs">
+      <DependentUpon>BottomImageSliderUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HomeWP\DashBoardWP\DashBoardWP.cs" />
+    <Compile Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx.cs">
+      <DependentUpon>DashBoardWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx.designer.cs">
+      <DependentUpon>DashBoardWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HomeWP\NewsWP\NewsWP.cs" />
+    <Compile Include="HomeWP\NewsWP\NewsWPUserControl.ascx.cs">
+      <DependentUpon>NewsWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeWP\NewsWP\NewsWPUserControl.ascx.designer.cs">
+      <DependentUpon>NewsWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HomeWP\TopImageSlider\TopImageSlider.cs" />
+    <Compile Include="HomeWP\TopImageSlider\TopImageSliderUserControl.ascx.cs">
+      <DependentUpon>TopImageSliderUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HomeWP\TopImageSlider\TopImageSliderUserControl.ascx.designer.cs">
+      <DependentUpon>TopImageSliderUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\NewsListingWP\NewsListingWP.cs" />
+    <Compile Include="OtherWP\NewsListingWP\NewsListingWPUserControl.ascx.cs">
+      <DependentUpon>NewsListingWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\NewsListingWP\NewsListingWPUserControl.ascx.designer.cs">
+      <DependentUpon>NewsListingWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OtherWP\BenchmarkingWP\BenchmarkingWP.webpart" />
+    <None Include="OtherWP\BenchmarkingWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{4b9ce43b-5aad-4157-b0e5-7f677e7b4cbd}</SharePointProjectItemId>
+    </None>
+    <None Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWP.webpart" />
+    <None Include="OtherWP\BenchmarkWithWeightWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{aee2578f-1a5f-4c1a-be65-76fcff800085}</SharePointProjectItemId>
+    </None>
+    <None Include="ControlTemplates\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{ff798472-274b-4ee6-a26c-972a1a9c9557}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\WFZO Feature\WFZO Feature.feature">
+      <FeatureId>{b74aed29-bd91-4845-8246-2ecb520ddd86}</FeatureId>
+    </None>
+    <None Include="OtherWP\FeedbackFormWP\FeedbackFormWP.webpart" />
+    <None Include="OtherWP\FeedbackFormWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d512aa7c-0fd7-48a0-af78-7767847c7856}</SharePointProjectItemId>
+    </None>
+    <None Include="OtherWP\FreeZoneWP\FreeZoneWP.webpart" />
+    <None Include="OtherWP\FreeZoneWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{37832549-8a70-404a-8c55-1821cc4b1e22}</SharePointProjectItemId>
+    </None>
+    <None Include="HomeWP\BottomImageSlider\BottomImageSlider.webpart" />
+    <None Include="HomeWP\BottomImageSlider\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{4800e96d-c267-42fc-87c1-2a96cb2afc31}</SharePointProjectItemId>
+    </None>
+    <None Include="HomeWP\DashBoardWP\DashBoardWP.webpart" />
+    <None Include="HomeWP\DashBoardWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{4c0171df-0844-479c-bb2b-a52785a6e39a}</SharePointProjectItemId>
+    </None>
+    <None Include="HomeWP\TopImageSlider\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{859ac23c-8f62-4901-9018-0cfe7993ec38}</SharePointProjectItemId>
+    </None>
+    <None Include="HomeWP\TopImageSlider\TopImageSlider.webpart" />
+    <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{17e6c1d4-9a8d-4db3-9266-7741a4c77bdd}</SharePointProjectItemId>
+    </None>
+    <None Include="HomeWP\NewsWP\NewsWP.webpart" />
+    <None Include="HomeWP\NewsWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{9c8e19a5-6062-4d1f-a095-621d4e6a49cf}</SharePointProjectItemId>
+    </None>
+    <None Include="OtherWP\NewsListingWP\NewsListingWP.webpart" />
+    <None Include="OtherWP\NewsListingWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{90a845cc-25d8-4456-b2d6-5b2a9064507d}</SharePointProjectItemId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{dfb169ce-5a41-46a9-bb7f-871417e9ea60}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx" />
+    <Content Include="Layouts\WFZO.FZSelector\js\CustomScript.js" />
+    <Content Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx" />
+    <Content Include="OtherWP\BenchmarkingWP\Elements.xml" />
+    <Content Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWPUserControl.ascx" />
+    <Content Include="OtherWP\BenchmarkWithWeightWP\Elements.xml" />
+    <Content Include="ControlTemplates\WFZO.FZSelector\FooterUC.ascx" />
+    <Content Include="Features\WFZO Feature\WFZO Feature.Template.xml">
+      <DependentUpon>WFZO Feature.feature</DependentUpon>
+    </Content>
+    <Content Include="OtherWP\FeedbackFormWP\Elements.xml" />
+    <Content Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx" />
+    <Content Include="OtherWP\FreeZoneWP\Elements.xml" />
+    <Content Include="OtherWP\FreeZoneWP\FreeZoneWPUserControl.ascx" />
+    <Content Include="HomeWP\BottomImageSlider\BottomImageSliderUserControl.ascx" />
+    <Content Include="HomeWP\BottomImageSlider\Elements.xml" />
+    <Content Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx" />
+    <Content Include="HomeWP\DashBoardWP\Elements.xml" />
+    <Content Include="HomeWP\NewsWP\Elements.xml" />
+    <Content Include="HomeWP\NewsWP\NewsWPUserControl.ascx" />
+    <Content Include="HomeWP\TopImageSlider\Elements.xml" />
+    <Content Include="HomeWP\TopImageSlider\TopImageSliderUserControl.ascx" />
+    <Content Include="OtherWP\NewsListingWP\Elements.xml" />
+    <Content Include="OtherWP\NewsListingWP\NewsListingWPUserControl.ascx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>

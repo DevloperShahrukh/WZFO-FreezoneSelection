@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="BenchmarkWithWeightWPUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="BenchmarkWithWeightWP\" Type="ElementManifest" />
+    <ProjectItemFile Source="BenchmarkWithWeightWP.webpart" Target="BenchmarkWithWeightWP\" Type="ElementFile" />
+    <ProjectItemFile Source="BenchmarkWithWeightWPUserControl.ascx" Target="CONTROLTEMPLATES\WFZO.FZSelector\BenchmarkWithWeightWP\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="WFZO.FZSelector.BenchmarkWithWeightWP" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

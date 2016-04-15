@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="dfb169ce-5a41-46a9-bb7f-871417e9ea60" solutionId="dfb169ce-5a41-46a9-bb7f-871417e9ea60" resetWebServer="false" sharePointProductVersion="15.0" name="WFZO.FZSelector" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="b74aed29-bd91-4845-8246-2ecb520ddd86" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="17e6c1d4-9a8d-4db3-9266-7741a4c77bdd" />
+    <projectItemReference itemId="ff798472-274b-4ee6-a26c-972a1a9c9557" />
+  </projectItems>
+</package>
