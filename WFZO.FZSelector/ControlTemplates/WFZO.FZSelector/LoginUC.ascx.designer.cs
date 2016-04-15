@@ -22,22 +22,22 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector {
         protected global::System.Web.UI.WebControls.Panel PlLogin;
         
         /// <summary>
-        /// email control.
+        /// TxtUserID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox email;
+        protected global::System.Web.UI.WebControls.TextBox TxtUserID;
         
         /// <summary>
-        /// password control.
+        /// TxtPassword control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox password;
+        protected global::System.Web.UI.WebControls.TextBox TxtPassword;
         
         /// <summary>
         /// btnUserLogin control.
@@ -49,13 +49,22 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector {
         protected global::System.Web.UI.WebControls.Button btnUserLogin;
         
         /// <summary>
-        /// checkbox control.
+        /// LblInvalidUser control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox checkbox;
+        protected global::System.Web.UI.WebControls.Label LblInvalidUser;
+        
+        /// <summary>
+        /// ChkStaySignedIn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ChkStaySignedIn;
         
         /// <summary>
         /// Label2 control.

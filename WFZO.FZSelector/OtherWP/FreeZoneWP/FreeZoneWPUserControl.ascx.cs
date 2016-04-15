@@ -184,12 +184,7 @@ namespace WFZO.FZSelector.FreeZoneWP
             BindFreezoneTreeView(ddlFreeZone.SelectedItem.Value);
         }
 
-        protected void btnShowReport_Click(object sender, EventArgs e)
-        {
-            Response.Write(hdnCountryCatIds.Value);
-            Response.Write(hdnFreezoneCatIds.Value);
-            Response.Write(hdnFreezoneProfileCatIds.Value);
-        }
+        
        
 
     }

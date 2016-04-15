@@ -1,9 +1,9 @@
 ﻿function AddToHidden(treeViewName, HiddenValueId) {
-    var ParameterIds = '';
+    var ParameterIds = '0';
     $('td .' + treeViewName + 'Child').each(function (index) {
         if ($(this).prev().is(':checked')) {
 
-            if (ParameterIds == '') {
+            if (ParameterIds == '0') {
                 ParameterIds = $(this).find('span').attr('id');
             }
             else {

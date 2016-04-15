@@ -21,20 +21,24 @@
                                 <div class="inner-addon left-addon">
                                     <i class="glyphicon glyphicon-user"></i>
                                     <%--<input id="email" type="email" class="form-control email" placeholder="Login ID" name="email" />--%>
-                                    <asp:TextBox ID="email" runat="server" TextMode="Email" class="form-control email" placeholder="Login ID" name="email"></asp:TextBox>
+                                    <asp:TextBox ID="TxtUserID" runat="server" TextMode="Email" class="form-control email" placeholder="Login ID" name="email"></asp:TextBox>
                                 </div>
                                 <div class="inner-addon left-addon">
                                     <i class="fa fa-lock pw"></i>
                                     <%--<input id="password" type="password" class="form-control password" placeholder="......." name="password" />--%>
-                                    <asp:TextBox ID="password" runat="server" TextMode="Password" class="form-control password" placeholder="......." name="password"></asp:TextBox>
+                                    <asp:TextBox ID="TxtPassword" runat="server" TextMode="Password" class="form-control password" placeholder="......." name="password"></asp:TextBox>
                                 </div>
                                 <div class="form-group">
                                     <%--<button class="btn user-login">LOG IN</button>--%>
                                     <asp:Button ID="btnUserLogin" runat="server" Text="LOG IN" class="btn user-login" OnClick="btnUserLogin_Click" />
                                 </div>
                                 <div class="controls">
+                                    <asp:Label ID="LblInvalidUser" runat="server" Text="" ForeColor="DarkRed"></asp:Label>
+                                </div>
+
+                                <div class="controls">
                                     <label class="checkbox-inline remember-check">
-                                        <asp:CheckBox ID="checkbox" runat="server" CssClass="checkbox-custom" Checked="true" />
+                                        <asp:CheckBox ID="ChkStaySignedIn" runat="server" CssClass="checkbox-custom" Checked="true" />
                                         <asp:Label ID="Label2" runat="server" Text="Remember me" CssClass="checkbox-custom-label"></asp:Label>
                                     </label>
                                     <%--<input id="checkbox-1" class="checkbox-custom" name="checkbox-1" type="checkbox" checked>--%>

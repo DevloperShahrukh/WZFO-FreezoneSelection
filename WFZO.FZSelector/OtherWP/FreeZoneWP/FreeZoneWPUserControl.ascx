@@ -22,10 +22,14 @@
 
         CollectParameters();
 
-        var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/Untitled.rdl&rp:@FreezoneId= + <%= ddlFreeZone.SelectedItem.Value %>' ;
+        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
         
-        ReportUrl += '&rp:CountryID=' + <%= ddlCountry.SelectedItem.Value %> + '&rp:CountryIDCountryLevelSubCategoryIds=' <%= hdnCountryCatIds.Value %>
-        + '&rp:CountryID=<%= ddlCountry.SelectedItem.Value %>&rp:CountryLevelSubCategoryIds=<%= hdnCountryCatIds.Value %>&rp:FreezoneLevelSubCategoryIds=<%= hdnFreezoneCatIds.Value %>';
+        ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
+        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
+        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
+        + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
+
+        window.open(ReportUrl);
     }
 
 
@@ -157,7 +161,7 @@
                 <div class="form-group">
                     <label for="freezone" class="col-md-4 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="CollectParameters();" OnClick="btnShowReport_Click" />
+                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;" UseSubmitBehavior="false"  />
                     </div>
                 </div>
             </div>
