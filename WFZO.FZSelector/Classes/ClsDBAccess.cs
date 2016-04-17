@@ -490,4 +490,38 @@ public class ClsDBAccess
             chk.DataBind();
         }
     }
+
+    public static int GetIntScalarVal(string SPName, params SqlParameter[] Parameters)
+    {
+        int output = 0;
+        using (SqlConnection cn = new Connection().getConnection())
+        {
+            SqlCommand cmd = new SqlCommand(SPName, cn);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+            if (Parameters != null)
+                foreach (SqlParameter item in Parameters)
+                    cmd.Parameters.Add(item);
+            cn.Open();
+
+            try
+            {
+                output = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch
+            {
+                if (cn != null) cn.Close();
+                throw;
+            }
+
+            cn.Close();
+            cmd = null;
+        }
+        return output;
+    }
+
+
+
+
+
 }

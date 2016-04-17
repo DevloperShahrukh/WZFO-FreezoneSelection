@@ -50,12 +50,15 @@
       <HintPath>..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.SharePoint.IdentityModel\v4.0_15.0.0.0__71e9bce111e9429c\Microsoft.SharePoint.IdentityModel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
@@ -73,6 +76,13 @@
     </Compile>
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.designer.cs">
       <DependentUpon>LoginUC.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Layouts\WFZO.FZSelector\WebMethods.aspx.cs">
+      <DependentUpon>WebMethods.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\WFZO.FZSelector\WebMethods.aspx.designer.cs">
+      <DependentUpon>WebMethods.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="OtherWP\BenchmarkingWP\BenchmarkingWP.cs" />
     <Compile Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx.cs">
@@ -211,10 +221,13 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ApplicationPages\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx" />
     <Content Include="Layouts\WFZO.FZSelector\js\CustomScript.js" />
+    <Content Include="Layouts\WFZO.FZSelector\WebMethods.aspx" />
     <Content Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx" />
     <Content Include="OtherWP\BenchmarkingWP\Elements.xml" />
     <Content Include="OtherWP\BenchmarkWithWeightWP\BenchmarkWithWeightWPUserControl.ascx" />

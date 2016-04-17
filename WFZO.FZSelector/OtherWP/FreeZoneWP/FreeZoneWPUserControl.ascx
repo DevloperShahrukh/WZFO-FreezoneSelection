@@ -30,10 +30,30 @@
         + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
 
         window.open(ReportUrl);
+
+        UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
+
+        function FreezoneAnalyticData(RegionId, CountryId, CityId, FreezoneId) {
+            this.RegionId = RegionId;
+            this.CountryId = CountryId;
+            this.CityId = CityId;
+            this.FreezoneId = FreezoneId;
+            
+        }
+
+
+        var temp = [];
+        var emp = new FreezoneAnalyticData(1, 1, 1);
+        var emp2 = new FreezoneAnalyticData(1, 1, 1);
+        var emp3 = new FreezoneAnalyticData(1, 1, 1);
+        temp.push(emp);
+        temp.push(emp2);
+        temp.push(emp3);
+
+
+
+        UpdateFreeZoneAnalytics(temp);
     }
-
-
-
 </script>
 
 <div class="row mt35">

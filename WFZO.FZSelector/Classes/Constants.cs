@@ -12,6 +12,13 @@ namespace WFZO.FZSelector
         {
             public const string News = "/News";
         }
+        public static class Modules
+        {
+            public const string Benchmarking = "Benchmarking";
+            public const string Weighted = "Weighted";
+            public const string Profile = "Profile";
+            
+        }
          public static class List
          {
              public static class BaseColumns
@@ -20,6 +27,8 @@ namespace WFZO.FZSelector
                  public const string IsActive = "IsActive";
                  public const string Created = "Created";
              }
+
+             
              public static class Pages
              {
                  public const string Name = "Pages";

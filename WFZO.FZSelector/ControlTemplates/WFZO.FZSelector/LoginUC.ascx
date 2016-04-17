@@ -34,12 +34,16 @@
                                 </div>
                                 <div class="controls">
                                     <asp:Label ID="LblInvalidUser" runat="server" Text="" ForeColor="DarkRed"></asp:Label>
+
+
+                                    <asp:Button ID="btnInformAdmin" runat="server" Text="Button" />
                                 </div>
 
                                 <div class="controls">
                                     <label class="checkbox-inline remember-check">
                                         <asp:CheckBox ID="ChkStaySignedIn" runat="server" CssClass="checkbox-custom" Checked="true" />
                                         <asp:Label ID="Label2" runat="server" Text="Remember me" CssClass="checkbox-custom-label"></asp:Label>
+
                                     </label>
                                     <%--<input id="checkbox-1" class="checkbox-custom" name="checkbox-1" type="checkbox" checked>--%>
                                     <%--<label for="checkbox-1" class="checkbox-custom-label">Remember me</label>--%>

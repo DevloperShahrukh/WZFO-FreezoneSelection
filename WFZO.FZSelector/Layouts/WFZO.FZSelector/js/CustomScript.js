@@ -16,6 +16,37 @@
 }
 
 
+function UpdateCategoryAnalytics(SubCategoryIds, ModuleName) {
+
+    $.ajax({
+        method: "POST",
+        url: "/_layouts/15/WFZO.FZSelector/WebMethods.aspx/UpdateCategoryAnalytics",
+        data: JSON.stringify({ SubCategoryIds: SubCategoryIds, ModuleName: ModuleName }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (msg) {
+        },
+    });
+}
+
+
+
+function UpdateFreeZoneAnalytics(ObjectArray) {
+
+    $.ajax({
+        method: "POST",
+        url: "/_layouts/15/WFZO.FZSelector/WebMethods.aspx/UpdateFreeZoneAnalytics",
+        data: JSON.stringify({ DataArray: ObjectArray }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (msg) {
+        },
+    });
+}
+
+
 function OnTreeClick(evt) {
     var src = window.event != window.undefined ? window.event.srcElement : evt.target;
     var isChkBoxClick = (src.tagName.toLowerCase() == "input" && src.type == "checkbox");
