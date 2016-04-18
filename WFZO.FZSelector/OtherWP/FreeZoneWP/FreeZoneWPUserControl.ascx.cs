@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using WFZO.FZSelector.Classes;
 
 namespace WFZO.FZSelector.FreeZoneWP
 {
+
     public partial class FreeZoneWPUserControl : UserControl
     {
+        public List<FreezoneAnalyticData> FreezoneDataList = new List<FreezoneAnalyticData>();
         ClsDBAccess obj = new ClsDBAccess();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -18,6 +22,8 @@ namespace WFZO.FZSelector.FreeZoneWP
                 tvFreezoneCategories.Attributes.Add("onclick", "OnTreeClick(event)");
                 tvCountryCategories.Attributes.Add("onclick", "OnTreeClick(event)");
                 bindRegion();
+
+
             }
         }
         public void bindRegion()
@@ -70,11 +76,11 @@ namespace WFZO.FZSelector.FreeZoneWP
                 ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
             }
 
-            
+
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void BindFreezoneTreeView(string FreezoneIds)
@@ -182,10 +188,19 @@ namespace WFZO.FZSelector.FreeZoneWP
             BindFreezoneProfileCategoryTreeView(1);
             BindCountryCategoryTreeView(ddlCountry.SelectedItem.Value);
             BindFreezoneTreeView(ddlFreeZone.SelectedItem.Value);
+
+
+            FreezoneAnalyticData FAD = new FreezoneAnalyticData();
+            FAD.CityId = Convert.ToInt32(ddlCity.SelectedItem.Value);
+            FAD.CountryId = Convert.ToInt32(ddlCountry.SelectedItem.Value);
+            FAD.FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
+            FAD.RegionId = Convert.ToInt32(ddlRegion.SelectedItem.Value);
+            FreezoneDataList.Add(FAD);
+
         }
 
-        
-       
+
+
 
     }
 }

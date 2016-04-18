@@ -57,6 +57,7 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
@@ -68,6 +69,7 @@
     <Compile Include="Classes\Category.cs" />
     <Compile Include="Classes\ClsDBAccess.cs" />
     <Compile Include="Classes\Connection.cs" />
+    <Compile Include="Classes\FreezoneAnalyticData.cs" />
     <Compile Include="Classes\Subcategory.cs" />
     <Compile Include="Classes\WZFOUtility.cs" />
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.cs">
@@ -168,6 +170,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="OtherWP\BenchmarkingWP\BenchmarkingWP.webpart" />
     <None Include="OtherWP\BenchmarkingWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{4b9ce43b-5aad-4157-b0e5-7f677e7b4cbd}</SharePointProjectItemId>

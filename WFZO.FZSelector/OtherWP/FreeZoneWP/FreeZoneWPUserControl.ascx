@@ -6,7 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="FreeZoneWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.FreeZoneWP.FreeZoneWPUserControl" %>
-
+<%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 
 
 <script src="/Style Library/WFZO/js/jquery.min.js"></script>
@@ -33,26 +33,7 @@
 
         UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
 
-        function FreezoneAnalyticData(RegionId, CountryId, CityId, FreezoneId) {
-            this.RegionId = RegionId;
-            this.CountryId = CountryId;
-            this.CityId = CityId;
-            this.FreezoneId = FreezoneId;
-            
-        }
-
-
-        var temp = [];
-        var emp = new FreezoneAnalyticData(1, 1, 1);
-        var emp2 = new FreezoneAnalyticData(1, 1, 1);
-        var emp3 = new FreezoneAnalyticData(1, 1, 1);
-        temp.push(emp);
-        temp.push(emp2);
-        temp.push(emp3);
-
-
-
-        UpdateFreeZoneAnalytics(temp);
+        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
     }
 </script>
 
@@ -160,6 +141,7 @@
                             <ParentNodeStyle Font-Bold="False" />
                             <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
                             <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
+
                         </asp:TreeView>
 
                         <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">

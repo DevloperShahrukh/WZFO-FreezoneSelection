@@ -5,18 +5,21 @@ using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using WFZO.FZSelector.Classes;
 
 namespace WFZO.FZSelector.BenchmarkingWP
 {
     public partial class BenchmarkingWPUserControl : UserControl
     {
+        public List<FreezoneAnalyticData> FreezoneDataList = new List<FreezoneAnalyticData>();
         ClsDBAccess obj = new ClsDBAccess();
         protected void Page_Load(object sender, EventArgs e)
         {
 
             if (!IsPostBack)
             {
-                CountryTreeView.Attributes.Add("onclick", "OnTreeClick(event)");
+                tvCountryCategories.Attributes.Add("onclick", "OnTreeClick(event)");
+                tvFreezoneCategories.Attributes.Add("onclick", "OnTreeClick(event)");
                 bindgridview();
                 bindRegion();
             }
@@ -42,6 +45,12 @@ namespace WFZO.FZSelector.BenchmarkingWP
             dt.Columns.Add("Country", typeof(string));
             dt.Columns.Add("City", typeof(string));
             dt.Columns.Add("FreeZone", typeof(string));
+            dt.Columns.Add("RegionId", typeof(int));
+            dt.Columns.Add("CountryId", typeof(int));
+            dt.Columns.Add("CityId", typeof(int));
+            dt.Columns.Add("FreeZoneId", typeof(int));
+
+
             ViewState["TempBenchmarking"] = dt;
         }
         protected void ddlRegion_SelectedIndexChanged(object sender, EventArgs e)
@@ -85,7 +94,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
         protected void Button1_Click(object sender, EventArgs e)
         {
 
-
             PlSelectedZone.Visible = true;
             DataTable dt = ViewState["TempBenchmarking"] as DataTable;
             DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
@@ -96,15 +104,21 @@ namespace WFZO.FZSelector.BenchmarkingWP
             row["City"] = ddlCity.SelectedItem.Text;
             row["FreeZone"] = ddlFreeZone.SelectedItem.Text;
 
+            row["RegionId"] = ddlRegion.SelectedItem.Value;
+            row["CountryId"] = ddlCountry.SelectedItem.Value;
+            row["CityId"] = ddlCity.SelectedItem.Value;
+            row["FreeZoneId"] = ddlFreeZone.SelectedItem.Value;
+
             if (temprow.Length <= 0)
             {
                 dt.Rows.Add(row);
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
             }
+
             if (GridView1.Rows.Count >= 2)
             {
-
+                FreezoneDataList = new List<FreezoneAnalyticData>();
                 string countries = "";
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -119,19 +133,19 @@ namespace WFZO.FZSelector.BenchmarkingWP
                         countries = countries + "," + Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
                     }
 
-
+                    PopulateListOfSelectedFreezones(dt.Rows[i]);
                 }
                 BindTreeViewControl(countries);
 
                 lblError.Visible=false;
                 btnReport.Enabled = true;
-                CountryTreeView.Visible = true;
+                tvCountryCategories.Visible = true;
             }
             else
             {
                 lblError.Visible=false;
                 btnReport.Enabled = false;
-                CountryTreeView.Visible = false;
+                tvCountryCategories.Visible = false;
             }
         }
 
@@ -148,6 +162,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 GridView1.DataBind();
                 if (GridView1.Rows.Count > 1)
                 {
+                    FreezoneDataList = new List<FreezoneAnalyticData>();
                     string countries = "";
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -162,18 +177,19 @@ namespace WFZO.FZSelector.BenchmarkingWP
                             countries = countries + "," + Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
                         }
 
-
+                        
+                        PopulateListOfSelectedFreezones(dt.Rows[i]);
                     }
                     BindTreeViewControl(countries);
                     lblError.Visible = false;
                     btnReport.Visible = true;
-                    CountryTreeView.Visible = true;
+                    tvCountryCategories.Visible = true;
                 }
                 else
                 {
                     lblError.Visible = false;
                     btnReport.Visible = false;
-                    CountryTreeView.Visible = false;
+                    tvCountryCategories.Visible = false;
                     //CountryTreeView.
                 }
 
@@ -190,7 +206,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
         {
             try
             {
-                CountryTreeView.Nodes.Clear();
+                tvCountryCategories.Nodes.Clear();
                 Hashtable par = new Hashtable();
                 par.Add("@CountryId", CountryIds);
                 DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);                //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
@@ -200,7 +216,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                     TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                     root.SelectAction = TreeNodeSelectAction.Expand;
                     CreateNode(root, ds.Tables[0]);
-                    CountryTreeView.Nodes.Add(root);
+                    tvCountryCategories.Nodes.Add(root);
                 }
             }
             catch (Exception Ex) { throw Ex; }
@@ -230,8 +246,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
 
         protected void btnReport_Click(object sender, EventArgs e)
         {
-            
-            if (CountryTreeView.CheckedNodes.Count <= 0)
+
+            if (tvCountryCategories.CheckedNodes.Count <= 0)
             {
                 lblError.Visible = true;
                 lblError.Text = "Please check atleast one checkbox from treeview";
@@ -243,6 +259,17 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 lblError.Text = "Report can be generated now";
 
             }
+        }
+
+        protected void PopulateListOfSelectedFreezones(DataRow SelectedFreezoneDetail)
+        {
+            FreezoneAnalyticData FDA = new FreezoneAnalyticData();
+            FDA.RegionId = Convert.ToInt32(SelectedFreezoneDetail["RegionId"]);
+            FDA.CountryId = Convert.ToInt32(SelectedFreezoneDetail["CountryId"]);
+            FDA.CityId = Convert.ToInt32(SelectedFreezoneDetail["CityId"]);
+            FDA.FreezoneId = Convert.ToInt32(SelectedFreezoneDetail["FreezoneId"]);
+
+            FreezoneDataList.Add(FDA);
         }
 
     }

@@ -7,6 +7,33 @@
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BenchmarkingWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.BenchmarkingWP.BenchmarkingWPUserControl" %>
 
+<script src="/Style Library/WFZO/js/jquery.min.js"></script>
+<script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
+<script>
+    <%--function CollectParameters() {
+        AddToHidden('<%= tvFreezoneProfileCategories.ID %>', '<%= hdnFreezoneProfileCatIds.ClientID %>');
+        AddToHidden('<%= tvFreezoneCategories.ID %>', '<%= hdnFreezoneCatIds.ClientID %>')
+        AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>')
+    }--%>
+
+    function getAndShowReport() {
+
+        //CollectParameters();
+
+        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
+
+        <%--ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
+        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
+        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
+        + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();--%>
+
+        //window.open(ReportUrl);
+
+        <%--UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');--%>
+
+        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+    }
+</script>
 
 <div class="row mt35">
     <div class="col-md-3">
@@ -123,18 +150,36 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <asp:TreeView ID="CountryTreeView" runat="server" ShowCheckBoxes="All" CssClass="tree-box" OnTreeNodeCheckChanged="CountryTreeView_TreeNodeCheckChanged" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
+            <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
                 <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                 <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
                 <ParentNodeStyle Font-Bold="False" />
                 <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+                <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
+
             </asp:TreeView>
+
+            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
+                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+                <ParentNodeStyle Font-Bold="False" />
+                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+                <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
+
+            </asp:TreeView>
+
+            <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
+            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+
         </div>
     </div>
 </asp:Panel>
 <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
 <div class="form-group">
-    
+
     <div class="col-md-8 text-center">
         <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" />
     </div>
@@ -143,7 +188,7 @@
 
 <asp:TreeView ID="FreeZoneTreeView" runat="server"></asp:TreeView>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
     // Treeview Parent-Child check behaviour **//
 
 
@@ -237,4 +282,4 @@
         }
         return parent;
     }
-</script>
+</script>--%>

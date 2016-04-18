@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using WFZO.FZSelector.Classes;
 
 
 namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
@@ -16,7 +17,7 @@ namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
         }
 
         [System.Web.Services.WebMethod()]
-        
+
         public static bool UpdateCategoryAnalytics(string SubCategoryIds, string ModuleName)
         {
             string[] SplittedIds = SubCategoryIds.Split(',');
@@ -38,39 +39,33 @@ namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
             return true;
         }
 
-        
-        public class FreezoneAnalyticData
-        {
-            public int RegionId { get; set; }
-            public int FreezoneId {get; set;}
-            public int CountryId {get; set;}
-            public int CityId {get; set;}
-        }
+
 
         [System.Web.Services.WebMethod()]
-        public static bool UpdateFreeZoneAnalytics(FreezoneAnalyticData[] DataArray)
+        public static bool UpdateFreeZoneAnalytics(List<FreezoneAnalyticData> DataArray)
         {
+            foreach (FreezoneAnalyticData Freezone in DataArray)
+            {
 
-            //SqlParameter sqpRegionId = new SqlParameter("@RegionId", SqlDbType.Int);
-            //sqpRegionId.Value = Convert.ToInt32(SubCategoryId);
+                SqlParameter sqpRegionId = new SqlParameter("@RegionId", SqlDbType.Int);
+                sqpRegionId.Value = Convert.ToInt32(Freezone.RegionId);
 
-            //SqlParameter sqpCountryId = new SqlParameter("@CountryId", SqlDbType.VarChar, 50);
-            //sqpCountryId.Value = ModuleName;
+                SqlParameter sqpCountryId = new SqlParameter("@CountryId", SqlDbType.VarChar, 50);
+                sqpCountryId.Value = Convert.ToInt32(Freezone.CountryId);
 
-            //SqlParameter sqpCityId = new SqlParameter("@CityId", SqlDbType.Int);
-            //sqpCityId.Value = Convert.ToInt32(SubCategoryId);
+                SqlParameter sqpCityId = new SqlParameter("@CityId", SqlDbType.Int);
+                sqpCityId.Value = Convert.ToInt32(Freezone.CityId);
 
-            //SqlParameter sqpFreezoneId = new SqlParameter("@FreezoneId", SqlDbType.VarChar, 50);
-            //sqpFreezoneId.Value = ModuleName;
+                SqlParameter sqpFreezoneId = new SqlParameter("@FreezoneId", SqlDbType.VarChar, 50);
+                sqpFreezoneId.Value = Convert.ToInt32(Freezone.FreezoneId);
 
-            //ClsDBAccess.GetIntScalarVal("UpdateCategoryAnalytics", sqpSubCategoryId, sqpModule);
-
-
+                ClsDBAccess.GetIntScalarVal("UpdateFreeZoneAnalytics", sqpRegionId, sqpCountryId, sqpCityId, sqpFreezoneId);
+            }
 
             return true;
         }
 
-        
+
 
 
 

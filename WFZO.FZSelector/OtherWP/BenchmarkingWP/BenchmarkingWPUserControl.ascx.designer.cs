@@ -112,13 +112,40 @@ namespace WFZO.FZSelector.BenchmarkingWP {
         protected global::System.Web.UI.WebControls.GridView GridView1;
         
         /// <summary>
-        /// CountryTreeView control.
+        /// tvCountryCategories control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TreeView CountryTreeView;
+        protected global::System.Web.UI.WebControls.TreeView tvCountryCategories;
+        
+        /// <summary>
+        /// tvFreezoneCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TreeView tvFreezoneCategories;
+        
+        /// <summary>
+        /// hdnFreezoneCatIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnFreezoneCatIds;
+        
+        /// <summary>
+        /// hdnCountryCatIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCountryCatIds;
         
         /// <summary>
         /// lblError control.
