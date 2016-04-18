@@ -163,7 +163,7 @@
                 <div class="form-group">
                     <label for="freezone" class="col-md-4 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;" UseSubmitBehavior="false"  />
+                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;"   />
                     </div>
                 </div>
             </div>

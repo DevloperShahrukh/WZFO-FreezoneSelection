@@ -224,9 +224,7 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ApplicationPages\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx" />
     <Content Include="Layouts\WFZO.FZSelector\js\CustomScript.js" />

@@ -10,26 +10,25 @@
 <script src="/Style Library/WFZO/js/jquery.min.js"></script>
 <script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
 <script>
-    <%--function CollectParameters() {
-        AddToHidden('<%= tvFreezoneProfileCategories.ID %>', '<%= hdnFreezoneProfileCatIds.ClientID %>');
-        AddToHidden('<%= tvFreezoneCategories.ID %>', '<%= hdnFreezoneCatIds.ClientID %>')
-        AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>')
-    }--%>
+    function CollectParameters() {
+
+        AddToHidden('<%= tvFreezoneCategories.ID %>', '<%= hdnFreezoneCatIds.ClientID %>');
+        AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>');
+    }
 
     function getAndShowReport() {
 
-        //CollectParameters();
+        CollectParameters();
 
-        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
+        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/BenchmarkReport.rdl';
 
-        <%--ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
-        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
-        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
-        + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();--%>
+        ReportUrl += '&rp:CountryID=' + $('#<%= hdnCountryIds.ClientID %>').val()
+        + '&rp:FreezoneId=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
+        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
+        
+        window.open(ReportUrl);
 
-        //window.open(ReportUrl);
-
-        <%--UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');--%>
+        UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Benchmarking %>');
 
         UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
     }
@@ -147,139 +146,56 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
 
-            <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+    <div class="inner-container">
+        <div class="row">
+            <div class="country-form">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
 
-                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
-                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
-                <ParentNodeStyle Font-Bold="False" />
-                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
-                <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
+                            <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
-            </asp:TreeView>
+                                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+                                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+                                <ParentNodeStyle Font-Bold="False" />
+                                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+                                <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
 
-            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                            </asp:TreeView>
 
-                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
-                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
-                <ParentNodeStyle Font-Bold="False" />
-                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
-                <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
+                            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
-            </asp:TreeView>
+                                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+                                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+                                <ParentNodeStyle Font-Bold="False" />
+                                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+                                <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
 
-            <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
-            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+                            </asp:TreeView>
 
-        </div>
-    </div>
+                            <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
+                            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+                            <asp:HiddenField ID="hdnCountryIds" runat="server" />
+                            <asp:HiddenField ID="hdnFreezoneIds" runat="server" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="freezone" class="col-md-4 text-right"></label>
+                        <div class="col-md-8 text-center">
+                            <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false"/>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div></div>
 </asp:Panel>
 <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
-<div class="form-group">
-
-    <div class="col-md-8 text-center">
-        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" />
-    </div>
-</div>
 
 
-<asp:TreeView ID="FreeZoneTreeView" runat="server"></asp:TreeView>
 
-<%--<script type="text/javascript">
-    // Treeview Parent-Child check behaviour **//
-
-
-    function OnTreeClick(evt) {
-        var src = window.event != window.undefined ? window.event.srcElement : evt.target;
-        var isChkBoxClick = (src.tagName.toLowerCase() == "input" && src.type == "checkbox");
-        if (isChkBoxClick) {
-            var parentTable = GetParentByTagName("table", src);
-            var nxtSibling = parentTable.nextSibling;
-            if (nxtSibling && nxtSibling.nodeType == 1)//check if nxt sibling is not null & is an element node
-            {
-                if (nxtSibling.tagName.toLowerCase() == "div") //if node has children
-                {
-                    //check or uncheck children at all levels
-                    CheckUncheckChildren(parentTable.nextSibling, src.checked);
-                }
-            }
-            //check or uncheck parents at all levels
-            CheckUncheckParents(src, src.checked);
-        }
-    }
-
-
-    function CheckUncheckChildren(childContainer, check) {
-        var childChkBoxes = childContainer.getElementsByTagName("input");
-        var childChkBoxCount = childChkBoxes.length;
-        for (var i = 0; i < childChkBoxCount; i++) {
-            childChkBoxes[i].checked = check;
-        }
-    }
-
-
-    function CheckUncheckParents(srcChild, check) {
-        var parentDiv = GetParentByTagName("div", srcChild);
-        var parentNodeTable = parentDiv.previousSibling;
-
-
-        if (parentNodeTable) {
-            var checkUncheckSwitch;
-
-
-            if (check) //checkbox checked
-            {
-                var isAllSiblingsChecked = AreAllSiblingsChecked(srcChild);
-                if (isAllSiblingsChecked)
-                    checkUncheckSwitch = true;
-                else
-                    return; //do not need to check parent if any child is not checked
-            }
-            else //checkbox unchecked
-            {
-                checkUncheckSwitch = false;
-            }
-
-
-            var inpElemsInParentTable = parentNodeTable.getElementsByTagName("input");
-            if (inpElemsInParentTable.length > 0) {
-                var parentNodeChkBox = inpElemsInParentTable[0];
-                parentNodeChkBox.checked = checkUncheckSwitch;
-                //do the same recursively
-                CheckUncheckParents(parentNodeChkBox, checkUncheckSwitch);
-            }
-        }
-    }
-
-
-    function AreAllSiblingsChecked(chkBox) {
-        var parentDiv = GetParentByTagName("div", chkBox);
-        var childCount = parentDiv.childNodes.length;
-        for (var i = 0; i < childCount; i++) {
-            if (parentDiv.childNodes[i].nodeType == 1) //check if the child node is an element node
-            {
-                if (parentDiv.childNodes[i].tagName.toLowerCase() == "table") {
-                    var prevChkBox = parentDiv.childNodes[i].getElementsByTagName("input")[0];
-                    //if any of sibling nodes are not checked, return false
-                    if (!prevChkBox.checked) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-
-    //utility function to get the container of an element by tagname
-    function GetParentByTagName(parentTagName, childElementObj) {
-        var parent = childElementObj.parentNode;
-        while (parent.tagName.toLowerCase() != parentTagName.toLowerCase()) {
-            parent = parent.parentNode;
-        }
-        return parent;
-    }
-</script>--%>

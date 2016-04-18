@@ -78,10 +78,7 @@ namespace WFZO.FZSelector.FreeZoneWP
 
 
         }
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void BindFreezoneTreeView(string FreezoneIds)
         {
@@ -95,7 +92,7 @@ namespace WFZO.FZSelector.FreeZoneWP
                 for (int i = 0; i < Rows.Length; i++)
                 {
                     TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
-                    root.NavigateUrl = "#Id=111";
+                    
                     root.SelectAction = TreeNodeSelectAction.Expand;
                     CreateNode(root, ds.Tables[0], tvFreezoneCategories);
                     tvFreezoneCategories.Nodes.Add(root);
@@ -185,7 +182,7 @@ namespace WFZO.FZSelector.FreeZoneWP
         {
             int FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
 
-            BindFreezoneProfileCategoryTreeView(1);
+            BindFreezoneProfileCategoryTreeView(FreezoneId);
             BindCountryCategoryTreeView(ddlCountry.SelectedItem.Value);
             BindFreezoneTreeView(ddlFreeZone.SelectedItem.Value);
 

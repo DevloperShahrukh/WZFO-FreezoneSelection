@@ -148,13 +148,22 @@ namespace WFZO.FZSelector.BenchmarkingWP {
         protected global::System.Web.UI.WebControls.HiddenField hdnCountryCatIds;
         
         /// <summary>
-        /// lblError control.
+        /// hdnCountryIds control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblError;
+        protected global::System.Web.UI.WebControls.HiddenField hdnCountryIds;
+        
+        /// <summary>
+        /// hdnFreezoneIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnFreezoneIds;
         
         /// <summary>
         /// btnReport control.
@@ -166,12 +175,12 @@ namespace WFZO.FZSelector.BenchmarkingWP {
         protected global::System.Web.UI.WebControls.Button btnReport;
         
         /// <summary>
-        /// FreeZoneTreeView control.
+        /// lblError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TreeView FreeZoneTreeView;
+        protected global::System.Web.UI.WebControls.Label lblError;
     }
 }

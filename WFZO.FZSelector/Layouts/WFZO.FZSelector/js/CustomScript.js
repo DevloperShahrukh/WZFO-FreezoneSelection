@@ -42,8 +42,7 @@ function UpdateFreeZoneAnalytics(ObjectArray) {
         dataType: "json",
         async: true,
         success: function (msg) {
-            alert(msg);
-            console.log(msg);
+            console.log(msg.d);
         },
     });
 }

@@ -39,6 +39,12 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             dt.Columns.Add("Country", typeof(string));
             dt.Columns.Add("City", typeof(string));
             dt.Columns.Add("FreeZone", typeof(string));
+
+            dt.Columns.Add("RegionId", typeof(int));
+            dt.Columns.Add("CountryId", typeof(int));
+            dt.Columns.Add("CityId", typeof(int));
+            dt.Columns.Add("FreeZoneId", typeof(int));
+
             ViewState["TempBenchmarking"] = dt;
         }
         protected void ddlRegion_SelectedIndexChanged(object sender, EventArgs e)
@@ -89,6 +95,11 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             row["Country"] = ddlCountry.SelectedItem.Text;
             row["City"] = ddlCity.SelectedItem.Text;
             row["FreeZone"] = ddlFreeZone.SelectedItem.Text;
+
+            row["RegionId"] = ddlRegion.SelectedItem.Value;
+            row["CountryId"] = ddlCountry.SelectedItem.Value;
+            row["CityId"] = ddlCity.SelectedItem.Value;
+            row["FreeZoneId"] = ddlFreeZone.SelectedItem.Value;
 
             if (temprow.Length <= 0)
             {
