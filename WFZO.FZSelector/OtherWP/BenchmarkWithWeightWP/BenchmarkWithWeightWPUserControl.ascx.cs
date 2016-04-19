@@ -112,6 +112,15 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             }
 
 
+            if (string.IsNullOrEmpty(hdnFreezoneIds.Value))
+            {
+                hdnFreezoneIds.Value = ddlFreeZone.SelectedItem.Value;
+            }
+            else
+            {
+                hdnFreezoneIds.Value += "," + ddlFreeZone.SelectedItem.Value;
+            }
+
             if (temprow.Length <= 0)
             {
                 dt.Rows.Add(row);
@@ -145,6 +154,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 GridView1.DataBind();
 
                 hdnCountryIds.Value = "";
+                hdnFreezoneIds.Value = "";
                 foreach (DataRow Freezone in dt.Rows)
                 {
                     if (string.IsNullOrEmpty(hdnCountryIds.Value))
@@ -154,6 +164,14 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     else
                     {
                         hdnCountryIds.Value += "," + Convert.ToString(Freezone["CountryId"]);
+                    }
+                    if (string.IsNullOrEmpty(hdnFreezoneIds.Value))
+                    {
+                        hdnFreezoneIds.Value = Convert.ToString(Freezone["FreezoneId"]);
+                    }
+                    else
+                    {
+                        hdnFreezoneIds.Value += "," + Convert.ToString(Freezone["FreezoneId"]);
                     }
                 }
 
@@ -215,7 +233,6 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 }
             }
 
-
             if (checkbox.Checked)
             {
                 txt.Enabled = true;
@@ -249,25 +266,24 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             else
             {
                 lblError.Visible = true;
-                lblError.Text = "Total Wieghtage should be approximately 100";
+                lblError.Text = "Total Weightage should be approximately 100";
             }
         }
 
 
         private void BindgrdCategories(string CountryIds)
         {
-
             Hashtable par = new Hashtable();
             par.Add("@CountryId", CountryIds);
             DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);   //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
             DataRow[] drCategories = ds.Tables[0].Select("parentId = 0");  // Get all parents nodes
 
-            DataTable dtCategories = ds.Tables[0].Clone();
-            dtCategories.Columns.Add("SubCategoryIds", typeof(string));
+            DataTable dtCountryLevelCategories = ds.Tables[0].Clone();
+            dtCountryLevelCategories.Columns.Add("SubCategoryIds", typeof(string));
 
             foreach (DataRow Row in drCategories)
             {
-                DataRow newCategoryRow = dtCategories.NewRow();
+                DataRow newCategoryRow = dtCountryLevelCategories.NewRow();
                 newCategoryRow["Category"] = Row["Category"];
                 newCategoryRow["Id"] = Row["Id"];
                 newCategoryRow["parentId"] = Row["parentId"];
@@ -289,19 +305,56 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 }
                 newCategoryRow["SubCategoryIds"] = SubCatIds;
 
-                dtCategories.Rows.Add(newCategoryRow);
+                dtCountryLevelCategories.Rows.Add(newCategoryRow);
             }
 
+            Hashtable FreezoneParameter = new Hashtable();
+            FreezoneParameter.Add("@FreezoneIds", hdnFreezoneIds.Value);
+            DataSet dsFreezoneCategories = obj.SelectDataProc("GetFreezoneCategoriesAndSubCategoriesByFreezoneIds", FreezoneParameter);   //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
+            DataRow[] drFreezoneCategories = dsFreezoneCategories.Tables[0].Select("parentId = 0");  // Get all parents nodes
 
-            grdWeightedBenchmarking.DataSource = dtCategories;
+            DataTable dtFreezoneLevelCategories = dsFreezoneCategories.Tables[0].Clone();
+            dtFreezoneLevelCategories.Columns.Add("SubCategoryIds", typeof(string));
+
+            
+            foreach (DataRow Row in drFreezoneCategories)
+            {
+                DataRow newCategoryRow = dtFreezoneLevelCategories.NewRow();
+                newCategoryRow["Category"] = Row["Category"];
+                newCategoryRow["Id"] = Row["Id"];
+                newCategoryRow["parentId"] = Row["parentId"];
+                newCategoryRow["CategoryLevel"] = Row["CategoryLevel"];
+
+                DataRow[] drSubCategories = dsFreezoneCategories.Tables[0].Select("parentId = " + Convert.ToString(Row["Id"]));
+
+                string SubCatIds = string.Empty;
+                foreach (DataRow SubCategory in drSubCategories)
+                {
+                    if (string.IsNullOrEmpty(SubCatIds))
+                    {
+                        SubCatIds = Convert.ToString(SubCategory["Id"]);
+                    }
+                    else
+                    {
+                        SubCatIds += "," + Convert.ToString(SubCategory["Id"]);
+                    }
+                }
+                newCategoryRow["SubCategoryIds"] = SubCatIds;
+
+                dtFreezoneLevelCategories.Rows.Add(newCategoryRow);
+            }
+            dtCountryLevelCategories.Merge(dtFreezoneLevelCategories);
+
+            grdWeightedBenchmarking.DataSource = dtCountryLevelCategories;
             grdWeightedBenchmarking.DataBind();
-
-
         }
 
         protected void grdWeightedBenchmarking_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                DataRowView CurrentTopicRow = (DataRowView)e.Item.DataItem;
+            }
         }
     }
 

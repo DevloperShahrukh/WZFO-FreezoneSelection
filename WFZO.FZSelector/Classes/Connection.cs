@@ -35,7 +35,7 @@ public class Connection
                     + "</Where>";
                 query.ViewFields = "<FieldRef Name='Value' />";
                 SPListItemCollection item = list.GetItems(query);
-                Str_StringCon = "Data Source=SPS2013;Initial Catalog=WFZO;User ID=sa; Password=P@ssw0rd" ;
+                Str_StringCon = "Data Source=SPS2013;Initial Catalog=WFZOFinal;User ID=sa; Password=P@ssw0rd" ;
                 //Decrypt(item[0]["Value"].ToString())
                 return new SqlConnection(Str_StringCon);
             }

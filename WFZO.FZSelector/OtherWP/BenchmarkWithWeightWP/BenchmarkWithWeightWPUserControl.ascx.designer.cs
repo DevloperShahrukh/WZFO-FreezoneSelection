@@ -22,6 +22,15 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP {
         protected global::System.Web.UI.WebControls.HiddenField hdnCountryIds;
         
         /// <summary>
+        /// hdnFreezoneIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnFreezoneIds;
+        
+        /// <summary>
         /// hdnCountryCatIds control.
         /// </summary>
         /// <remarks>

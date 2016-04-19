@@ -11,6 +11,7 @@
 
 
 <asp:HiddenField ID="hdnCountryIds" runat="server" />
+<asp:HiddenField ID="hdnFreezoneIds" runat="server" />
 <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
 <asp:HiddenField ID="hdnFreezoneIdsCatIds" runat="server" />
 

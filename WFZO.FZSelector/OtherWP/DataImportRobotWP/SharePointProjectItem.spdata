@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="DataImportRobotWPUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="DataImportRobotWP\" Type="ElementManifest" />
+    <ProjectItemFile Source="DataImportRobotWP.webpart" Target="DataImportRobotWP\" Type="ElementFile" />
+    <ProjectItemFile Source="DataImportRobotWPUserControl.ascx" Target="CONTROLTEMPLATES\WFZO.FZSelector.OtherWP\DataImportRobotWP\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="WFZO.FZSelector.OtherWP.DataImportRobotWP" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

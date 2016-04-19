@@ -41,6 +41,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\Users\sp.admin\Desktop\code wfzo\code wfzo\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.IdentityModel\3.5.0.0__31bf3856ad364e35\Microsoft.IdentityModel.dll</HintPath>
@@ -79,6 +82,7 @@
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.designer.cs">
       <DependentUpon>LoginUC.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExcelPackageExtensions.cs" />
     <Compile Include="Layouts\WFZO.FZSelector\WebMethods.aspx.cs">
       <DependentUpon>WebMethods.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -110,6 +114,14 @@
     </Compile>
     <Compile Include="ControlTemplates\WFZO.FZSelector\FooterUC.ascx.designer.cs">
       <DependentUpon>FooterUC.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWP.cs" />
+    <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx.cs">
+      <DependentUpon>DataImportRobotWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx.designer.cs">
+      <DependentUpon>DataImportRobotWPUserControl.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWP.cs" />
     <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx.cs">
@@ -185,6 +197,10 @@
     <None Include="Features\WFZO Feature\WFZO Feature.feature">
       <FeatureId>{b74aed29-bd91-4845-8246-2ecb520ddd86}</FeatureId>
     </None>
+    <None Include="OtherWP\DataImportRobotWP\DataImportRobotWP.webpart" />
+    <None Include="OtherWP\DataImportRobotWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f26b773b-7f4d-4556-86fe-0fe658f48fd1}</SharePointProjectItemId>
+    </None>
     <None Include="OtherWP\FeedbackFormWP\FeedbackFormWP.webpart" />
     <None Include="OtherWP\FeedbackFormWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{d512aa7c-0fd7-48a0-af78-7767847c7856}</SharePointProjectItemId>
@@ -237,6 +253,8 @@
     <Content Include="Features\WFZO Feature\WFZO Feature.Template.xml">
       <DependentUpon>WFZO Feature.feature</DependentUpon>
     </Content>
+    <Content Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx" />
+    <Content Include="OtherWP\DataImportRobotWP\Elements.xml" />
     <Content Include="OtherWP\FeedbackFormWP\Elements.xml" />
     <Content Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx" />
     <Content Include="OtherWP\FreeZoneWP\Elements.xml" />
