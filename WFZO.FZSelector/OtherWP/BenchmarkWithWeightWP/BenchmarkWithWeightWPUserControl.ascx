@@ -8,6 +8,13 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BenchmarkWithWeightWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.BenchmarkWithWeightWP.BenchmarkWithWeightWPUserControl" %>
 
 
+
+
+<asp:HiddenField ID="hdnCountryIds" runat="server" />
+<asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+<asp:HiddenField ID="hdnFreezoneIdsCatIds" runat="server" />
+
+
 <div class="row mt35">
     <div class="col-md-3">
         <div class="db-small-tab mb20">
@@ -129,26 +136,26 @@
             <div class="panel panel-default">
                 <div class="panel-heading grid-header">Categories <span>*</span></div>
                 <div class="panel-body table-responsive">
-                    <asp:GridView ID="GridView2" runat="server" CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal">
-                    <Columns>
-                        <asp:TemplateField>
-                            <ItemTemplate>
-                                <asp:CheckBox ID="checkbox1" runat="server" OnCheckedChanged="checkbox1_CheckedChanged" AutoPostBack="true" />
-                              
-                                  </ItemTemplate>
-                        </asp:TemplateField>
-                        <asp:BoundField DataField="Country" HeaderText="Level of Category" />
-                        <asp:BoundField DataField="FreeZone" HeaderText="Category" />
-                        <asp:TemplateField>
-                            <HeaderTemplate>
-                                <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
-                            </HeaderTemplate>
-                            <ItemTemplate>
-                                <asp:TextBox ID="quantity" runat="server" Enabled="false" />
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                    </Columns>
-                </asp:GridView>
+                    <asp:GridView ID="grdWeightedBenchmarking" runat="server" CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal" OnRowDataBound="grdWeightedBenchmarking_RowDataBound">
+                        <Columns>
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:CheckBox ID="checkbox1" runat="server" OnCheckedChanged="checkbox1_CheckedChanged" AutoPostBack="true" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:BoundField DataField="CategoryLevel" HeaderText="Category Level" />
+                            <asp:BoundField DataField="Category" HeaderText="Category" />
+                            <asp:BoundField DataField="SubCategoryIds" HeaderText="SubCategoryIds" />
+                            <asp:TemplateField>
+                                <HeaderTemplate>
+                                   <asp:HiddenField ID="hdnSubCatIds" runat="server" /> <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
                 </div>
             </div>
         </div>
@@ -158,7 +165,7 @@
 </asp:Panel>
 <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
 <div class="form-group">
-    
+
     <div class="col-md-8 text-center">
         <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" />
     </div>

@@ -13,6 +13,33 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP {
     public partial class BenchmarkWithWeightWPUserControl {
         
         /// <summary>
+        /// hdnCountryIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCountryIds;
+        
+        /// <summary>
+        /// hdnCountryCatIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnCountryCatIds;
+        
+        /// <summary>
+        /// hdnFreezoneIdsCatIds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hdnFreezoneIdsCatIds;
+        
+        /// <summary>
         /// ddlRegion control.
         /// </summary>
         /// <remarks>
@@ -112,13 +139,13 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP {
         protected global::System.Web.UI.WebControls.GridView GridView1;
         
         /// <summary>
-        /// GridView2 control.
+        /// grdWeightedBenchmarking control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView2;
+        protected global::System.Web.UI.WebControls.GridView grdWeightedBenchmarking;
         
         /// <summary>
         /// lblError control.

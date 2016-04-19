@@ -116,7 +116,7 @@
                 <div class="form-group">
                     <label for="freezone" class="col-md-4 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="Button1" runat="server" Text="ADD TO SELECTION" class="btn btn-collection" OnClick="Button1_Click" />
+                        <%--<asp:Button ID="Button1" runat="server" Text="ADD TO SELECTION" class="btn btn-collection" OnClick="Button1_Click" />--%>
                     </div>
                 </div>
 

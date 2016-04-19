@@ -4,6 +4,7 @@ using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using System.Linq;
 
 namespace WFZO.FZSelector.BenchmarkWithWeightWP
 {
@@ -101,16 +102,24 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             row["CityId"] = ddlCity.SelectedItem.Value;
             row["FreeZoneId"] = ddlFreeZone.SelectedItem.Value;
 
+            if (string.IsNullOrEmpty(hdnCountryIds.Value))
+            {
+                hdnCountryIds.Value = ddlCountry.SelectedItem.Value;
+            }
+            else
+            {
+                hdnCountryIds.Value += "," + ddlCountry.SelectedItem.Value;
+            }
+
+
             if (temprow.Length <= 0)
             {
                 dt.Rows.Add(row);
                 ViewState["TempBenchmarking"] = dt;
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
-                GridView2.DataSource = dt;
-                GridView2.DataBind();
             }
-            if (GridView1.Rows.Count > 0 && GridView2.Rows.Count > 0)
+            if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarking.Rows.Count > 0*/)
             {
                 PlSelectedZone.Visible = true;
                 btnReport.Enabled = true;
@@ -135,9 +144,22 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
 
-                GridView2.DataSource = dt;
-                GridView2.DataBind();
-                if (GridView1.Rows.Count > 0 && GridView2.Rows.Count > 0)
+                hdnCountryIds.Value = "";
+                foreach (DataRow Freezone in dt.Rows)
+                {
+                    if (string.IsNullOrEmpty(hdnCountryIds.Value))
+                    {
+                        hdnCountryIds.Value = Convert.ToString(Freezone["CountryId"]);
+                    }
+                    else
+                    {
+                        hdnCountryIds.Value += "," + Convert.ToString(Freezone["CountryId"]);
+                    }
+                }
+
+                BindgrdCategories(hdnCountryIds.Value);
+
+                if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarking.Rows.Count > 0*/)
                 {
                     PlSelectedZone.Visible = true;
                     btnReport.Enabled = true;
@@ -151,6 +173,8 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 }
             }
         }
+
+
         protected void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             DataTable dt = (DataTable)ViewState["TempBenchmarking"];
@@ -165,7 +189,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             GridViewRow gdrow = (GridViewRow)checkbox.NamingContainer;
             TextBox txt = (TextBox)gdrow.FindControl("quantity");
             int count = 0;
-            foreach (GridViewRow row in GridView2.Rows)
+            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
             {
                 CheckBox chk = (CheckBox)row.FindControl("checkbox1");
                 if (chk.Checked)
@@ -181,7 +205,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
 
 
-            foreach (GridViewRow row in GridView2.Rows)
+            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
             {
                 CheckBox chk = (CheckBox)row.FindControl("checkbox1");
                 if (chk.Checked)
@@ -206,16 +230,17 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
         protected void btnReport_Click(object sender, EventArgs e)
         {
             decimal weight = 0;
-            foreach(GridViewRow row in GridView2.Rows){
-                
-             CheckBox chkbox = (CheckBox)row.Cells[0].FindControl("checkbox1");
+            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
+            {
 
-                if(chkbox.Checked)
+                CheckBox chkbox = (CheckBox)row.Cells[0].FindControl("checkbox1");
+
+                if (chkbox.Checked)
                 {
                     TextBox txtbox = (TextBox)row.Cells[3].FindControl("quantity");
                     weight = weight + Convert.ToInt32(txtbox.Text);
                 }
-              }
+            }
             if (Math.Ceiling(weight) == 100)
             {
                 lblError.Visible = true;
@@ -224,9 +249,60 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             else
             {
                 lblError.Visible = true;
-                lblError.Text = "Total Wieghtage should be approximately 100"; 
+                lblError.Text = "Total Wieghtage should be approximately 100";
             }
         }
 
+
+        private void BindgrdCategories(string CountryIds)
+        {
+
+            Hashtable par = new Hashtable();
+            par.Add("@CountryId", CountryIds);
+            DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);   //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
+            DataRow[] drCategories = ds.Tables[0].Select("parentId = 0");  // Get all parents nodes
+
+            DataTable dtCategories = ds.Tables[0].Clone();
+            dtCategories.Columns.Add("SubCategoryIds", typeof(string));
+
+            foreach (DataRow Row in drCategories)
+            {
+                DataRow newCategoryRow = dtCategories.NewRow();
+                newCategoryRow["Category"] = Row["Category"];
+                newCategoryRow["Id"] = Row["Id"];
+                newCategoryRow["parentId"] = Row["parentId"];
+                newCategoryRow["CategoryLevel"] = Row["CategoryLevel"];
+
+                DataRow[] drSubCategories = ds.Tables[0].Select("parentId = " + Convert.ToString(Row["Id"]));
+
+                string SubCatIds = string.Empty;
+                foreach (DataRow SubCategory in drSubCategories)
+                {
+                    if (string.IsNullOrEmpty(SubCatIds))
+                    {
+                        SubCatIds = Convert.ToString(SubCategory["Id"]);
+                    }
+                    else
+                    {
+                        SubCatIds += "," + Convert.ToString(SubCategory["Id"]);
+                    }
+                }
+                newCategoryRow["SubCategoryIds"] = SubCatIds;
+
+                dtCategories.Rows.Add(newCategoryRow);
+            }
+
+
+            grdWeightedBenchmarking.DataSource = dtCategories;
+            grdWeightedBenchmarking.DataBind();
+
+
+        }
+
+        protected void grdWeightedBenchmarking_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+
+        }
     }
+
 }
