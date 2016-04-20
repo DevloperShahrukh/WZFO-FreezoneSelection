@@ -392,6 +392,11 @@ namespace WFZO.FZSelector.Classes
 
         }
 
+        public static string getWFZOPrimarySiteUrl()
+        {
+            return "http://sps2013";
+
+        }
 
         //public static void resizeImage( string imagePath, int width, int height)
         //{

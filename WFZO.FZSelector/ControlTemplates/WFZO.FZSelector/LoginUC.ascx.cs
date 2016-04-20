@@ -165,7 +165,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                {
                    string reqType = "";
-                   using (SPSite site1 = new SPSite(SPContext.Current.Site.ID))
+                   using (SPSite site1 = new SPSite(WZFOUtility.getWFZOPrimarySiteUrl()))
                    {
                        using (SPWeb web1 = site1.OpenWeb())
                        {
@@ -440,13 +440,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                    {
-                       SPSite parentSite = new SPSite(SPContext.Current.Site.ID);
+                      
+                       //SPUserToken systemToken = parentSite.SystemAccount.UserToken;
 
-                       SPUserToken systemToken = parentSite.SystemAccount.UserToken;
-
-                       using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
+                       //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
+                       using (SPSite parentSite = new SPSite(WZFOUtility.getWFZOPrimarySiteUrl()))
                        {
-                           using (SPWeb web = site.OpenWeb())
+                           using (SPWeb web = parentSite.OpenWeb())
                            {
                                SPList eventsList = SPContext.Current.Web.Lists["ConfigList"];
                                SPQuery query = new SPQuery();
