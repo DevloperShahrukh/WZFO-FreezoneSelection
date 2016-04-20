@@ -22,7 +22,7 @@
 
         CollectParameters();
 
-        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
+        var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
         
         ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
         + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='

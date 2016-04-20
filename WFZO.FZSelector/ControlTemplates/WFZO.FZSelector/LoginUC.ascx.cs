@@ -469,7 +469,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                    emailBody = EmailItem[0]["Email_x0020_Body"].ToString().Replace("&lt;Email&gt;", BlockedEmail);
                                    emailSub = EmailItem[0]["Email_x0020_Subject"].ToString();
                                    WZFOUtility.SendEmail(AdminEmail, web, emailBody, emailSub, false);
-                                   WZFOUtility.LogEmail(AdminEmail, emailSub, emailBody, "User Blocked from Login", site);
+                                   WZFOUtility.LogEmail(AdminEmail, emailSub, emailBody, "User Blocked from Login", parentSite);
                                }
                            }
                        }
