@@ -20,11 +20,11 @@
 
         CollectParameters();
 
-        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/BenchmarkReport.rdl';
+        var ReportUrl = 'http://sps2013/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
 
-        ReportUrl += '&rp:CountryID=' + $('#<%= hdnCountryIds.ClientID %>').val()
-        + '&rp:FreezoneId=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
-        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
+        ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
+        + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
+        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
         
         window.open(ReportUrl);
 
@@ -187,10 +187,8 @@
                         <label for="freezone" class="col-md-4 text-right"></label>
                         <div class="col-md-8 text-center">
                             <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false"/>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div></div>

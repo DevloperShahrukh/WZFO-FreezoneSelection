@@ -114,6 +114,7 @@ namespace WFZO.FZSelector.FreeZoneWP
                 {
                     TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                     root.SelectAction = TreeNodeSelectAction.Expand;
+                    
                     CreateNode(root, ds.Tables[0], tvFreezoneProfileCategories);
                     tvFreezoneProfileCategories.Nodes.Add(root);
                 }
@@ -148,6 +149,8 @@ namespace WFZO.FZSelector.FreeZoneWP
             {
                 TreeNode Childnode = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                 Childnode.SelectAction = TreeNodeSelectAction.Expand;
+
+                Childnode.ToolTip = Convert.ToString(Rows[i]["Definition"]);
                 Childnode.Target = "target";
                 Childnode.Text = "<span id='" + Childnode.Value + "' class='treeviewnode'>" + Childnode.Text + "</span>";
                 node.ChildNodes.Add(Childnode);

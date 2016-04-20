@@ -351,10 +351,17 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
         protected void grdWeightedBenchmarking_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                DataRowView CurrentTopicRow = (DataRowView)e.Item.DataItem;
-            }
+            
+
+            //if (e.Row.RowType == DataControlRowType.DataRow)
+            //{
+            //    //If Salary is less than 10000 than set the row Background Color to Cyan  
+            //    if (Convert.ToInt32(e.Row.Cells[3].Text) < 10000)
+            //    {
+            //        //e.Row.BackColor = Color.Cyan;
+            //    }
+            //}  
+
         }
     }
 

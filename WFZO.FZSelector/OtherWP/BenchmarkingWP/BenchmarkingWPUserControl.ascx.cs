@@ -279,8 +279,9 @@ namespace WFZO.FZSelector.BenchmarkingWP
             {
                 TreeNode Childnode = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                 Childnode.SelectAction = TreeNodeSelectAction.Expand;
-                Childnode.Target = "target";
+                Childnode.ToolTip = Convert.ToString(Rows[i]["Definition"]);
                 Childnode.Text = "<span id='" + Childnode.Value + "' class='treeviewnode'>" + Childnode.Text + "</span>";
+
                 node.ChildNodes.Add(Childnode);
 
                 //CreateNode(Childnode, Dt);

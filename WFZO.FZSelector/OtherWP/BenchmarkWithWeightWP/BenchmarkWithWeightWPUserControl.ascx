@@ -8,8 +8,6 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BenchmarkWithWeightWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.BenchmarkWithWeightWP.BenchmarkWithWeightWPUserControl" %>
 
 
-
-
 <asp:HiddenField ID="hdnCountryIds" runat="server" />
 <asp:HiddenField ID="hdnFreezoneIds" runat="server" />
 <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
@@ -146,13 +144,12 @@
                             </asp:TemplateField>
                             <asp:BoundField DataField="CategoryLevel" HeaderText="Category Level" />
                             <asp:BoundField DataField="Category" HeaderText="Category" />
-                            <asp:BoundField DataField="SubCategoryIds" HeaderText="SubCategoryIds" />
                             <asp:TemplateField>
                                 <HeaderTemplate>
-                                   <asp:HiddenField ID="hdnSubCatIds" runat="server" /> <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
+                                    <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
+                                  <asp:HiddenField ID="hdnSubCatIds" runat="server"  Value='<%# Eval("SubCategoryIds") %>'/>  <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
