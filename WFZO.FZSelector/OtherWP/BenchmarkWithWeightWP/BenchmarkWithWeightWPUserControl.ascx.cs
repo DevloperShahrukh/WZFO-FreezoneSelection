@@ -206,6 +206,8 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             CheckBox checkbox = (CheckBox)sender;
             GridViewRow gdrow = (GridViewRow)checkbox.NamingContainer;
             TextBox txt = (TextBox)gdrow.FindControl("quantity");
+
+
             int count = 0;
             foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
             {
@@ -222,7 +224,9 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             }
 
 
-
+            hdnCountryCatIds.Value = "";
+            hdnFreezoneCatIds.Value = "";
+            hdnCatIdAndWeightageValue.Value = "";
             foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
             {
                 CheckBox chk = (CheckBox)row.FindControl("checkbox1");
@@ -230,6 +234,28 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 {
                     TextBox textbox = (TextBox)row.FindControl("quantity");
                     textbox.Text = Convert.ToString(avg);
+
+                    HiddenField hdnSubCatIds = (HiddenField)row.FindControl("hdnSubCatIds");
+                    if (row.Cells[1].Text.Equals("Country level"))
+                    {
+                        hdnCountryCatIds.Value += hdnSubCatIds.Value;
+                    }
+                    else if (row.Cells[1].Text.Equals("FreeZone level"))
+                    {
+                        hdnFreezoneCatIds.Value += hdnSubCatIds.Value;
+                    }
+
+                    HiddenField hdnCatIds = (HiddenField)row.FindControl("hdnCatIds");
+                    TextBox txtWeightage = (TextBox)row.FindControl("quantity");
+
+                    if (string.IsNullOrEmpty(hdnCatIdAndWeightageValue.Value))
+                    {
+                        hdnCatIdAndWeightageValue.Value += hdnCatIds.Value + ":" + txtWeightage.Text;
+                    }
+                    else
+                    {
+                        hdnCatIdAndWeightageValue.Value += "," + hdnCatIds.Value + ":" + txtWeightage.Text;
+                    }
                 }
             }
 
@@ -316,7 +342,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             DataTable dtFreezoneLevelCategories = dsFreezoneCategories.Tables[0].Clone();
             dtFreezoneLevelCategories.Columns.Add("SubCategoryIds", typeof(string));
 
-            
+
             foreach (DataRow Row in drFreezoneCategories)
             {
                 DataRow newCategoryRow = dtFreezoneLevelCategories.NewRow();
@@ -351,7 +377,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
         protected void grdWeightedBenchmarking_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            
+
 
             //if (e.Row.RowType == DataControlRowType.DataRow)
             //{

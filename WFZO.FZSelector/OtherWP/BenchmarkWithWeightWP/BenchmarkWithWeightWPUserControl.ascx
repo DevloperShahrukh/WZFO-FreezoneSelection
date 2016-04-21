@@ -8,10 +8,33 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BenchmarkWithWeightWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.BenchmarkWithWeightWP.BenchmarkWithWeightWPUserControl" %>
 
 
+<script src="/Style Library/WFZO/js/jquery.min.js"></script>
+<script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
+<script>
+    
+    function getAndShowReport() {
+
+       // CollectParameters();
+
+        var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
+
+        ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
+        + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
+        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
+
+        window.open(ReportUrl);
+
+        UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
+
+<%--        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);--%>
+    }
+</script>
+
 <asp:HiddenField ID="hdnCountryIds" runat="server" />
 <asp:HiddenField ID="hdnFreezoneIds" runat="server" />
 <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
-<asp:HiddenField ID="hdnFreezoneIdsCatIds" runat="server" />
+<asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
+<asp:HiddenField ID="hdnCatIdAndWeightageValue" runat="server" />
 
 
 <div class="row mt35">
@@ -149,7 +172,7 @@
                                     <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                  <asp:HiddenField ID="hdnSubCatIds" runat="server"  Value='<%# Eval("SubCategoryIds") %>'/>  <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
+                                 <asp:HiddenField ID="hdnCatIds" runat="server"  Value='<%# Eval("Id") %>'/>  <asp:HiddenField ID="hdnSubCatIds" runat="server"  Value='<%# Eval("SubCategoryIds") %>'/>  <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
