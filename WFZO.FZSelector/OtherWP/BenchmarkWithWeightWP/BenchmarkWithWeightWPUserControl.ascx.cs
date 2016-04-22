@@ -5,11 +5,14 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Linq;
+using WFZO.FZSelector.Classes;
+using System.Collections.Generic;
 
 namespace WFZO.FZSelector.BenchmarkWithWeightWP
 {
     public partial class BenchmarkWithWeightWPUserControl : UserControl
     {
+        public List<FreezoneAnalyticData> FreezoneDataList = new List<FreezoneAnalyticData>();
         ClsDBAccess obj = new ClsDBAccess();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -121,6 +124,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 hdnFreezoneIds.Value += "," + ddlFreeZone.SelectedItem.Value;
             }
 
+
             if (temprow.Length <= 0)
             {
                 dt.Rows.Add(row);
@@ -140,6 +144,22 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 btnReport.Enabled = false;
                 //GridView2.Visible = false;
             }
+
+
+            if (ViewState["FreezoneDataList"] != null)
+            {
+                FreezoneDataList = (List<FreezoneAnalyticData>)ViewState["FreezoneDataList"];
+            }
+
+            FreezoneAnalyticData FAD = new FreezoneAnalyticData();
+            FAD.RegionId = Convert.ToInt32(row["RegionId"]);
+            FAD.CountryId = Convert.ToInt32(row["CountryId"]);
+            FAD.CityId = Convert.ToInt32(row["CityId"]);
+            FAD.FreezoneId = Convert.ToInt32(row["FreeZoneId"]);
+            FreezoneDataList.Add(FAD);
+
+            ViewState["FreezoneDataList"] = FreezoneDataList;
+
         }
         protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -155,6 +175,8 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
                 hdnCountryIds.Value = "";
                 hdnFreezoneIds.Value = "";
+                ViewState["FreezoneDataList"] = null;
+                FreezoneDataList = new List<FreezoneAnalyticData>();
                 foreach (DataRow Freezone in dt.Rows)
                 {
                     if (string.IsNullOrEmpty(hdnCountryIds.Value))
@@ -173,7 +195,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     {
                         hdnFreezoneIds.Value += "," + Convert.ToString(Freezone["FreezoneId"]);
                     }
+
+                    FreezoneAnalyticData FAD = new FreezoneAnalyticData();
+                    FAD.RegionId = Convert.ToInt32(Freezone["RegionId"]);
+                    FAD.CountryId = Convert.ToInt32(Freezone["CountryId"]);
+                    FAD.CityId = Convert.ToInt32(Freezone["CityId"]);
+                    FAD.FreezoneId = Convert.ToInt32(Freezone["FreeZoneId"]);
+                    FreezoneDataList.Add(FAD);
+
                 }
+                ViewState["FreezoneDataList"] = FreezoneDataList;
 
                 BindgrdCategories(hdnCountryIds.Value);
 

@@ -11,10 +11,10 @@
 <script src="/Style Library/WFZO/js/jquery.min.js"></script>
 <script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
 <script>
-    
+
     function getAndShowReport() {
 
-       // CollectParameters();
+        // CollectParameters();
 
         var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
 
@@ -26,7 +26,7 @@
 
         UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 
-<%--        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);--%>
+        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
     }
 </script>
 
@@ -172,7 +172,9 @@
                                     <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                 <asp:HiddenField ID="hdnCatIds" runat="server"  Value='<%# Eval("Id") %>'/>  <asp:HiddenField ID="hdnSubCatIds" runat="server"  Value='<%# Eval("SubCategoryIds") %>'/>  <asp:TextBox  ID="quantity" runat="server" Enabled="false" />
+                                    <asp:HiddenField ID="hdnCatIds" runat="server" Value='<%# Eval("Id") %>' />
+                                    <asp:HiddenField ID="hdnSubCatIds" runat="server" Value='<%# Eval("SubCategoryIds") %>' />
+                                    <asp:TextBox ID="quantity" runat="server" Enabled="false" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
