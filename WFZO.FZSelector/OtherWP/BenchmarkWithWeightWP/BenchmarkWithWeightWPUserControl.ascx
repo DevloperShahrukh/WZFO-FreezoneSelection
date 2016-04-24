@@ -15,18 +15,26 @@
     function getAndShowReport() {
 
         // CollectParameters();
+        var ErrorVariable =   { Error: "" };
 
-        var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
+        if (validateCheckedInputs(ErrorVariable) && validateCheckedInputsSum(ErrorVariable)) {
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
 
-        ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
-        + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
-        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
+            ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
+            + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
+            + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
 
-        window.open(ReportUrl);
+            window.open(ReportUrl);
 
-        UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
+            //UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 
-        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+            //UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+        }
+        else {
+            alert(ErrorVariable.Error);
+        }
+
+
     }
 </script>
 
@@ -152,17 +160,22 @@
         </div>
     </div>
 
-    <div class="row">
+   
+
+</asp:Panel>
+
+<asp:Panel ID="pnlCategories" runat="server" Visible="false">
+     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading grid-header">Categories <span>*</span></div>
                 <div class="panel-body table-responsive">
-                    <asp:GridView ID="grdWeightedBenchmarking" runat="server" CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal" OnRowDataBound="grdWeightedBenchmarking_RowDataBound">
+                    <asp:GridView ID="grdWeightedBenchmarkingCategories" runat="server"  CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal"  >
                         <Columns>
                             <asp:TemplateField>
                                 <ItemTemplate>
-                                    <asp:CheckBox ID="checkbox1" runat="server" OnCheckedChanged="checkbox1_CheckedChanged" AutoPostBack="true" />
+                                    <asp:CheckBox ID="chkSelectedCategory" runat="server" OnCheckedChanged="chkSelectedCategory_CheckedChanged" AutoPostBack="true" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:BoundField DataField="CategoryLevel" HeaderText="Category Level" />
@@ -172,9 +185,9 @@
                                     <asp:Label ID="lblWeightage" runat="server" Text="Weightage"></asp:Label>
                                 </HeaderTemplate>
                                 <ItemTemplate>
-                                    <asp:HiddenField ID="hdnCatIds" runat="server" Value='<%# Eval("Id") %>' />
+                                    <asp:HiddenField ID="hdnCatId" runat="server" Value='<%# Eval("Id") %>' />
                                     <asp:HiddenField ID="hdnSubCatIds" runat="server" Value='<%# Eval("SubCategoryIds") %>' />
-                                    <asp:TextBox ID="quantity" runat="server" Enabled="false" />
+                                    <asp:TextBox ID="quantity" runat="server"  Enabled="false" TextMode="Number" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -184,12 +197,14 @@
         </div>
         <div class="col-md-2"></div>
     </div>
-
-</asp:Panel>
-<asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
+    <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
 <div class="form-group">
 
-    <div class="col-md-8 text-center">
-        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" />
+    <div class="col-md-8 text-center"> 
+        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" OnClientClick="getAndShowReport();return false;" />
     </div>
 </div>
+    </asp:Panel>
+
+
+

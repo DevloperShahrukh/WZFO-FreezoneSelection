@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WFZO.FZSelector.Classes
 {
+    [Serializable]
     public class FreezoneAnalyticData
     {
         public int RegionId { get; set; }

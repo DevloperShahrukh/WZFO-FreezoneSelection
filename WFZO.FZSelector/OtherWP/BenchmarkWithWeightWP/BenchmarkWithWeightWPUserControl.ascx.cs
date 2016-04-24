@@ -132,17 +132,23 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
             }
-            if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarking.Rows.Count > 0*/)
+            if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarkingCategories.Rows.Count > 1*/)
             {
                 PlSelectedZone.Visible = true;
                 btnReport.Enabled = true;
-                //  GridView2.Visible = true;
+
+                if (GridView1.Rows.Count > 1)
+                {
+                    BindgrdCategories(hdnCountryIds.Value);
+                    pnlCategories.Visible = true;
+                }
+
             }
             else
             {
                 PlSelectedZone.Visible = false;
                 btnReport.Enabled = false;
-                //GridView2.Visible = false;
+                pnlCategories.Visible = false;
             }
 
 
@@ -206,9 +212,9 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 }
                 ViewState["FreezoneDataList"] = FreezoneDataList;
 
-                BindgrdCategories(hdnCountryIds.Value);
 
-                if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarking.Rows.Count > 0*/)
+
+                if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarkingCategories.Rows.Count > 0*/)
                 {
                     PlSelectedZone.Visible = true;
                     btnReport.Enabled = true;
@@ -219,6 +225,17 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     PlSelectedZone.Visible = false;
                     btnReport.Enabled = false;
                     //GridView2.Visible = false;
+                }
+
+                if (dt.Rows.Count > 1)
+                {
+                    BindgrdCategories(hdnCountryIds.Value);
+                    pnlCategories.Visible = true;
+                }
+                else
+                {
+                    pnlCategories.Visible = false;
+
                 }
             }
         }
@@ -232,7 +249,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             GridView1.DataBind();
         }
 
-        protected void checkbox1_CheckedChanged(object sender, EventArgs e)
+        protected void chkSelectedCategory_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox checkbox = (CheckBox)sender;
             GridViewRow gdrow = (GridViewRow)checkbox.NamingContainer;
@@ -240,9 +257,9 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
 
             int count = 0;
-            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
+            foreach (GridViewRow row in grdWeightedBenchmarkingCategories.Rows)
             {
-                CheckBox chk = (CheckBox)row.FindControl("checkbox1");
+                CheckBox chk = (CheckBox)row.FindControl("chkSelectedCategory");
                 if (chk.Checked)
                 {
                     count++;
@@ -258,9 +275,9 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             hdnCountryCatIds.Value = "";
             hdnFreezoneCatIds.Value = "";
             hdnCatIdAndWeightageValue.Value = "";
-            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
+            foreach (GridViewRow row in grdWeightedBenchmarkingCategories.Rows)
             {
-                CheckBox chk = (CheckBox)row.FindControl("checkbox1");
+                CheckBox chk = (CheckBox)row.FindControl("chkSelectedCategory");
                 if (chk.Checked)
                 {
                     TextBox textbox = (TextBox)row.FindControl("quantity");
@@ -276,16 +293,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                         hdnFreezoneCatIds.Value += hdnSubCatIds.Value;
                     }
 
-                    HiddenField hdnCatIds = (HiddenField)row.FindControl("hdnCatIds");
+                    HiddenField hdnCatId = (HiddenField)row.FindControl("hdnCatId");
                     TextBox txtWeightage = (TextBox)row.FindControl("quantity");
 
                     if (string.IsNullOrEmpty(hdnCatIdAndWeightageValue.Value))
                     {
-                        hdnCatIdAndWeightageValue.Value += hdnCatIds.Value + ":" + txtWeightage.Text;
+                        hdnCatIdAndWeightageValue.Value += hdnCatId.Value + ":" + txtWeightage.Text;
                     }
                     else
                     {
-                        hdnCatIdAndWeightageValue.Value += "," + hdnCatIds.Value + ":" + txtWeightage.Text;
+                        hdnCatIdAndWeightageValue.Value += "," + hdnCatId.Value + ":" + txtWeightage.Text;
                     }
                 }
             }
@@ -304,10 +321,10 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
         protected void btnReport_Click(object sender, EventArgs e)
         {
             decimal weight = 0;
-            foreach (GridViewRow row in grdWeightedBenchmarking.Rows)
+            foreach (GridViewRow row in grdWeightedBenchmarkingCategories.Rows)
             {
 
-                CheckBox chkbox = (CheckBox)row.Cells[0].FindControl("checkbox1");
+                CheckBox chkbox = (CheckBox)row.Cells[0].FindControl("chkSelectedCategory");
 
                 if (chkbox.Checked)
                 {
@@ -402,14 +419,12 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             }
             dtCountryLevelCategories.Merge(dtFreezoneLevelCategories);
 
-            grdWeightedBenchmarking.DataSource = dtCountryLevelCategories;
-            grdWeightedBenchmarking.DataBind();
+            grdWeightedBenchmarkingCategories.DataSource = dtCountryLevelCategories;
+            grdWeightedBenchmarkingCategories.DataBind();
         }
 
-        protected void grdWeightedBenchmarking_RowDataBound(object sender, GridViewRowEventArgs e)
+        protected void grdWeightedBenchmarkingCategories_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-
-
             //if (e.Row.RowType == DataControlRowType.DataRow)
             //{
             //    //If Salary is less than 10000 than set the row Background Color to Cyan  

@@ -48,6 +48,34 @@ function UpdateFreeZoneAnalytics(ObjectArray) {
 }
 
 
+
+// *** Weighted Benchmarking Validation
+function validateCheckedInputs(ErrorVariable)
+{
+    var checkedCategories = $("[name*='chkSelectedCategory']:checked");
+
+    if (checkedCategories.length <= 0) { ErrorVariable.Error += ' One of the category must be checked \n'; }
+    
+    return (checkedCategories.length > 0);
+}
+
+function validateCheckedInputsSum(ErrorVariable) {
+    var Sum = 0;
+    $("[name*='chkSelectedCategory']:checked").parent().parent().each(function (index) {
+
+        Sum += parseInt($(this).find("[name*='quantity']").val());
+
+    });
+
+    if (Sum != 100) { ErrorVariable.Error += ' The over all weightage should be equal to 100';}
+
+
+    return (Sum == 100)
+}
+
+
+    // End of Weighted Benchmarking Validation
+
 function OnTreeClick(evt) {
     var src = window.event != window.undefined ? window.event.srcElement : evt.target;
     var isChkBoxClick = (src.tagName.toLowerCase() == "input" && src.type == "checkbox");

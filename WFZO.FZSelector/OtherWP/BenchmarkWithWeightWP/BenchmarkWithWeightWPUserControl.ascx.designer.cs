@@ -157,13 +157,22 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP {
         protected global::System.Web.UI.WebControls.GridView GridView1;
         
         /// <summary>
-        /// grdWeightedBenchmarking control.
+        /// pnlCategories control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView grdWeightedBenchmarking;
+        protected global::System.Web.UI.WebControls.Panel pnlCategories;
+        
+        /// <summary>
+        /// grdWeightedBenchmarkingCategories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView grdWeightedBenchmarkingCategories;
         
         /// <summary>
         /// lblError control.
