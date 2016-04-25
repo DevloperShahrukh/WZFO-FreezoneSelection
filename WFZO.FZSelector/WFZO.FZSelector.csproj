@@ -123,6 +123,14 @@
     <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx.designer.cs">
       <DependentUpon>DataImportRobotWPUserControl.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="OtherWP\FAQWP\FAQWP.cs" />
+    <Compile Include="OtherWP\FAQWP\FAQWPUserControl.ascx.cs">
+      <DependentUpon>FAQWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\FAQWP\FAQWPUserControl.ascx.designer.cs">
+      <DependentUpon>FAQWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWP.cs" />
     <Compile Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx.cs">
       <DependentUpon>FeedbackFormWPUserControl.ascx</DependentUpon>
@@ -201,6 +209,10 @@
     <None Include="OtherWP\DataImportRobotWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{f26b773b-7f4d-4556-86fe-0fe658f48fd1}</SharePointProjectItemId>
     </None>
+    <None Include="OtherWP\FAQWP\FAQWP.webpart" />
+    <None Include="OtherWP\FAQWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{2b88ad3c-3b1b-4c46-8149-98a5ad2c71ee}</SharePointProjectItemId>
+    </None>
     <None Include="OtherWP\FeedbackFormWP\FeedbackFormWP.webpart" />
     <None Include="OtherWP\FeedbackFormWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{d512aa7c-0fd7-48a0-af78-7767847c7856}</SharePointProjectItemId>
@@ -256,6 +268,8 @@
     </Content>
     <Content Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx" />
     <Content Include="OtherWP\DataImportRobotWP\Elements.xml" />
+    <Content Include="OtherWP\FAQWP\Elements.xml" />
+    <Content Include="OtherWP\FAQWP\FAQWPUserControl.ascx" />
     <Content Include="OtherWP\FeedbackFormWP\Elements.xml" />
     <Content Include="OtherWP\FeedbackFormWP\FeedbackFormWPUserControl.ascx" />
     <Content Include="OtherWP\FreeZoneWP\Elements.xml" />

@@ -19,7 +19,7 @@
                     	<div class="fzprofileb"></div>
                     </div> 
                     <div class="db-main-detail">
-	                    <h3><a href="/Pages/FreeZoneProfile.aspx">Free Zone Profile</a></h3>    
+	                    <h3><a href="FreeZoneProfile.aspx">Free Zone Profile</a></h3>    
                         <p>Lorem ipsum dolor sit amet, sed dia nonummy nibh euismod tincidunt ut et dolore magna aliquam erat</p>
                         <div class="help">
                         	<a href="#">Need Help?</a>
@@ -34,7 +34,7 @@
                     	<div class="benchmarkingb"></div>
                     </div> 
                     <div class="db-main-detail">
-	                    <h3><a href="/Pages/Benchmarking.aspx">Benchmarking</a></h3>    
+	                    <h3><a href="Benchmarking.aspx">Benchmarking</a></h3>    
                         <p>Lorem ipsum dolor sit amet, sed dia nonummy nibh euismod tincidunt ut et dolore magna aliquam erat</p>
                         <div class="help">
                         	<a href="#">Need Help?</a>
@@ -49,7 +49,7 @@
                     	<div class="weightageb"></div>
                     </div> 
                     <div class="db-main-detail">
-	                    <h3><a href="/Pages/BenchmarkwithWeightage.aspx">Benchmark with Weightage</a></h3>    
+	                    <h3><a href="BenchmarkwithWeightage.aspx">Benchmark with weights</a></h3>    
                         <p>Lorem ipsum dolor sit amet, sed dia nonummy nibh euismod tincidunt</p>
                         <div class="help">
                         	<a href="#">Need Help?</a>
@@ -67,15 +67,15 @@
             
             <div class="col-md-8">
             	<div class="notes-box mb20">
-                	<h3>Most viewed/queried freezones</h3>
+                	<h3><a target="_blank" href="/reports/rptFreezoneAnalytics.rdl">Most viewed/queried freezones</a></h3>
                     This report will show the most top viewed/searched Freezones along with their region, country, and city using monitoring tool.
                 </div>
                 <div class="notes-box mb20">
-                	<h3>Most used Categories and sub-categories</h3>
+                	<h3><a target="_blank" href="/reports/rptCategoryAnalytics.rdl">Most used Categories and sub-categories</a></h3>
                     These reports will show the most common categories and sub-categories select by the members in the Benchmarking module.
                 </div>
                 <div class="notes-box mb20">
-                	<h3>Highest weightage Categories</h3>
+                	<h3><a target="_blank" href="/reports/rptWeightedAnalytics.rdl">Highest weightage Categories</a></h3>
                     This report will show the most/highest weighted category by the members in weighted analysis.
                 </div>
             </div>

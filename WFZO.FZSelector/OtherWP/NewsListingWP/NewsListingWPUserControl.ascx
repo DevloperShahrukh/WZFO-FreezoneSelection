@@ -8,27 +8,28 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="NewsListingWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.OtherWP.NewsListingWP.NewsListingWPUserControl" %>
 
 
-<asp:Repeater ID="NewsRP" runat="server">
+<asp:Repeater ID="NewsRP" runat="server" OnItemDataBound="NewsRP_ItemDataBound">
     <HeaderTemplate>
         <div class="news-head col-xs-12">
-            	<div class="col-xs-12">
-            	<h2>Latest News & Articles</h2>
-                </div>
-        	</div>
+            <div class="col-xs-12">
+                <h2>Latest News & Articles</h2>
+            </div>
+        </div>
     </HeaderTemplate>
     <ItemTemplate>
         <div class="news-row col-xs-12">
             <div class="col-sm-3">
-                <img src="/Style Library/WFZO/img/news.jpg" class="news-img" />
+                <img src="<%# Eval("Image") %>" class="news-img" />
             </div>
             <div class="col-sm-9">
                 <div class="news-list">
                     <h2>
-                        <asp:Label ID="Label1" runat="server" Text='<%# Eval("Title") %>'></asp:Label>
+                        <asp:Label ID="lblTitle" runat="server" Text='<%# Eval("Title") %>' Visible="false"></asp:Label>
+                        <asp:Literal ID="ltrUrl" runat="server"></asp:Literal>
+                        <asp:Label ID="lblUrl" runat="server" Text='<%# Eval("URL") %>' Visible="false"></asp:Label>
                     </h2>
-                    <h5>March 16, 2016</h5>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim lorem ipsum dolor sit amet consectetuer... </p>
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim lorem ipsum dolor sit amet consectetuer... </p>
+                    <h5><%# Eval("ArticleStartDate") %></h5>
+                    <p><%# Eval("Comments") %></p>
                 </div>
             </div>
         </div>

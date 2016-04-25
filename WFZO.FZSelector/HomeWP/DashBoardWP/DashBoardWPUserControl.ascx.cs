@@ -11,7 +11,6 @@ namespace WFZO.FZSelector.HomeWP.DashBoardWP
         protected void Page_Load(object sender, EventArgs e)
         {
             lblUsername.Text = SPContext.Current.Web.CurrentUser.Name;
-          
         }
     }
 }

@@ -33,7 +33,7 @@ namespace WFZO.FZSelector.NewsWP
                                          </Eq>
 <Eq>
                                            <FieldRef Name='" + Constants.List.Pages.Fields.ContentType + @"' />
-                                           <Value Type='" + Commons.Type.Computed + @"'>Article Page</Value>
+                                           <Value Type='" + Commons.Type.Computed + @"'>News</Value>
                                          </Eq>
                                        </And>  
                                     </Where>

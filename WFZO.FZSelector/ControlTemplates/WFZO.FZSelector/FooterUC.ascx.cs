@@ -9,6 +9,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 {
     public partial class FooterUC : UserControl
     {
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -18,17 +19,17 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         }
         protected void BindFooterRP()
         {
-            string url = "";
-            if (SPContext.Current.Web.IsRootWeb)
-            {
-                url = SPContext.Current.Web.Url;
-            }
-            else
-            {
-               url = SPContext.Current.Web.ParentWeb.Url;
+            //string url = "";
+            //if (SPContext.Current.Web.IsRootWeb)
+            //{
+            //    url = SPContext.Current.Web.Url;
+            //}
+            //else
+            //{
+            //   url = SPContext.Current.Site.RootWeb.Url;
 
-            }
-            using (SPSite site = new SPSite(url))
+            //}
+            using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
             {
                 using (SPWeb web = site.OpenWeb())
                 {
@@ -62,16 +63,19 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 Label Title = (Label)e.Item.FindControl("lblTitle");
                 Label LinkURL = (Label)e.Item.FindControl("lblUrl");
 
+                string[] getLink = LinkURL.Text.Split(',');
 
                 if (lblInWindow.Text == "1")
                 {
-                    lit.Text = "<a href='" + LinkURL.Text + "' target='_blank'>" + Title.Text + "</a>";
+                    lit.Text = "<a href='" + getLink[0] + "' target='_blank'>" + Title.Text + "</a>";
                 }
                 else
                 {
-                    lit.Text = "<a href='" + LinkURL.Text + "'>" + Title.Text + "</a>";
+                    lit.Text = "<a href='" + getLink[0] + "'>" + Title.Text + "</a>";
                 }
             }
         }
+
     }
 }
+
