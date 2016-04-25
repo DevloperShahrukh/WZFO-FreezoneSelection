@@ -7,6 +7,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Linq;
 using WFZO.FZSelector.Classes;
 using System.Collections.Generic;
+using Microsoft.SharePoint;
 
 namespace WFZO.FZSelector.BenchmarkWithWeightWP
 {
@@ -20,6 +21,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             {
                 bindgridview();
                 bindRegion();
+                PopluateReportTypeList();
             }
         }
         public void bindRegion()
@@ -421,6 +423,33 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
             grdWeightedBenchmarkingCategories.DataSource = dtCountryLevelCategories;
             grdWeightedBenchmarkingCategories.DataBind();
+        }
+
+        public void PopluateReportTypeList()
+        {
+            using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
+            {
+                using (SPWeb web = site.OpenWeb())
+                {
+                    SPList list = web.Lists.TryGetList(Constants.List.Reports.Name);
+
+                    SPQuery query = new SPQuery();
+                    query.Query = @"<Where>
+                                         <Eq>
+                                           <FieldRef Name='" + Constants.List.Reports.Fields.Module + @"' />
+                                           <Value Type='" + Commons.Type.Text + @"'>" + "Weighted" + @"</Value>
+                                         </Eq>
+                                    </Where>";
+                    DataTable dt = list.GetItems(query).GetDataTable();
+                    if (dt.Rows.Count > 0)
+                    {
+                        rblReportType.DataSource = dt;
+                        rblReportType.DataTextField = "Title";
+                        rblReportType.DataValueField = "FileLeafRef";
+                        rblReportType.DataBind();
+                    }
+                }
+            }
         }
 
         protected void grdWeightedBenchmarkingCategories_RowDataBound(object sender, GridViewRowEventArgs e)

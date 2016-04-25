@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SharePoint;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -22,6 +23,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 tvFreezoneCategories.Attributes.Add("onclick", "OnTreeClick(event)");
                 bindgridview();
                 bindRegion();
+                PopluateReportTypeList();
             }
         }
         public void bindRegion()
@@ -164,6 +166,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 tvCountryCategories.Visible = false;
                 tvFreezoneCategories.Visible = false;
             }
+
+            rblReportType.Visible = true;
         }
 
 
@@ -320,6 +324,34 @@ namespace WFZO.FZSelector.BenchmarkingWP
             FDA.FreezoneId = Convert.ToInt32(SelectedFreezoneDetail["FreezoneId"]);
 
             FreezoneDataList.Add(FDA);
+        }
+        public void PopluateReportTypeList()
+        {
+            using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
+            {
+                using (SPWeb web = site.OpenWeb())
+                {
+                    SPList list = web.Lists.TryGetList(Constants.List.Reports.Name);
+
+
+                    SPQuery query = new SPQuery();
+                    query.Query = @"<Where>
+                                         <Eq>
+                                           <FieldRef Name='" + Constants.List.Reports.Fields.Module + @"' />
+                                           <Value Type='" + Commons.Type.Text + @"'>" + Constants.Modules.Benchmarking + @"</Value>
+                                         </Eq>
+                                    </Where>";
+                    DataTable dt = list.GetItems(query).GetDataTable();
+                    if (dt.Rows.Count > 0)
+                    {
+                        rblReportType.DataSource = dt;
+                        rblReportType.DataTextField = "Title";
+                        rblReportType.DataValueField = "FileLeafRef";
+                        rblReportType.DataBind();
+                    }
+
+                }
+            }
         }
 
     }

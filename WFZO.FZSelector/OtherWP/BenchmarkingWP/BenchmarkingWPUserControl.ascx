@@ -187,7 +187,13 @@
 
                         </div>
                     </div>
-
+                     <div class="form-group">
+                        <label for="freezone" class="col-md-4 text-right"></label>
+                        <div class="col-md-8 text-center">
+                           <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
+                   
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="freezone" class="col-md-4 text-right"></label>
                         <div class="col-md-8 text-center">

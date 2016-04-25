@@ -202,6 +202,7 @@
 <div class="form-group">
 
     <div class="col-md-8 text-center"> 
+        <asp:RadioButtonList ID="rblReportType" runat="server" Visible="true" RepeatLayout="UnorderedList"></asp:RadioButtonList>
         <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" OnClientClick="getAndShowReport();return false;" />
     </div>
 </div>

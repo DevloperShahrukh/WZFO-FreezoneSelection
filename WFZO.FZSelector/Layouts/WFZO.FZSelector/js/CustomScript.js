@@ -51,8 +51,13 @@ function UpdateFreeZoneAnalytics(ObjectArray) {
     });
 }
 
+function validateReportType(RadioButtonListClienId) {
+    var selectedReportType = $('#' + RadioButtonListClienId).find('input:checked');
 
+    if (selectedReportType.length <= 0) { ErrorVariable.Error += ' Select one of the report type \n'; }
 
+    return (selectedReportType.length > 0);
+}
 
 
 // *** Weighted Benchmarking Validation
@@ -101,7 +106,7 @@ function UpdateCategoryAnalyticsOfWeigthted(ModuleName) {
     $.ajax({
         method: "POST",
         url: "/_layouts/15/WFZO.FZSelector/WebMethods.aspx/UpdateCategoryAnalyticsOfWeigthted",
-        data: JSON.stringify({ SubCategoryIdsWithWeight: SubCategoryWithWeights , ModuleName: ModuleName  }),
+        data: JSON.stringify({ SubCategoryIdsWithWeight: SubCategoryWithWeights, ModuleName: ModuleName }),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         async: true,
