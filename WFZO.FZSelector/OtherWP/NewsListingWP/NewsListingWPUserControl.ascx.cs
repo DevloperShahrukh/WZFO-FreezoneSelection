@@ -1,6 +1,9 @@
 ﻿using Microsoft.SharePoint;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
@@ -8,11 +11,13 @@ using System.Web.UI.WebControls.WebParts;
 namespace WFZO.FZSelector.OtherWP.NewsListingWP
 {
     public partial class NewsListingWPUserControl : UserControl
-    {
+    {     
         protected void Page_Load(object sender, EventArgs e)
         {
+     
             if (!IsPostBack)
             {
+                GetPageSize();
                 BindNewsRP();
             }
         }
@@ -40,7 +45,6 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                                     <OrderBy>
                                        <FieldRef Name='" + Constants.List.BaseColumns.Created + @"' Ascending='True' />
                                     </OrderBy>";
-                    query.RowLimit = 5;
                     SPListItemCollection col = list.GetItems(query);
                     DataTable NewDT = new DataTable();
                     NewDT.Columns.Add("Title", typeof(string));
@@ -62,12 +66,56 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
 
                         NewDT.Rows.Add(row);
                     }
-                    NewsRP.DataSource = NewDT;
+
+                    PagedDataSource pagedData = new PagedDataSource();
+
+                    pagedData.AllowPaging = true;
+                    pagedData.PageSize = PageSize;
+                    pagedData.DataSource = NewDT.DefaultView;
+                    pagedData.CurrentPageIndex = CurrentPage;
+
+
+                    lblCurrentPage.Text = "<b>Page:</b> " + (CurrentPage + 1).ToString() + " of " + pagedData.PageCount.ToString();
+
+                    PageCount = pagedData.PageCount;
+
+                    // Disable Prev/Next First/Last buttons if necessary
+                    cmdPrev.Enabled = !pagedData.IsFirstPage;
+                    cmdFirst.Enabled = !pagedData.IsFirstPage;
+                    cmdNext.Enabled = !pagedData.IsLastPage;
+                    cmdLast.Enabled = !pagedData.IsLastPage;
+
+
+
+                    // Wire up the page numbers
+                    if (pagedData.PageCount > 1)
+                    {
+                        rptPages.Visible = true;
+                        ArrayList pages = new ArrayList();
+                        for (int i = 0; i < pagedData.PageCount; i++)
+                            if (i == CurrentPage)
+                            {
+
+                                pages.Add("<b>" + (i + 1).ToString() + "</b>");
+                            }
+                            else
+                            {
+                                pages.Add((i + 1).ToString());
+                            }
+                        rptPages.DataSource = pages;
+                        rptPages.DataBind();
+                    }
+                    else
+                    {
+                        rptPages.Visible = false;
+                    }
+
+                    NewsRP.DataSource = pagedData;
                     NewsRP.DataBind();
+
                 }
             }
         }
-
         public static string GetSrcFromImgTag(string imgTag)
         {
             int start = imgTag.IndexOf("src=") + 5;
@@ -93,5 +141,158 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
 
             }
         }
+
+        //Pageing
+        protected int CurrentPage
+        {
+            get
+            {
+                // look for current page in ViewState
+                object o = this.ViewState["_CurrentPage"];
+                if (o == null)
+                    return 0;   // default to showing the first page
+                else
+                    return (int)o;
+            }
+
+            set
+            {
+                this.ViewState["_CurrentPage"] = value;
+            }
+        }
+
+        protected int PageSize
+        {
+            get
+            {
+                // look for current page in ViewState
+                object o = this.ViewState["PageSize"];
+                if (o == null)
+                    return 1;   // default to showing the first page
+                else
+                    return (int)o;
+            }
+
+            set
+            {
+                this.ViewState["PageSize"] = value;
+            }
+        }
+        protected int PageCount
+        {
+            get
+            {
+                // look for current page count in ViewState
+                object o = this.ViewState["_PageCount"];
+                if (o == null)
+                    return 1;   // default to just 1 page
+                else
+                    return (int)o;
+            }
+
+            set
+            {
+                this.ViewState["_PageCount"] = value;
+            }
+        }
+
+
+        protected void cmdPrev_Click(object sender, System.EventArgs e)
+        {
+            // Set viewstate variable to the previous page
+            CurrentPage -= 1;
+
+            // Reload control
+            BindNewsRP();
+        }
+
+        protected void cmdNext_Click(object sender, System.EventArgs e)
+        {
+            // Set viewstate variable to the next page
+            CurrentPage += 1;
+
+            // Reload control
+            BindNewsRP();
+        }
+
+        protected void cmdFirst_Click(object sender, System.EventArgs e)
+        {
+            // Set viewstate variable to the first page
+            CurrentPage = 0;
+
+            // Reload control
+            BindNewsRP();
+        }
+        protected void cmdLast_Click(object sender, System.EventArgs e)
+        {
+            // Set viewstate variable to the last page
+            CurrentPage = PageCount - 1;
+
+            // Reload control
+            BindNewsRP();
+        }
+
+        protected void rptPages_ItemCommand(object source,
+                                 RepeaterCommandEventArgs e)
+        {
+            string page = Convert.ToString(e.CommandArgument);
+            if (page.Contains("<"))
+            {
+
+                page = StripHTML(page);
+            }
+            CurrentPage = Convert.ToInt32(page) - 1;
+            BindNewsRP();
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInit(e);
+            rptPages.ItemCommand +=
+               new RepeaterCommandEventHandler(rptPages_ItemCommand);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            BindNewsRP();
+        }
+
+        protected bool CurrentPageHighlight(int currPage)
+        {
+            return currPage == CurrentPage ? true : false;
+        }
+        public static string StripHTML(string input)
+        {
+            return Regex.Replace(input, "<.*?>", String.Empty);
+        }
+        protected void GetPageSize()
+        {
+            using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
+            {
+                using (SPWeb web = site.OpenWeb())
+                {
+                    SPList list = web.Lists.TryGetList(Constants.List.Configuration.Name);
+
+                    SPQuery query = new SPQuery();
+                    query.Query = @"<Where>
+                                      
+                                            <Eq>
+                                           <FieldRef Name='" + Constants.List.BaseColumns.Title + @"' />
+                                           <Value Type='" + Commons.Type.Text + @"'>PageSize</Value>
+                                         </Eq>
+                                       
+                                    </Where>";
+                    SPListItemCollection col = list.GetItems(query);
+                    foreach (SPListItem item in col)
+                    {
+                        PageSize = Convert.ToInt32(item[Constants.List.Configuration.Fields.Value]);
+                    }
+                    ViewState["PageSize"] = PageSize;
+                }
+            }
+        }
+
     }
 }

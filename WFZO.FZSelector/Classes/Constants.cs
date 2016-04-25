@@ -37,7 +37,15 @@ namespace WFZO.FZSelector
                 public const string IsActive = "IsActive";
                 public const string Created = "Created";
             }
+            public static class Configuration
+            {
+                public const string Name = "Configuration";
+                public static class Fields
+                {
 
+                    public const string Value = "Value";
+                }
+            }
 
             public static class Pages
             {
