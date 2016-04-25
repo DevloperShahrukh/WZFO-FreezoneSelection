@@ -18,22 +18,27 @@
         AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>')
     }
 
-    function getAndShowReport(){
+    function getAndShowReport() {
 
-        CollectParameters();
+        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>') || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>') || validateTreeviewNodesSelection('<%= hdnFreezoneProfileCatIds.ID %>')) {
+            CollectParameters();
 
-        var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/rptFreezoneProfile.rdl';
-        
-        ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
-        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
-        + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
-        + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/rptFreezoneProfile.rdl';
 
-        window.open(ReportUrl);
+                ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
+            + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
+                + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
+                + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
 
-        UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
+                window.open(ReportUrl);
 
-        UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+                UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
+
+                UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+        }
+        else {
+            alert('Select one of the category or sub category');
+        }
     }
 </script>
 
@@ -163,7 +168,7 @@
                 <div class="form-group">
                     <label for="freezone" class="col-md-4 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;"   />
+                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;" />
                     </div>
                 </div>
             </div>

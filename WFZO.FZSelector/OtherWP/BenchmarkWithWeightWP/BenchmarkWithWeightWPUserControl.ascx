@@ -14,7 +14,6 @@
 
     function getAndShowReport() {
 
-        // CollectParameters();
         var ErrorVariable =   { Error: "" };
 
         if (validateCheckedInputs(ErrorVariable) && validateCheckedInputsSum(ErrorVariable)) {
@@ -24,7 +23,9 @@
             + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
             + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
 
-            window.open(ReportUrl);
+            //window.open(ReportUrl);
+
+            UpdateCategoryAnalyticsOfWeigthted('<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 
             //UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 

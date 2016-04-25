@@ -14,4 +14,12 @@ namespace WFZO.FZSelector.Classes
         public int CountryId { get; set; }
         public int CityId { get; set; }
     }
+
+
+    [Serializable]
+    public class SubCatIdsWithWeight
+    {
+        public string SubCatIds { get; set; }
+        public int Weight { get; set; }
+    }
 }

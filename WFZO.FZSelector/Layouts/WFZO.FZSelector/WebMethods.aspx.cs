@@ -6,6 +6,7 @@ using System.Data;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using WFZO.FZSelector.Classes;
+using System.Linq;
 
 
 namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
@@ -39,14 +40,12 @@ namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
             return true;
         }
 
-
-
         [System.Web.Services.WebMethod()]
         public static bool UpdateFreeZoneAnalytics(List<FreezoneAnalyticData> DataArray)
         {
+
             foreach (FreezoneAnalyticData Freezone in DataArray)
             {
-
                 SqlParameter sqpRegionId = new SqlParameter("@RegionId", SqlDbType.Int);
                 sqpRegionId.Value = Convert.ToInt32(Freezone.RegionId);
 
@@ -65,7 +64,39 @@ namespace WFZO.FZSelector.Layouts.WFZO.FZSelector
             return true;
         }
 
+        /// <summary>
+        /// Update Category Analytics the category analytics with highest weightage will be entered as the data
+        /// </summary>
+        /// <param name="SubCategoryIdsWithWeight"></param>
+        /// <param name="ModuleName"></param>
+        /// <returns></returns>
+        [System.Web.Services.WebMethod()]
+        public static bool UpdateCategoryAnalyticsOfWeigthted(List<SubCatIdsWithWeight> SubCategoryIdsWithWeight, string ModuleName)
+        {
+            int MaxWeight = SubCategoryIdsWithWeight.Max(x => x.Weight);
 
+            List<SubCatIdsWithWeight> MaxSubCategoryIdsWithWeight = SubCategoryIdsWithWeight.Where(x => x.Weight == MaxWeight).ToList();
+
+            if (MaxSubCategoryIdsWithWeight.Count != SubCategoryIdsWithWeight.Count)
+            {
+                foreach (var SubCategoryIdsWithWeightItem in MaxSubCategoryIdsWithWeight)
+                {
+                    string[] SplittedIds = SubCategoryIdsWithWeightItem.SubCatIds.Split(',');
+
+                    foreach (string SubCategoryId in SplittedIds)
+                    {
+                        SqlParameter sqpSubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
+                        sqpSubCategoryId.Value = Convert.ToInt32(SubCategoryId);
+
+                        SqlParameter sqpModule = new SqlParameter("@Module", SqlDbType.VarChar, 50);
+                        sqpModule.Value = ModuleName;
+
+                        ClsDBAccess.GetIntScalarVal("UpdateCategoryAnalytics", sqpSubCategoryId, sqpModule);
+                    }
+                }
+            }
+            return true;
+        }
 
 
 

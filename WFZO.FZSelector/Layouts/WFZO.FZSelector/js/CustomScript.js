@@ -15,6 +15,11 @@
     $('#' + HiddenValueId).val(ParameterIds);
 }
 
+function validateTreeviewNodesSelection(TreeviewID) {
+    return ($('td .' + TreeviewID + 'Child').prev('input:checked').length > 0)
+
+}
+
 
 function UpdateCategoryAnalytics(SubCategoryIds, ModuleName) {
 
@@ -42,20 +47,20 @@ function UpdateFreeZoneAnalytics(ObjectArray) {
         dataType: "json",
         async: true,
         success: function (msg) {
-            console.log(msg.d);
         },
     });
 }
 
 
 
+
+
 // *** Weighted Benchmarking Validation
-function validateCheckedInputs(ErrorVariable)
-{
+function validateCheckedInputs(ErrorVariable) {
     var checkedCategories = $("[name*='chkSelectedCategory']:checked");
 
     if (checkedCategories.length <= 0) { ErrorVariable.Error += ' One of the category must be checked \n'; }
-    
+
     return (checkedCategories.length > 0);
 }
 
@@ -67,14 +72,49 @@ function validateCheckedInputsSum(ErrorVariable) {
 
     });
 
-    if (Sum != 100) { ErrorVariable.Error += ' The over all weightage should be equal to 100';}
+    if (Sum != 100) { ErrorVariable.Error += ' The over all weightage should be equal to 100'; }
 
 
-    return (Sum == 100)
+    return (Sum == 100);
 }
 
 
-    // End of Weighted Benchmarking Validation
+// End of Weighted Benchmarking Validation
+
+// *** Weighted Benchmarking Category Analytics Data preparation and update
+
+function UpdateCategoryAnalyticsOfWeigthted(ModuleName) {
+
+    var SubCategoryWithWeights = new Array();
+
+    $("[name*='chkSelectedCategory']:checked").parent().parent().each(function (index) {
+
+        var SubCategoryWithWeight = new Object();
+        SubCategoryWithWeight.SubCatIds = $(this).find("[name*='hdnSubCatIds']").val();
+        SubCategoryWithWeight.Weight = $(this).find("[name*='quantity']").val();
+
+        SubCategoryWithWeights.push(SubCategoryWithWeight);
+
+    });
+
+
+    $.ajax({
+        method: "POST",
+        url: "/_layouts/15/WFZO.FZSelector/WebMethods.aspx/UpdateCategoryAnalyticsOfWeigthted",
+        data: JSON.stringify({ SubCategoryIdsWithWeight: SubCategoryWithWeights , ModuleName: ModuleName  }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        async: true,
+        success: function (msg) {
+            console.log(msg.d);
+        },
+    });
+
+}
+
+// End of Weighted Benchmarking Validation
+
+
 
 function OnTreeClick(evt) {
     var src = window.event != window.undefined ? window.event.srcElement : evt.target;
