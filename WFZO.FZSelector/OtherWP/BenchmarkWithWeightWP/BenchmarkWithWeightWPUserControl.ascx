@@ -16,23 +16,29 @@
 
         var ErrorVariable =   { Error: "" };
 
-        if (validateCheckedInputs(ErrorVariable) && validateCheckedInputsSum(ErrorVariable)) {
-            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Report/Benchmarking.rdl';
+        if (validateReportType('<%= rblReportType.ClientID %>', ErrorVariable) && validateCheckedInputs(ErrorVariable) && validateCheckedInputsSum(ErrorVariable)) {
+
+            AddCategoryWithWeights("[name*='chkSelectedCategory']:checked", '<%= hdnCatIdAndWeightageValue.ClientID %>');
+            var reportName = $('#<%= rblReportType.ClientID %>').find('input:checked').val();
+
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName;
 
             ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
             + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
-            + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val();
+            + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:MicroCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
+            + '&rp:CategoriesWithWeights=' + $('#<%= hdnCatIdAndWeightageValue.ClientID %>').val();
 
-            //window.open(ReportUrl);
+            window.open(ReportUrl);
 
             UpdateCategoryAnalyticsOfWeigthted('<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
-
+            
             //UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 
-            //UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+            UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {
             alert(ErrorVariable.Error);
+            ErrorVariable = { Error: "" };
         }
 
 
@@ -203,7 +209,7 @@
 
     <div class="col-md-8 text-center"> 
         <asp:RadioButtonList ID="rblReportType" runat="server" Visible="true" RepeatLayout="UnorderedList"></asp:RadioButtonList>
-        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClick="btnReport_Click" OnClientClick="getAndShowReport();return false;" />
+        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false;" />
     </div>
 </div>
     </asp:Panel>

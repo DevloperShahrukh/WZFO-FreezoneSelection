@@ -96,76 +96,91 @@ namespace WFZO.FZSelector.BenchmarkingWP
         protected void Button1_Click(object sender, EventArgs e)
         {
 
-            PlSelectedZone.Visible = true;
-            DataTable dt = ViewState["TempBenchmarking"] as DataTable;
-            DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
-            DataRow row = dt.NewRow();
-            row["SR"] = dt.Rows.Count + 1;
-            row["Region"] = ddlRegion.SelectedItem.Text;
-            row["Country"] = ddlCountry.SelectedItem.Text;
-            row["City"] = ddlCity.SelectedItem.Text;
-            row["FreeZone"] = ddlFreeZone.SelectedItem.Text;
+            //if (rblReportType.SelectedItem.Text.Equals(Constants.ReportTypes.Normal))
+            //{
+                PlSelectedZone.Visible = true;
+                DataTable dt = ViewState["TempBenchmarking"] as DataTable;
+                DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
+                DataRow row = dt.NewRow();
+                row["SR"] = dt.Rows.Count + 1;
+                row["Region"] = ddlRegion.SelectedItem.Text;
+                row["Country"] = ddlCountry.SelectedItem.Text;
+                row["City"] = ddlCity.SelectedItem.Text;
+                row["FreeZone"] = ddlFreeZone.SelectedItem.Text;
 
-            row["RegionId"] = ddlRegion.SelectedItem.Value;
-            row["CountryId"] = ddlCountry.SelectedItem.Value;
-            row["CityId"] = ddlCity.SelectedItem.Value;
-            row["FreeZoneId"] = ddlFreeZone.SelectedItem.Value;
+                row["RegionId"] = ddlRegion.SelectedItem.Value;
+                row["CountryId"] = ddlCountry.SelectedItem.Value;
+                row["CityId"] = ddlCity.SelectedItem.Value;
+                row["FreeZoneId"] = ddlFreeZone.SelectedItem.Value;
 
-            hdnFreezoneIds.Value = "0";
+                hdnFreezoneIds.Value = "0";
 
-            if (temprow.Length <= 0)
-            {
-                dt.Rows.Add(row);
-                GridView1.DataSource = dt;
-                GridView1.DataBind();
-            }
-
-            if (GridView1.Rows.Count >= 2)
-            {
-                FreezoneDataList = new List<FreezoneAnalyticData>();
-                hdnCountryIds.Value = "0";
-                for (int i = 0; i < dt.Rows.Count; i++)
+                if (temprow.Length <= 0)
                 {
-
-                    DataSet ds = obj.FillData("SELECT [CountryId] FROM [dbo].[Country] where CountryName = '" + Convert.ToString(dt.Rows[i]["Country"]) + "'");
-                    if (hdnCountryIds.Value == "0")
-                    {
-                        hdnCountryIds.Value = Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
-                    }
-                    else
-                    {
-                        hdnCountryIds.Value += "," + Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
-                    }
-
-                    if (hdnFreezoneIds.Value == "0")
-                    {
-                        hdnFreezoneIds.Value = Convert.ToString(dt.Rows[i]["FreezoneId"]);
-                    }
-                    else
-                    {
-                        hdnFreezoneIds.Value += "," + Convert.ToString(dt.Rows[i]["FreezoneId"]);
-                    }
-
-                    PopulateListOfSelectedFreezones(dt.Rows[i]);
+                    dt.Rows.Add(row);
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
                 }
-                BindTreeViewControl(hdnCountryIds.Value);
-                BindFreezoneTreeView(hdnFreezoneIds.Value);
+
+                if (GridView1.Rows.Count >= 2)
+                {
+                    FreezoneDataList = new List<FreezoneAnalyticData>();
+                    hdnCountryIds.Value = "0";
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+
+                        DataSet ds = obj.FillData("SELECT [CountryId] FROM [dbo].[Country] where CountryName = '" + Convert.ToString(dt.Rows[i]["Country"]) + "'");
+                        if (hdnCountryIds.Value == "0")
+                        {
+                            hdnCountryIds.Value = Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
+                        }
+                        else
+                        {
+                            hdnCountryIds.Value += "," + Convert.ToString(ds.Tables[0].Rows[0]["CountryId"]);
+                        }
+
+                        if (hdnFreezoneIds.Value == "0")
+                        {
+                            hdnFreezoneIds.Value = Convert.ToString(dt.Rows[i]["FreezoneId"]);
+                        }
+                        else
+                        {
+                            hdnFreezoneIds.Value += "," + Convert.ToString(dt.Rows[i]["FreezoneId"]);
+                        }
+
+                        PopulateListOfSelectedFreezones(dt.Rows[i]);
+                    }
+                    BindTreeViewControl(hdnCountryIds.Value);
+                    BindFreezoneTreeView(hdnFreezoneIds.Value);
 
 
-                lblError.Visible=false;
-                btnReport.Enabled = true;
-                btnReport.Visible = true;
-                tvCountryCategories.Visible = true;
-                tvFreezoneCategories.Visible = true;
+                    lblError.Visible = false;
+                    btnReport.Enabled = true;
+                    btnReport.Visible = true;
+                    tvCountryCategories.Visible = true;
+                    tvFreezoneCategories.Visible = true;
 
-            }
-            else
-            {
-                lblError.Visible=false;
-                btnReport.Enabled = false;
-                tvCountryCategories.Visible = false;
-                tvFreezoneCategories.Visible = false;
-            }
+                }
+                else
+                {
+                    lblError.Visible = false;
+                    btnReport.Enabled = false;
+                    tvCountryCategories.Visible = false;
+                    tvFreezoneCategories.Visible = false;
+                }
+            
+            //else if(rblReportType.SelectedItem.Text.Equals(Constants.ReportTypes.Trend))
+            //{
+            //    pnlTrend.Visible = true;
+                
+            //    DataTable dt = ViewState["TempBenchmarking"] as DataTable;
+            //    DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
+            //    DataRow row = dt.NewRow();
+            //    row["SR"] = dt.Rows.Count + 1;
+            //    row["Region"] = ddlRegion.SelectedItem.Text;
+            //    row["Country"] = ddlCountry.SelectedItem.Text;
+
+            //}
 
             rblReportType.Visible = true;
         }
@@ -225,7 +240,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
                     tvCountryCategories.Visible = false; 
                     tvFreezoneCategories.Visible = false;
                 }
-
             }
         }
         protected void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -253,6 +267,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                     CreateNode(root, ds.Tables[0], tvFreezoneCategories);
                     tvFreezoneCategories.Nodes.Add(root);
                 }
+                tvFreezoneCategories.CollapseAll();
             }
             catch (Exception Ex) { throw Ex; }
         }
@@ -272,6 +287,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
                     CreateNode(root, ds.Tables[0], tvCountryCategories);
                     tvCountryCategories.Nodes.Add(root);
                 }
+
+                tvCountryCategories.CollapseAll();
             }
             catch (Exception Ex) { throw Ex; }
         }
@@ -333,7 +350,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 {
                     SPList list = web.Lists.TryGetList(Constants.List.Reports.Name);
 
-
                     SPQuery query = new SPQuery();
                     query.Query = @"<Where>
                                          <Eq>
@@ -341,6 +357,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                                            <Value Type='" + Commons.Type.Text + @"'>" + Constants.Modules.Benchmarking + @"</Value>
                                          </Eq>
                                     </Where>";
+
                     DataTable dt = list.GetItems(query).GetDataTable();
                     if (dt.Rows.Count > 0)
                     {
@@ -349,7 +366,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
                         rblReportType.DataValueField = "FileLeafRef";
                         rblReportType.DataBind();
                     }
-
                 }
             }
         }

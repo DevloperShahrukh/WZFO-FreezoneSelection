@@ -14,7 +14,6 @@ namespace WFZO.FZSelector
             {
                 public const string Comments = "Comments";
                 public const string Date = "ArticleStartDate";
-
             }
         }
 
@@ -29,6 +28,12 @@ namespace WFZO.FZSelector
             public const string Profile = "Profile";
 
         }
+
+        public static class ReportTypes
+        {
+            public const string Trend = "Trend";
+            public const string Normal = "Normal";
+        }
         public static class List
         {
             public static class BaseColumns
@@ -42,7 +47,6 @@ namespace WFZO.FZSelector
                 public const string Name = "Configuration";
                 public static class Fields
                 {
-
                     public const string Value = "Value";
                 }
             }

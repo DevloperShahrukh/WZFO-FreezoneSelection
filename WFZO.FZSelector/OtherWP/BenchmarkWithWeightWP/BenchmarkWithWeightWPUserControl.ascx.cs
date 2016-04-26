@@ -288,7 +288,15 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     HiddenField hdnSubCatIds = (HiddenField)row.FindControl("hdnSubCatIds");
                     if (row.Cells[1].Text.Equals("Country level"))
                     {
-                        hdnCountryCatIds.Value += hdnSubCatIds.Value;
+                        if(string.IsNullOrEmpty(hdnCountryCatIds.Value))
+                        {
+                            hdnCountryCatIds.Value += hdnSubCatIds.Value;
+                        }
+                        else
+                        {
+                            hdnCountryCatIds.Value += "," + hdnSubCatIds.Value;
+                        }
+
                     }
                     else if (row.Cells[1].Text.Equals("FreeZone level"))
                     {

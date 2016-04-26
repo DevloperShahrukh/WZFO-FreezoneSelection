@@ -17,11 +17,16 @@
     }
 
     function getAndShowReport() {
-        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>') || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>')) {
+
+        var ErrorVariable = { Error: "" };
+
+        if ((validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable)) && validateReportType('<%= rblReportType.ClientID %>', ErrorVariable)) {
 
             CollectParameters();
 
-            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/Benchmarking.rdl';
+            var reportName = $('#<%= rblReportType.ClientID %>').find('input:checked').val();
+
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName;
 
             ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
             + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
@@ -34,7 +39,7 @@
             UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {
-            alert('Select one of the category or sub category');
+            alert(ErrorVariable.Error);
         }
     }
 </script>
@@ -78,6 +83,8 @@
     <div class="row">
         <div class="country-form">
             <div class="form-horizontal">
+
+                
                 <div class="form-group">
                     <label class="col-md-4 text-right" for="inputEmail1">Region <span>*</span></label>
                     <div class="col-md-8">
@@ -160,7 +167,7 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
 
-                            <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                            <asp:TreeView ID="tvCountryCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                                 <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                                 <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
@@ -170,7 +177,7 @@
 
                             </asp:TreeView>
 
-                            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                                 <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                                 <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
@@ -187,23 +194,51 @@
 
                         </div>
                     </div>
-                     <div class="form-group">
-                        <label for="freezone" class="col-md-4 text-right"></label>
-                        <div class="col-md-8 text-center">
-                           <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
-                   
-                        </div>
+                    <div class="form-group">
+                    <label for="freezone" class="col-md-4 text-right"></label>
+                    <div class="col-md-8 text-center">
+                        <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
                     </div>
+                </div>
                     <div class="form-group">
                         <label for="freezone" class="col-md-4 text-right"></label>
                         <div class="col-md-8 text-center">
-                            <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false"/>
+                            <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false" />
                         </div>
                     </div>
                 </div>
             </div>
-        </div></div>
+        </div>
+    </div>
 </asp:Panel>
+
+<%--<asp:Panel ID="pnlTrend" runat="server" Visible="false">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading grid-header">Selected Free Zone</div>
+                <div class="panel-body table-responsive">
+                    <asp:GridView ID="GridView2" runat="server" CssClass="table country-table" AutoGenerateColumns="False" AllowPaging="True" PageSize="5" OnRowCommand="GridView1_RowCommand" OnPageIndexChanging="GridView1_PageIndexChanging" GridLines="Horizontal">
+                        <Columns>
+                            <asp:BoundField DataField="SR" HeaderText="#" />
+                            <asp:BoundField DataField="Region" HeaderText="Region" />
+                            <asp:BoundField DataField="Country" HeaderText="Country" />
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="LinkButton1" runat="server" CssClass="remove" CommandName="delRow" CommandArgument='<%# Bind("SR") %>'><span class="glyphicon glyphicon-trash" ></span></asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</asp:Panel>--%>
+
+
 <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
 
 

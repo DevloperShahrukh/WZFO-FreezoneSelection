@@ -15,7 +15,11 @@
     $('#' + HiddenValueId).val(ParameterIds);
 }
 
-function validateTreeviewNodesSelection(TreeviewID) {
+function validateTreeviewNodesSelection(TreeviewID, ErrorVariable) {
+
+
+    if ($('td .' + TreeviewID + 'Child').prev('input:checked').length <= 0) { ErrorVariable.Error = ' Select any one of the Category or Sub Category \n' }
+
     return ($('td .' + TreeviewID + 'Child').prev('input:checked').length > 0)
 
 }
@@ -51,7 +55,7 @@ function UpdateFreeZoneAnalytics(ObjectArray) {
     });
 }
 
-function validateReportType(RadioButtonListClienId) {
+function validateReportType(RadioButtonListClienId, ErrorVariable) {
     var selectedReportType = $('#' + RadioButtonListClienId).find('input:checked');
 
     if (selectedReportType.length <= 0) { ErrorVariable.Error += ' Select one of the report type \n'; }
@@ -117,8 +121,29 @@ function UpdateCategoryAnalyticsOfWeigthted(ModuleName) {
 
 }
 
-// End of Weighted Benchmarking Validation
+// Weighted Benchmarking Category Analytics Data preparation and update
 
+
+function AddCategoryWithWeights(CheckBoxInputContainingName, HiddenValueFieldClientId) {
+
+    var CategoriesWithWeight = '';
+
+    $(CheckBoxInputContainingName).parent().parent().each(function (index) {
+
+        if(CategoriesWithWeight == '')
+        {
+            CategoriesWithWeight += $(this).find("[name*='hdnCatId']").val() + ':' + $(this).find("[name*='quantity']").val();
+        }
+        else {
+            CategoriesWithWeight += ',' + $(this).find("[name*='hdnCatId']").val() + ':' + $(this).find("[name*='quantity']").val();
+        }
+
+    });
+
+    $('#' + HiddenValueFieldClientId).val(CategoriesWithWeight);
+    
+
+}
 
 
 function OnTreeClick(evt) {

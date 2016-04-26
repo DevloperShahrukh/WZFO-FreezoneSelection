@@ -129,7 +129,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
 
-                        <asp:TreeView ID="tvFreezoneProfileCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                        <asp:TreeView ID="tvFreezoneProfileCategories" runat="server"   ShowExpandCollapse="true"     ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                             <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
@@ -149,7 +149,7 @@
 
                         </asp:TreeView>
 
-                        <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                        <asp:TreeView ID="tvFreezoneCategories" runat="server"  ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                             <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
