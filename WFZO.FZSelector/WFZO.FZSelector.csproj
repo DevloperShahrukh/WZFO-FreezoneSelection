@@ -82,6 +82,13 @@
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.designer.cs">
       <DependentUpon>LoginUC.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControlTemplates\WFZO.FZSelector\TopBar.ascx.cs">
+      <DependentUpon>TopBar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlTemplates\WFZO.FZSelector\TopBar.ascx.designer.cs">
+      <DependentUpon>TopBar.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExcelPackageExtensions.cs" />
     <Compile Include="Layouts\WFZO.FZSelector\WebMethods.aspx.cs">
       <DependentUpon>WebMethods.aspx</DependentUpon>
@@ -256,6 +263,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx" />
+    <Content Include="ControlTemplates\WFZO.FZSelector\TopBar.ascx" />
     <Content Include="Layouts\WFZO.FZSelector\js\CustomScript.js" />
     <Content Include="Layouts\WFZO.FZSelector\WebMethods.aspx" />
     <Content Include="OtherWP\BenchmarkingWP\BenchmarkingWPUserControl.ascx" />

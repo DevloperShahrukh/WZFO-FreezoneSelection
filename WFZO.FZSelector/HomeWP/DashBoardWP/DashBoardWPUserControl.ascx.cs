@@ -10,7 +10,10 @@ namespace WFZO.FZSelector.HomeWP.DashBoardWP
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblUsername.Text = SPContext.Current.Web.CurrentUser.Name;
+            if (SPContext.Current.Web.CurrentUser != null)
+            {
+                lblUsername.Text = SPContext.Current.Web.CurrentUser.Name;
+            }
         }
     }
 }

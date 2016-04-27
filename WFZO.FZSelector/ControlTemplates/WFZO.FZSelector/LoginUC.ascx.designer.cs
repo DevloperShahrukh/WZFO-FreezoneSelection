@@ -22,22 +22,31 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector {
         protected global::System.Web.UI.WebControls.Panel PlLogin;
         
         /// <summary>
-        /// TxtUserID control.
+        /// liLogin control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TxtUserID;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl liLogin;
         
         /// <summary>
-        /// TxtPassword control.
+        /// txtUserID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TxtPassword;
+        protected global::System.Web.UI.WebControls.TextBox txtUserID;
+        
+        /// <summary>
+        /// txtPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPassword;
         
         /// <summary>
         /// btnUserLogin control.
@@ -49,13 +58,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector {
         protected global::System.Web.UI.WebControls.Button btnUserLogin;
         
         /// <summary>
-        /// LblInvalidUser control.
+        /// lblInvalidUser control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LblInvalidUser;
+        protected global::System.Web.UI.WebControls.Label lblInvalidUser;
         
         /// <summary>
         /// btnInformAdmin control.
@@ -67,13 +76,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector {
         protected global::System.Web.UI.WebControls.Button btnInformAdmin;
         
         /// <summary>
-        /// ChkStaySignedIn control.
+        /// chkStaySignedIn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox ChkStaySignedIn;
+        protected global::System.Web.UI.WebControls.CheckBox chkStaySignedIn;
         
         /// <summary>
         /// Label2 control.

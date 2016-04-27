@@ -19,8 +19,8 @@
     }
 
     function getAndShowReport() {
-
-        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>') || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>') || validateTreeviewNodesSelection('<%= hdnFreezoneProfileCatIds.ID %>')) {
+        var ErrorVariable = { Error: "" };
+        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= hdnFreezoneProfileCatIds.ID %>', ErrorVariable)) {
             CollectParameters();
 
             var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/rptFreezoneProfile.rdl';
@@ -168,7 +168,8 @@
                 <div class="form-group">
                     <label for="freezone" class="col-md-4 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="btnShowReport" runat="server" Text="ShowReport" class="btn btn-collection" OnClientClick="getAndShowReport(); return false;" />
+                        <input  type="button" class="btn btn-collection" onclick="getAndShowReport();" value="View Report"  />
+
                     </div>
                 </div>
             </div>

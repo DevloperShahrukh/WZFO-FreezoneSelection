@@ -52,7 +52,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
             dt.Columns.Add("CityId", typeof(int));
             dt.Columns.Add("FreeZoneId", typeof(int));
 
-
             ViewState["TempBenchmarking"] = dt;
         }
         protected void ddlRegion_SelectedIndexChanged(object sender, EventArgs e)
@@ -309,7 +308,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
             }
         }
 
-
         protected void CountryTreeView_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
         {
             // this.CheckAllChildNodes(e.Node, e.Node.Checked);
@@ -369,6 +367,5 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 }
             }
         }
-
     }
 }
