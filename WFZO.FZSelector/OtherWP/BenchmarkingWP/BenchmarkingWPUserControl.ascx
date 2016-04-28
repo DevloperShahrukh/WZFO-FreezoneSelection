@@ -44,47 +44,14 @@
     }
 </script>
 
-<div class="row mt35">
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="fzprofiles"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="fzprofilept"><a href="/Pages/FreeZoneProfile.aspx">Free Zone Profile</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab selected mb20">
-            <div class="db-small-iconbox">
-                <div class="benchmarkings"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3><a href="/Pages/Benchmarking.aspx">Benchmarking</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="weightages"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="weight"><a href="/Pages/BenchmarkwithWeightage.aspx">Benchmark with Weightage</a></h3>
-            </div>
-        </div>
-    </div>
-</div>
+<asp:HiddenField ID="errorMessage" runat="server" />
 
 <div class="inner-container">
     <div class="row">
         <div class="country-form">
             <div class="form-horizontal">
 
-                
+
                 <div class="form-group">
                     <label class="col-md-4 text-right" for="inputEmail1">Region <span>*</span></label>
                     <div class="col-md-8">
@@ -132,7 +99,12 @@
         </div>
     </div>
 </div>
-
+<div class="form-group">
+    <label for="freezone" class="col-md-4 text-right"></label>
+    <div class="col-md-8 text-center">
+         <a href='/Pages/CategoryMap.aspx' target='_blank'>Category Map</a>
+    </div>
+</div>
 <asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
     <div class="row">
         <div class="col-md-2"></div>
@@ -195,11 +167,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                    <label for="freezone" class="col-md-4 text-right"></label>
-                    <div class="col-md-8 text-center">
-                        <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
+                        <label for="freezone" class="col-md-4 text-right"></label>
+                        <div class="col-md-8 text-center">
+                            <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
+                        </div>
                     </div>
-                </div>
                     <div class="form-group">
                         <label for="freezone" class="col-md-4 text-right"></label>
                         <div class="col-md-8 text-center">

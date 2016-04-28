@@ -7,7 +7,7 @@
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="FreeZoneWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.FreeZoneWP.FreeZoneWPUserControl" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
-
+<asp:HiddenField ID="errorMessage" runat="server" />
 
 <script src="/Style Library/WFZO/js/jquery.min.js"></script>
 <script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
@@ -42,40 +42,6 @@
     }
 </script>
 
-<div class="row mt35">
-    <div class="col-md-3">
-        <div class="db-small-tab selected mb20">
-            <div class="db-small-iconbox">
-                <div class="fzprofiles"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="fzprofilept"><a href="/Pages/FreeZoneProfile.aspx">Free Zone Profile</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="benchmarkings"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3><a href="/Pages/Benchmarking.aspx">Benchmarking</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="weightages"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="weight"><a href="/Pages/BenchmarkwithWeightage.aspx">Benchmark with Weightage</a></h3>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="inner-container">
     <div class="row">

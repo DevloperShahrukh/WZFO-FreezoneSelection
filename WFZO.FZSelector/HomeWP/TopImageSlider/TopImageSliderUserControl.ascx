@@ -6,7 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TopImageSliderUserControl.ascx.cs" Inherits="WFZO.FZSelector.HomeWP.TopImageSlider.TopImageSliderUserControl" %>
-
+<asp:HiddenField ID="errorMessage" runat="server" />
 <asp:Repeater ID="Repeater2" runat="server" OnItemDataBound="Repeater2_ItemDataBound">
     <HeaderTemplate>
 

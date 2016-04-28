@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WFZO.FZSelector.NewsWP {
+namespace WFZO.FZSelector.OtherWP.CategoryMapWP {
     
     
-    public partial class NewsWPUserControl {
+    public partial class CategoryMapWPUserControl {
         
         /// <summary>
         /// errorMessage control.
@@ -22,12 +22,12 @@ namespace WFZO.FZSelector.NewsWP {
         protected global::System.Web.UI.WebControls.HiddenField errorMessage;
         
         /// <summary>
-        /// NewsRP control.
+        /// rptCountyLevel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater NewsRP;
+        protected global::System.Web.UI.WebControls.Repeater rptCountyLevel;
     }
 }

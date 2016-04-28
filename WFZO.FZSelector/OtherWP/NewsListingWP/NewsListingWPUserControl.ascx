@@ -54,7 +54,7 @@
         color: #fff !important;
     }
 </style>
-
+<asp:HiddenField ID="errorMessage" runat="server" />
 <asp:Repeater ID="NewsRP" runat="server" OnItemDataBound="NewsRP_ItemDataBound">
     <HeaderTemplate>
         <div class="news-head col-xs-12">
@@ -76,7 +76,7 @@
                         <asp:Label ID="lblUrl" runat="server" Text='<%# Eval("URL") %>' Visible="false"></asp:Label>
                     </h2>
                     <h5><%# Eval("ArticleStartDate") %></h5>
-                    <p><%# Eval("Comments") %></p>
+                        <p><%# Eval("Comments") %></p>
                 </div>
             </div>
         </div>

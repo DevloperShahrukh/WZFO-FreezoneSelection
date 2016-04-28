@@ -8,46 +8,19 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="FeedbackFormWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.OtherWP.FeedbackFormWP.FeedbackFormWPUserControl" %>
 
 
-<div class="row mt35">
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="fzprofiles"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="fzprofilept"><a href="/Pages/FreeZoneProfile.aspx">Free Zone Profile</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="benchmarkings"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3><a href="/Pages/Benchmarking.aspx">Benchmarking</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="weightages"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="weight"><a href="/Pages/BenchmarkwithWeightage.aspx">Benchmark with Weightage</a></h3>
-            </div>
-        </div>
-    </div>
-
-</div>
+<asp:HiddenField ID="errorMessage" runat="server" />
 
 <div class="inner-container">
     <div class="row">
         <div class="country-form">
             <div class="form-horizontal">
+                 <div class="form-group">
+                    <label class="col-md-4 text-right" for="inputEmail1">From <span>*</span></label>
+                    <div class="col-md-8">
+                        <asp:TextBox ID="txtFrom" runat="server" class="form-control txt-box"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Name Required" ControlToValidate="txtFrom" Display="Dynamic"></asp:RequiredFieldValidator>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-md-4 text-right" for="inputEmail1">Name <span>*</span></label>
                     <div class="col-md-8">

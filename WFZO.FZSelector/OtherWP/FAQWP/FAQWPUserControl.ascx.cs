@@ -4,6 +4,7 @@ using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using WFZO.FZSelector.Classes;
 
 namespace WFZO.FZSelector.OtherWP.FAQWP
 {
@@ -19,7 +20,9 @@ namespace WFZO.FZSelector.OtherWP.FAQWP
         }
 
         public DataTable GetTable()
-        { 
+        {
+            DataTable dt = new DataTable();
+            try { 
             using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
             {
                 using (SPWeb web = site.OpenWeb())
@@ -32,11 +35,18 @@ namespace WFZO.FZSelector.OtherWP.FAQWP
                                            <Value Type='" + Commons.Type.Boolean + @"'>" + 1 + @"</Value>
                                          </Eq>
                                     </Where>";
-                    DataTable dt = list.GetItems(query).GetDataTable();
-                    return dt;
-                    
+                    dt = list.GetItems(query).GetDataTable();
+                   
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GetTable", SPContext.Current.Site);
+            }
+            return dt;
+                    
         }
     }
 }

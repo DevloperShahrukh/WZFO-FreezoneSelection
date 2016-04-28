@@ -6,6 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TopBar.ascx.cs" Inherits="WFZO.FZSelector.ControlTemplates.WFZO.FZSelector.TopBar" %>
+<asp:HiddenField ID="errorMessage" runat="server" />
 <div class="logout-box">
     <ul>
         <li>

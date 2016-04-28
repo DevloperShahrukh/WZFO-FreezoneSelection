@@ -13,6 +13,15 @@ namespace WFZO.FZSelector.OtherWP.FAQWP {
     public partial class FAQWPUserControl {
         
         /// <summary>
+        /// errorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField errorMessage;
+        
+        /// <summary>
         /// rpFAQ control.
         /// </summary>
         /// <remarks>

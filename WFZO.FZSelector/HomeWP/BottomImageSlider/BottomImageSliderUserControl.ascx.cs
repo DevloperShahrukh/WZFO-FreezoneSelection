@@ -3,6 +3,7 @@ using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using WFZO.FZSelector.Classes;
 
 namespace WFZO.FZSelector.HomeWP.BottomImageSlider
 {
@@ -22,14 +23,16 @@ namespace WFZO.FZSelector.HomeWP.BottomImageSlider
         }
         protected void getLogoSliderImages()
         {
-            using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+            try
             {
-                using (SPWeb web = site.OpenWeb())
+                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                 {
+                    using (SPWeb web = site.OpenWeb())
+                    {
 
-                    SPList list = web.Lists[Constants.List.BottomSlider.Name];
-                    SPQuery query = new SPQuery();
-                    query.Query = @"<Where>
+                        SPList list = web.Lists[Constants.List.BottomSlider.Name];
+                        SPQuery query = new SPQuery();
+                        query.Query = @"<Where>
                                        
                                             <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.IsActive + @"' />
@@ -38,22 +41,39 @@ namespace WFZO.FZSelector.HomeWP.BottomImageSlider
                                        
                                     </Where>";
 
-                    SPListItemCollection newVeh = list.GetItems(query);
-                    Repeater1.DataSource = newVeh.GetDataTable();
-                    Repeater1.DataBind();
+                        SPListItemCollection newVeh = list.GetItems(query);
+                        Repeater1.DataSource = newVeh.GetDataTable();
+                        Repeater1.DataBind();
 
+                    }
                 }
             }
-        }
-        public static string GetSrcFromImgTag(string imgTag)
-        {
-            int start = imgTag.IndexOf("src=") + 5;
-            int end = imgTag.IndexOf("\"", start);
 
-            if (end > start)
-                return imgTag.Substring(start, end - start);
-            else
-                return "";
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "getLogoSliderImages", SPContext.Current.Site);
+            }
+        }
+        public string GetSrcFromImgTag(string imgTag)
+        {
+            string result = "";
+            try
+            {
+                int start = imgTag.IndexOf("src=") + 5;
+                int end = imgTag.IndexOf("\"", start);
+
+                if (end > start)
+                    result = imgTag.Substring(start, end - start);
+                else
+                    result = "";
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GetSrcFromImgTag", SPContext.Current.Site);
+            }
+            return result;
         }
     }
 }

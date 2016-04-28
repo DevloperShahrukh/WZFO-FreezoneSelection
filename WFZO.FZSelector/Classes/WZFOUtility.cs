@@ -66,20 +66,20 @@ namespace WFZO.FZSelector.Classes
                             if (ex != null)
                             {
                                 web1.AllowUnsafeUpdates = true;
-                                SPList list = web1.Lists["ErrorLog"];
+                                SPList list = web1.Lists[Constants.List.Exception.Name];
 
                                 //Add a new item in the List
                                 SPListItem itemToAdd = list.Items.Add();
-                                itemToAdd["Title"] = MethodName;
-                                itemToAdd["Error"] = ex.Message;
+                                itemToAdd[Constants.List.BaseColumns.Title] = MethodName;
+                                itemToAdd[Constants.List.Exception.Fields.Error] = ex.Message;
                                 if (ex.InnerException != null)
                                 {
-                                    itemToAdd["Detail"] = ex.InnerException.ToString();
+                                    itemToAdd[Constants.List.Exception.Fields.Detail] = ex.InnerException.ToString();
                                 }
 
                                 if (ex.StackTrace != null)
                                 {
-                                    itemToAdd["Trace"] = ex.StackTrace;
+                                    itemToAdd[Constants.List.Exception.Fields.Stacktrace] = ex.StackTrace;
                                 }
                                 itemToAdd.Update();
                                 web1.AllowUnsafeUpdates = false;

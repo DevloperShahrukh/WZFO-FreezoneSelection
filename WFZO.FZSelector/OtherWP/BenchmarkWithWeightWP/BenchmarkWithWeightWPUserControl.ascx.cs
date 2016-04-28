@@ -26,6 +26,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
         }
         public void bindRegion()
         {
+            try { 
             obj.BindCombo(ddlRegion, "RegionName", "RegionID", "FillRegion");
             ddlRegion.Items.Insert(0, new ListItem("Select", "0"));
 
@@ -35,10 +36,15 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             ddlCountry.Items.Insert(0, new ListItem("Select", "0"));
             ddlCity.Items.Insert(0, new ListItem("Select", "0"));
             ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
-
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "bindRegion", SPContext.Current.Site);
+            }
         }
         public void bindgridview()
-        {
+        {try{
             DataTable dt = new DataTable();
             dt.Columns.Add("SR", typeof(int));
             dt.Columns.Add("Region", typeof(string));
@@ -51,10 +57,15 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             dt.Columns.Add("CityId", typeof(int));
             dt.Columns.Add("FreeZoneId", typeof(int));
 
-            ViewState["TempBenchmarking"] = dt;
+            ViewState["TempBenchmarking"] = dt;    }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "bindgridview", SPContext.Current.Site);
+            }
         }
         protected void ddlRegion_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {try{
             if (ddlRegion.SelectedItem.Value != "0")
             {
                 Hashtable par = new Hashtable();
@@ -65,10 +76,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             ddlCity.Items.Clear();
             ddlFreeZone.Items.Clear();
             ddlCity.Items.Insert(0, new ListItem("Select", "0"));
-            ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+            ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));    }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlRegion_SelectedIndexChanged", SPContext.Current.Site);
+            }
         }
         protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             if (ddlCountry.SelectedItem.Value != "0")
             {
                 Hashtable par = new Hashtable();
@@ -79,9 +96,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             }
             ddlFreeZone.Items.Clear();
             ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlCountry_SelectedIndexChanged", SPContext.Current.Site);
+            }
         }
         protected void ddlCity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             if (ddlCity.SelectedItem.Value != "0")
             {
                 Hashtable par = new Hashtable();
@@ -89,9 +113,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 obj.BindList(ddlFreeZone, "FillFreeZone", "FreezoneName", par, "FreezoneName", "FreeZoneID");
                 ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlCity_SelectedIndexChanged", SPContext.Current.Site);
+            }
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
+            try { 
             PlSelectedZone.Visible = true;
             DataTable dt = ViewState["TempBenchmarking"] as DataTable;
             DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
@@ -167,10 +198,16 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             FreezoneDataList.Add(FAD);
 
             ViewState["FreezoneDataList"] = FreezoneDataList;
-
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "Button1_Click", SPContext.Current.Site);
+            }
         }
         protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            try { 
             if (e.CommandName == "delRow")
             {
                 DataTable dt = (DataTable)ViewState["TempBenchmarking"];
@@ -240,19 +277,33 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GridView1_RowCommand", SPContext.Current.Site);
+            }
         }
 
 
         protected void GridView1_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
+            try { 
             DataTable dt = (DataTable)ViewState["TempBenchmarking"];
             GridView1.PageIndex = e.NewPageIndex;
             GridView1.DataSource = dt;
             GridView1.DataBind();
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "Button2_Click", SPContext.Current.Site);
+            }
         }
 
         protected void chkSelectedCategory_CheckedChanged(object sender, EventArgs e)
         {
+            try { 
             CheckBox checkbox = (CheckBox)sender;
             GridViewRow gdrow = (GridViewRow)checkbox.NamingContainer;
             TextBox txt = (TextBox)gdrow.FindControl("quantity");
@@ -326,10 +377,17 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 txt.Enabled = false;
                 txt.Text = "";
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GridView1_PageIndexChanging", SPContext.Current.Site);
+            }
         }
 
         protected void btnReport_Click(object sender, EventArgs e)
         {
+            try {
             decimal weight = 0;
             foreach (GridViewRow row in grdWeightedBenchmarkingCategories.Rows)
             {
@@ -352,11 +410,18 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 lblError.Visible = true;
                 lblError.Text = "Total Weightage should be approximately 100";
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "btnReport_Click", SPContext.Current.Site);
+            }
         }
 
 
         private void BindgrdCategories(string CountryIds)
         {
+            try { 
             Hashtable par = new Hashtable();
             par.Add("@CountryId", CountryIds);
             DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);   //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
@@ -431,10 +496,17 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
 
             grdWeightedBenchmarkingCategories.DataSource = dtCountryLevelCategories;
             grdWeightedBenchmarkingCategories.DataBind();
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "BindgrdCategories", SPContext.Current.Site);
+            }
         }
 
         public void PopluateReportTypeList()
         {
+            try { 
             using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
             {
                 using (SPWeb web = site.OpenWeb())
@@ -457,6 +529,12 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                         rblReportType.DataBind();
                     }
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "PopluateReportTypeList", SPContext.Current.Site);
             }
         }
 

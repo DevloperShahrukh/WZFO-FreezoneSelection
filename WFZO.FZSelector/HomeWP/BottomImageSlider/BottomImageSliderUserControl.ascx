@@ -6,7 +6,7 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BottomImageSliderUserControl.ascx.cs" Inherits="WFZO.FZSelector.HomeWP.BottomImageSlider.BottomImageSliderUserControl" %>
-
+<asp:HiddenField ID="errorMessage" runat="server" />
 
 		<div class="row">
     <asp:Repeater ID="Repeater1" runat="server">
@@ -15,7 +15,8 @@
         </HeaderTemplate>
         <ItemTemplate>
             <div class="item">
-                <img src='<%# GetSrcFromImgTag(Eval("ImageColumn").ToString())%>' alt="logo" />
+                <a href="/Pages/Dashboard.aspx">
+                <img src='<%# GetSrcFromImgTag(Eval("ImageColumn").ToString())%>' alt="logo" /></a>
             </div>
         </ItemTemplate>
         <FooterTemplate>

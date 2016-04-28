@@ -14,7 +14,7 @@
 
     function getAndShowReport() {
 
-        var ErrorVariable =   { Error: "" };
+        var ErrorVariable = { Error: "" };
 
         if (validateReportType('<%= rblReportType.ClientID %>', ErrorVariable) && validateCheckedInputs(ErrorVariable) && validateCheckedInputsSum(ErrorVariable)) {
 
@@ -31,7 +31,7 @@
             window.open(ReportUrl);
 
             UpdateCategoryAnalyticsOfWeigthted('<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
-            
+
             //UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
 
             UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
@@ -51,43 +51,7 @@
 <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
 <asp:HiddenField ID="hdnCatIdAndWeightageValue" runat="server" />
 
-
-<div class="row mt35">
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="fzprofiles"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="fzprofilept"><a href="/Pages/FreeZoneProfile.aspx">Free Zone Profile</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab mb20">
-            <div class="db-small-iconbox">
-                <div class="benchmarkings"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3><a href="/Pages/Benchmarking.aspx">Benchmarking</a></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="db-small-tab selected mb20">
-            <div class="db-small-iconbox">
-                <div class="weightages"></div>
-            </div>
-            <div class="db-small-detail">
-                <h3 class="weight"><a href="/Pages/BenchmarkwithWeightage.aspx">Benchmark with Weightage</a></h3>
-            </div>
-        </div>
-    </div>
-
-</div>
-
+<asp:HiddenField ID="errorMessage" runat="server" />
 
 <div class="inner-container">
     <div class="row">
@@ -167,18 +131,18 @@
         </div>
     </div>
 
-   
+
 
 </asp:Panel>
 
 <asp:Panel ID="pnlCategories" runat="server" Visible="false">
-     <div class="row">
+    <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading grid-header">Categories <span>*</span></div>
                 <div class="panel-body table-responsive">
-                    <asp:GridView ID="grdWeightedBenchmarkingCategories" runat="server"  CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal"  >
+                    <asp:GridView ID="grdWeightedBenchmarkingCategories" runat="server" CssClass="table country-table" AutoGenerateColumns="False" GridLines="Horizontal">
                         <Columns>
                             <asp:TemplateField>
                                 <ItemTemplate>
@@ -194,7 +158,7 @@
                                 <ItemTemplate>
                                     <asp:HiddenField ID="hdnCatId" runat="server" Value='<%# Eval("Id") %>' />
                                     <asp:HiddenField ID="hdnSubCatIds" runat="server" Value='<%# Eval("SubCategoryIds") %>' />
-                                    <asp:TextBox ID="quantity" runat="server"  Enabled="false" TextMode="Number" />
+                                    <asp:TextBox ID="quantity" runat="server" Enabled="false" TextMode="Number" />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -205,14 +169,14 @@
         <div class="col-md-2"></div>
     </div>
     <asp:Label ID="lblError" runat="server" Text="" Visible="false"></asp:Label>
-<div class="form-group">
+    <div class="form-group">
 
-    <div class="col-md-8 text-center"> 
-        <asp:RadioButtonList ID="rblReportType" runat="server" Visible="true" RepeatLayout="UnorderedList"></asp:RadioButtonList>
-        <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false;" />
+        <div class="col-md-8 text-center">
+            <asp:RadioButtonList ID="rblReportType" runat="server" Visible="true" RepeatLayout="UnorderedList"></asp:RadioButtonList>
+            <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false;" />
+        </div>
     </div>
-</div>
-    </asp:Panel>
+</asp:Panel>
 
 
 

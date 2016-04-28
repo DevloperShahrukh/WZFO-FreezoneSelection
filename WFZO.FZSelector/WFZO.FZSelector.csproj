@@ -73,6 +73,7 @@
     <Compile Include="Classes\ClsDBAccess.cs" />
     <Compile Include="Classes\Connection.cs" />
     <Compile Include="Classes\FreezoneAnalyticData.cs" />
+    <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\Subcategory.cs" />
     <Compile Include="Classes\WZFOUtility.cs" />
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.cs">
@@ -121,6 +122,14 @@
     </Compile>
     <Compile Include="ControlTemplates\WFZO.FZSelector\FooterUC.ascx.designer.cs">
       <DependentUpon>FooterUC.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtherWP\CategoryMapWP\CategoryMapWP.cs" />
+    <Compile Include="OtherWP\CategoryMapWP\CategoryMapWPUserControl.ascx.cs">
+      <DependentUpon>CategoryMapWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\CategoryMapWP\CategoryMapWPUserControl.ascx.designer.cs">
+      <DependentUpon>CategoryMapWPUserControl.ascx.cs</DependentUpon>
     </Compile>
     <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWP.cs" />
     <Compile Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx.cs">
@@ -212,6 +221,10 @@
     <None Include="Features\WFZO Feature\WFZO Feature.feature">
       <FeatureId>{b74aed29-bd91-4845-8246-2ecb520ddd86}</FeatureId>
     </None>
+    <None Include="OtherWP\CategoryMapWP\CategoryMapWP.webpart" />
+    <None Include="OtherWP\CategoryMapWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{b9a564a1-a232-49f4-a169-df570eaadbbd}</SharePointProjectItemId>
+    </None>
     <None Include="OtherWP\DataImportRobotWP\DataImportRobotWP.webpart" />
     <None Include="OtherWP\DataImportRobotWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{f26b773b-7f4d-4556-86fe-0fe658f48fd1}</SharePointProjectItemId>
@@ -274,6 +287,8 @@
     <Content Include="Features\WFZO Feature\WFZO Feature.Template.xml">
       <DependentUpon>WFZO Feature.feature</DependentUpon>
     </Content>
+    <Content Include="OtherWP\CategoryMapWP\CategoryMapWPUserControl.ascx" />
+    <Content Include="OtherWP\CategoryMapWP\Elements.xml" />
     <Content Include="OtherWP\DataImportRobotWP\DataImportRobotWPUserControl.ascx" />
     <Content Include="OtherWP\DataImportRobotWP\Elements.xml" />
     <Content Include="OtherWP\FAQWP\Elements.xml" />

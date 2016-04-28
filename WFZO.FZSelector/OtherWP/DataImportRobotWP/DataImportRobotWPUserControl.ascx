@@ -8,6 +8,7 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="DataImportRobotWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.OtherWP.DataImportRobotWP.DataImportRobotWPUserControl" %>
 
 
+<asp:HiddenField ID="errorMessage" runat="server" />
 <asp:FileUpload ID="FileUpload1" runat="server" />
 <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Country Level Import" />
 <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="FreeZone Level Import" />

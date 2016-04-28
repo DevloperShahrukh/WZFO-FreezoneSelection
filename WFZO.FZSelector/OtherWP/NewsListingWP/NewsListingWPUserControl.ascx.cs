@@ -7,14 +7,15 @@ using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
+using WFZO.FZSelector.Classes;
 
 namespace WFZO.FZSelector.OtherWP.NewsListingWP
 {
     public partial class NewsListingWPUserControl : UserControl
-    {     
+    {
         protected void Page_Load(object sender, EventArgs e)
         {
-     
+
             if (!IsPostBack)
             {
                 GetPageSize();
@@ -23,14 +24,16 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
         }
         protected void BindNewsRP()
         {
-            using (SPSite site = new SPSite(SPContext.Current.Web.Url + Constants.Subsite.News))
+            try
             {
-                using (SPWeb web = site.OpenWeb())
+                using (SPSite site = new SPSite(SPContext.Current.Web.Url + Constants.Subsite.News))
                 {
-                    SPList list = web.Lists.TryGetList(Constants.List.Pages.Name);
+                    using (SPWeb web = site.OpenWeb())
+                    {
+                        SPList list = web.Lists.TryGetList(Constants.List.Pages.Name);
 
-                    SPQuery query = new SPQuery();
-                    query.Query = @"<Where>
+                        SPQuery query = new SPQuery();
+                        query.Query = @"<Where>
                                        <And>
                                             <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.IsActive + @"' />
@@ -42,103 +45,135 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                                          </Eq>
                                        </And>  
                                     </Where>
-                                    <OrderBy>
-                                       <FieldRef Name='" + Constants.List.BaseColumns.Created + @"' Ascending='True' />
+                                   <OrderBy>
+                                       <FieldRef Name='" + Constants.List.BaseColumns.Created + @"' Ascending='False' />
                                     </OrderBy>";
-                    SPListItemCollection col = list.GetItems(query);
-                    DataTable NewDT = new DataTable();
-                    NewDT.Columns.Add("Title", typeof(string));
-                    NewDT.Columns.Add("ArticleStartDate", typeof(string));
-                    NewDT.Columns.Add("Comments", typeof(string));
-                    NewDT.Columns.Add("Image", typeof(string));
-                    NewDT.Columns.Add("Url", typeof(string));
-                    foreach (SPListItem item in col)
-                    {
-                        DataRow row = NewDT.NewRow();
-                        row["Title"] = Convert.ToString(item[Constants.List.BaseColumns.Title]);
-                        row["ArticleStartDate"] = Convert.ToDateTime(item[Constants.ContentType.News.Date]).ToLongDateString();
-                        row["Comments"] = Convert.ToString(item[Constants.ContentType.News.Comments]);
+                        SPListItemCollection col = list.GetItems(query);
+                        DataTable NewDT = new DataTable();
+                        NewDT.Columns.Add("Title", typeof(string));
+                        NewDT.Columns.Add("ArticleStartDate", typeof(string));
+                        NewDT.Columns.Add("Comments", typeof(string));
+                        NewDT.Columns.Add("Image", typeof(string));
+                        NewDT.Columns.Add("Url", typeof(string));
+                        foreach (SPListItem item in col)
+                        {
+                            DataRow row = NewDT.NewRow();
+                            row["Title"] = Convert.ToString(item[Constants.List.BaseColumns.Title]);
+                            row["ArticleStartDate"] = Convert.ToDateTime(item[Constants.ContentType.News.Date]).ToLongDateString();
+                            row["Comments"] = Convert.ToString(item[Constants.ContentType.News.Comments]);
 
 
-
-                        row["Image"] = GetSrcFromImgTag(Convert.ToString(item["PublishingPageImage"]));
-                        row["URL"] = Convert.ToString(item.File.ServerRelativeUrl);
-
-                        NewDT.Rows.Add(row);
-                    }
-
-                    PagedDataSource pagedData = new PagedDataSource();
-
-                    pagedData.AllowPaging = true;
-                    pagedData.PageSize = PageSize;
-                    pagedData.DataSource = NewDT.DefaultView;
-                    pagedData.CurrentPageIndex = CurrentPage;
-
-
-                    lblCurrentPage.Text = "<b>Page:</b> " + (CurrentPage + 1).ToString() + " of " + pagedData.PageCount.ToString();
-
-                    PageCount = pagedData.PageCount;
-
-                    // Disable Prev/Next First/Last buttons if necessary
-                    cmdPrev.Enabled = !pagedData.IsFirstPage;
-                    cmdFirst.Enabled = !pagedData.IsFirstPage;
-                    cmdNext.Enabled = !pagedData.IsLastPage;
-                    cmdLast.Enabled = !pagedData.IsLastPage;
-
-
-
-                    // Wire up the page numbers
-                    if (pagedData.PageCount > 1)
-                    {
-                        rptPages.Visible = true;
-                        ArrayList pages = new ArrayList();
-                        for (int i = 0; i < pagedData.PageCount; i++)
-                            if (i == CurrentPage)
+                            string defaultiamge = "../../Style Library/WFZO/img/news.jpg";
+                            if (String.IsNullOrWhiteSpace(Convert.ToString(item["PublishingPageImage"])))
                             {
-
-                                pages.Add("<b>" + (i + 1).ToString() + "</b>");
+                                row["Image"] = defaultiamge;
                             }
                             else
                             {
-                                pages.Add((i + 1).ToString());
-                            }
-                        rptPages.DataSource = pages;
-                        rptPages.DataBind();
-                    }
-                    else
-                    {
-                        rptPages.Visible = false;
-                    }
 
-                    NewsRP.DataSource = pagedData;
-                    NewsRP.DataBind();
+                                row["Image"] = GetSrcFromImgTag(Convert.ToString(item["PublishingPageImage"]));
+                            }
+                            row["URL"] = Convert.ToString(item.File.ServerRelativeUrl);
+
+                            NewDT.Rows.Add(row);
+                        }
+
+                        PagedDataSource pagedData = new PagedDataSource();
+
+                        pagedData.AllowPaging = true;
+                        pagedData.PageSize = PageSize;
+                        pagedData.DataSource = NewDT.DefaultView;
+                        pagedData.CurrentPageIndex = CurrentPage;
+
+
+                        lblCurrentPage.Text = "<b>Page:</b> " + (CurrentPage + 1).ToString() + " of " + pagedData.PageCount.ToString();
+
+                        PageCount = pagedData.PageCount;
+
+                        // Disable Prev/Next First/Last buttons if necessary
+                        cmdPrev.Enabled = !pagedData.IsFirstPage;
+                        cmdFirst.Enabled = !pagedData.IsFirstPage;
+                        cmdNext.Enabled = !pagedData.IsLastPage;
+                        cmdLast.Enabled = !pagedData.IsLastPage;
+
+
+
+                        // Wire up the page numbers
+                        if (pagedData.PageCount > 1)
+                        {
+                            rptPages.Visible = true;
+                            ArrayList pages = new ArrayList();
+                            for (int i = 0; i < pagedData.PageCount; i++)
+                                if (i == CurrentPage)
+                                {
+
+                                    pages.Add("<b>" + (i + 1).ToString() + "</b>");
+                                }
+                                else
+                                {
+                                    pages.Add((i + 1).ToString());
+                                }
+                            rptPages.DataSource = pages;
+                            rptPages.DataBind();
+                        }
+                        else
+                        {
+                            rptPages.Visible = false;
+                        }
+
+                        NewsRP.DataSource = pagedData;
+                        NewsRP.DataBind();
+                    }
 
                 }
             }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "BindNewsRP", SPContext.Current.Site);
+            }
         }
-        public static string GetSrcFromImgTag(string imgTag)
+        public string GetSrcFromImgTag(string imgTag)
         {
-            int start = imgTag.IndexOf("src=") + 5;
-            int end = imgTag.IndexOf("\"", start);
+            string result = "";
+            try
+            {
+                int start = imgTag.IndexOf("src=") + 5;
+                int end = imgTag.IndexOf("\"", start);
 
-            if (end > start)
-                return imgTag.Substring(start, end - start);
-            else
-                return "";
+                if (end > start)
+                    result = imgTag.Substring(start, end - start);
+                else
+                    result = "";
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GetSrcFromImgTag", SPContext.Current.Site);
+            }
 
+            return result;
         }
 
         protected void NewsRP_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            try
             {
-                Literal lit = (Literal)e.Item.FindControl("ltrUrl");
-                Label Title = (Label)e.Item.FindControl("lblTitle");
-                Label LinkURL = (Label)e.Item.FindControl("lblUrl");
+                if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+                {
+                    Literal lit = (Literal)e.Item.FindControl("ltrUrl");
+                    Label Title = (Label)e.Item.FindControl("lblTitle");
+                    Label LinkURL = (Label)e.Item.FindControl("lblUrl");
 
-                string[] getLink = LinkURL.Text.Split(',');
-                lit.Text = "<a href='" + getLink[0] + "'>" + Title.Text + "</a>";
+                    string[] getLink = LinkURL.Text.Split(',');
+                    lit.Text = "<a href='" + getLink[0] + "'>" + Title.Text + "</a>";
 
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "NewsRP_ItemDataBound", SPContext.Current.Site);
             }
         }
 
@@ -269,14 +304,16 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
         }
         protected void GetPageSize()
         {
-            using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
+            try
             {
-                using (SPWeb web = site.OpenWeb())
+                using (SPSite site = new SPSite(SPContext.Current.Site.RootWeb.Url))
                 {
-                    SPList list = web.Lists.TryGetList(Constants.List.Configuration.Name);
+                    using (SPWeb web = site.OpenWeb())
+                    {
+                        SPList list = web.Lists.TryGetList(Constants.List.Configuration.Name);
 
-                    SPQuery query = new SPQuery();
-                    query.Query = @"<Where>
+                        SPQuery query = new SPQuery();
+                        query.Query = @"<Where>
                                       
                                             <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.Title + @"' />
@@ -284,15 +321,22 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                                          </Eq>
                                        
                                     </Where>";
-                    SPListItemCollection col = list.GetItems(query);
-                    foreach (SPListItem item in col)
-                    {
-                        PageSize = Convert.ToInt32(item[Constants.List.Configuration.Fields.Value]);
+                        SPListItemCollection col = list.GetItems(query);
+                        foreach (SPListItem item in col)
+                        {
+                            PageSize = Convert.ToInt32(item[Constants.List.Configuration.Fields.Value]);
+                        }
+                        ViewState["PageSize"] = PageSize;
                     }
-                    ViewState["PageSize"] = PageSize;
                 }
             }
-        }
 
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "GetPageSize", SPContext.Current.Site);
+            }
+
+        }
     }
 }

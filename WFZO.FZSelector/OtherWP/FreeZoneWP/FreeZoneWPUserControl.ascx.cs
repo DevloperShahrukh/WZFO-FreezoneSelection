@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SharePoint;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -28,34 +29,52 @@ namespace WFZO.FZSelector.FreeZoneWP
         }
         public void bindRegion()
         {
-            obj.BindCombo(ddlRegion, "RegionName", "RegionID", "FillRegion");
+            try
+            {
+                obj.BindCombo(ddlRegion, "RegionName", "RegionID", "FillRegion");
 
-            ddlRegion.Items.Insert(0, new ListItem("Select", "0"));
+                ddlRegion.Items.Insert(0, new ListItem("Select", "0"));
 
-            ddlCountry.Items.Clear();
-            ddlCity.Items.Clear();
-            ddlFreeZone.Items.Clear();
-            ddlCountry.Items.Insert(0, new ListItem("Select", "0"));
-            ddlCity.Items.Insert(0, new ListItem("Select", "0"));
-            ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+                ddlCountry.Items.Clear();
+                ddlCity.Items.Clear();
+                ddlFreeZone.Items.Clear();
+                ddlCountry.Items.Insert(0, new ListItem("Select", "0"));
+                ddlCity.Items.Insert(0, new ListItem("Select", "0"));
+                ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "bindRegion", SPContext.Current.Site);
+            }
 
         }
         protected void ddlRegion_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlRegion.SelectedItem.Value != "0")
+            try
             {
-                Hashtable par = new Hashtable();
-                par.Add("@RegionID", ddlRegion.SelectedItem.Value);
-                obj.BindList(ddlCountry, "FillCountry", "CountryName", par, "CountryName", "CountryId");
-                ddlCountry.Items.Insert(0, new ListItem("Select", "0"));
+                if (ddlRegion.SelectedItem.Value != "0")
+                {
+                    Hashtable par = new Hashtable();
+                    par.Add("@RegionID", ddlRegion.SelectedItem.Value);
+                    obj.BindList(ddlCountry, "FillCountry", "CountryName", par, "CountryName", "CountryId");
+                    ddlCountry.Items.Insert(0, new ListItem("Select", "0"));
+                }
+                ddlCity.Items.Clear();
+                ddlFreeZone.Items.Clear();
+                ddlCity.Items.Insert(0, new ListItem("Select", "0"));
+                ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
             }
-            ddlCity.Items.Clear();
-            ddlFreeZone.Items.Clear();
-            ddlCity.Items.Insert(0, new ListItem("Select", "0"));
-            ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlRegion_SelectedIndexChanged", SPContext.Current.Site);
+            }
+
         }
         protected void ddlCountry_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             if (ddlCountry.SelectedItem.Value != "0")
             {
                 Hashtable par = new Hashtable();
@@ -65,9 +84,17 @@ namespace WFZO.FZSelector.FreeZoneWP
             }
             ddlFreeZone.Items.Clear();
             ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlCountry_SelectedIndexChanged", SPContext.Current.Site);
+            }
+
         }
         protected void ddlCity_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             if (ddlCity.SelectedItem.Value != "0")
             {
                 Hashtable par = new Hashtable();
@@ -76,6 +103,12 @@ namespace WFZO.FZSelector.FreeZoneWP
                 ddlFreeZone.Items.Insert(0, new ListItem("Select", "0"));
             }
 
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlCity_SelectedIndexChanged", SPContext.Current.Site);
+            }
 
         }
         
@@ -98,7 +131,13 @@ namespace WFZO.FZSelector.FreeZoneWP
                     tvFreezoneCategories.Nodes.Add(root);
                 }
             }
-            catch (Exception Ex) { throw Ex; }
+             
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "BindFreezoneTreeView", SPContext.Current.Site);
+            }
+
         }
 
         private void BindFreezoneProfileCategoryTreeView(int FreezoneId)
@@ -119,7 +158,12 @@ namespace WFZO.FZSelector.FreeZoneWP
                     tvFreezoneProfileCategories.Nodes.Add(root);
                 }
             }
-            catch (Exception Ex) { throw Ex; }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "BindFreezoneProfileCategoryTreeView", SPContext.Current.Site);
+            }
+
         }
 
         private void BindCountryCategoryTreeView(string CountryId)
@@ -139,10 +183,16 @@ namespace WFZO.FZSelector.FreeZoneWP
                     tvCountryCategories.Nodes.Add(root);
                 }
             }
-            catch (Exception Ex) { throw Ex; }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "BindCountryCategoryTreeView", SPContext.Current.Site);
+            }
+
         }
         public void CreateNode(TreeNode node, DataTable Dt, TreeView Control)
         {
+            try { 
             DataRow[] Rows = Dt.Select("parentId =" + node.Value);
             if (Rows.Length == 0) { return; }
             for (int i = 0; i < Rows.Length; i++)
@@ -157,11 +207,19 @@ namespace WFZO.FZSelector.FreeZoneWP
 
                 //CreateNode(Childnode, Dt);
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "CreateNode", SPContext.Current.Site);
+            }
+
         }
 
 
         private void CheckAllChildNodes(TreeNode treeNode, bool nodeChecked)
         {
+            try { 
             foreach (TreeNode node in treeNode.ChildNodes)
             {
                 node.Checked = nodeChecked;
@@ -171,6 +229,13 @@ namespace WFZO.FZSelector.FreeZoneWP
                     this.CheckAllChildNodes(node, nodeChecked);
                 }
             }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "CheckAllChildNodes", SPContext.Current.Site);
+            }
+
         }
         protected void TreeView1_TreeNodeCheckChanged(object sender, TreeNodeEventArgs e)
         {
@@ -183,6 +248,7 @@ namespace WFZO.FZSelector.FreeZoneWP
 
         protected void ddlFreeZone_SelectedIndexChanged(object sender, EventArgs e)
         {
+            try { 
             int FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
 
             BindFreezoneProfileCategoryTreeView(FreezoneId);
@@ -196,6 +262,12 @@ namespace WFZO.FZSelector.FreeZoneWP
             FAD.FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
             FAD.RegionId = Convert.ToInt32(ddlRegion.SelectedItem.Value);
             FreezoneDataList.Add(FAD);
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "ddlFreeZone_SelectedIndexChanged", SPContext.Current.Site);
+            }
 
         }
 

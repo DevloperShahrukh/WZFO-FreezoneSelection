@@ -95,6 +95,17 @@ namespace WFZO.FZSelector
                 }
             }
 
+            public static class Exception
+            {
+                public const string Name = "errorLog";
+                public static class Fields
+                {
+                    public const string Message = "Message";
+                    public const string Stacktrace = "Trace";
+                    public const string Error = "Error";
+                    public const string Detail = "Detail";
+                }
+            }
             public static class TopSlider
             {
                 public const string Name = "TopSlider";
