@@ -17,12 +17,21 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         protected void Page_Load(object sender, EventArgs e)
         {
             //if (!Page.IsPostBack)
+            this.Page.LoadComplete += new EventHandler(Page_LoadComplete);
+
+        }
+
+        protected void Page_LoadComplete(object sender, EventArgs e)
+        {
+            //if (!Page.IsPostBack)
+            
             SetUserLabel();
             hypDashboard.Enabled = hypHome.Enabled = true;
             if (Page.Title == "Dashoard")
                 hypDashboard.Enabled = false;
             else if (Page.Title == "Home")
                 hypHome.Enabled = false;
+
         }
 
         protected void lnkLogout_Click(object sender, EventArgs e)
@@ -34,9 +43,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 {
                     FederatedAuthentication.SessionAuthenticationModule.SignOut();
                     FormsAuthentication.SignOut();
-                    //Pllogout.Visible = false;
-                    //PlLogin.Visible = true;
-                    //PlLogin.Visible = true;
+
                     RemoveCookie();
                     Response.Redirect("/Pages/default.aspx", false);
                 });
@@ -125,11 +132,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             try
             {
-                Response.Cookies["WZFOUserName"].Value = "";
-                Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
+                
+                Response.Cookies["WFZOSingleSignOn"].Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Remove("WFZOSingleSignOn");
 
-                Response.Cookies["WZFOPassword"].Value = "";
-                Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies["WFZOSingleSignOn"]["Username"] = null;
+                Response.Cookies["WFZOSingleSignOn"]["Pasword"] = null;
+
             }
 
             catch (Exception ex)

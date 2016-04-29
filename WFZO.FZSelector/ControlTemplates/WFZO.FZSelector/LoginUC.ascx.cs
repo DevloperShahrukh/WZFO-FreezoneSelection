@@ -23,26 +23,29 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             if (!IsPostBack)
             {
-                if (IfCookieExists())
+                if (SPContext.Current.Web.CurrentUser == null)
                 {
-                    Login(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"]), Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]));
+                    if (Request.Cookies.Get("WFZOSingleSignOn") != null)
+                    {
 
-
-                    //Request.Cookies["WFZOSingleSignOn"]["Username"] = txtUserID.Text;
-                    //Request.Cookies["WFZOSingleSignOn"]["Password"] = txtPassword.Text;
+                        if (IfCookieExists())
+                        {
+                            //Login(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"]), Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]));
+                            LoginWithoutLog(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"]), Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]));
+                        }
+                    }
 
                 }
             }
 
+
             if (SPContext.Current.Web.CurrentUser != null)
             {
                 PlLogin.Visible = false;
-                //Pllogout.Visible = true;
             }
             else
             {
                 PlLogin.Visible = true;
-                //Pllogout.Visible = false;
             }
         }
 
@@ -51,9 +54,27 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             Login(txtUserID.Text, txtPassword.Text);
         }
 
+        protected void LoginWithoutLog(string strUserName, string strPassword)
+        {
 
 
-        protected void Login(string strUserName,string strPassword  )
+            SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    SPIisSettings iisSettings = SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
+                    SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
+
+                    //formsClaimsAuthenticationProvider.
+
+                    SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
+                    if (null != token)
+                    {
+
+                        EstablishSessionWithToken(token);
+                    }
+                });
+        }
+
+        protected void Login(string strUserName, string strPassword)
         {
             try
             {
@@ -61,12 +82,11 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 SPListItem Item;
                 DateTime ActiveDate = DateTime.MaxValue;
 
-                
+
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
                     string reqType = "";
                     SPSite wfzoSite = new SPSite(SPContext.Current.Site.ID);
-                    SPUserToken systemToken = wfzoSite.SystemAccount.UserToken;
                     wfzoSite.Dispose();
 
                     //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
@@ -263,7 +283,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     FormsAuthentication.SignOut();
                     Pllogout.Visible = false;
                     PlLogin.Visible = true;
-                    
+
                     Response.Redirect("/Pages/default.aspx", false);
                 });
             }
@@ -355,12 +375,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         private void SetTextBoxFromCookies()
         {
-            if (Request.Cookies["WZFOUserName"] != null)
+            if (IfCookieExists())
             {
 
-                txtUserID.Text = Request.Cookies["WZFOUserName"].Value;
+                txtUserID.Text = Request.Cookies["WFZOSingleSignOn"]["Username"];
                 //TxtPassword.Text = Request.Cookies["WZFOPassword"].Value;
-                txtPassword.Attributes.Add("value", Request.Cookies["WZFOPassword"].Value);
+                txtPassword.Attributes.Add("value", Request.Cookies["WFZOSingleSignOn"]["Password"]);
                 chkStaySignedIn.Checked = true;
             }
         }
@@ -368,48 +388,24 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             if (chkStaySignedIn.Checked)
             {
-                //HttpCookie c =
-                if (Request.Cookies["WZFOUserName"] == null)
+                if (Response.Cookies["WFZOSingleSignOn"] == null)
                 {
-                    //Response.Cookies.Add(new HttpCookie("WZFOUserName", txtUserID.Text));
-                    //Response.Cookies.Add(new HttpCookie("WZFOPassword", txtPassword.Text));
-
-                    //Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(30);
-                    //Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(30);
-
                     HttpCookie aCookie = new HttpCookie("WFZOSingleSignOn");
                     aCookie.Values["Username"] = txtUserID.Text;
                     aCookie.Values["Password"] = txtPassword.Text;
                     aCookie.Expires = DateTime.Now.AddDays(30);
-
-
-                    
+                    Response.Cookies.Add(aCookie);
                 }
                 else
                 {
-                    //Response.Cookies["WZFOUserName"].Value = txtUserID.Text;
-                    //Response.Cookies["WZFOPassword"].Value = txtPassword.Text;
+                    Response.Cookies["WFZOSingleSignOn"]["Username"] = txtUserID.Text;
+                    Response.Cookies["WFZOSingleSignOn"]["Password"] = txtPassword.Text;
+                    Response.Cookies["WFZOSingleSignOn"].Expires = DateTime.Now.AddDays(30);
+                    Response.Cookies.Add(Response.Cookies["WFZOSingleSignOn"]);
 
-                    HttpCookie aCookie = new HttpCookie("WFZOSingleSignOn");
-                    Request.Cookies["WFZOSingleSignOn"]["Username"] = txtUserID.Text;
-                    Request.Cookies["WFZOSingleSignOn"]["Password"] = txtPassword.Text;
-
-                    //Response.Cookies["WZFOUserName"].Domain = "";
-                    //Response.Cookies["WZFOPassword"].Domain = "";
-                }
-
-            }
-            else
-            {
-                if (Request.Cookies["WZFOUserName"] != null)
-                {
-                    Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
-                }
-                if (Request.Cookies["WZFOPassword"] != null)
-                {
-                    Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
                 }
             }
+
         }
 
         protected void btnInformAdmin_Click(object sender, EventArgs e)
@@ -472,15 +468,9 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         protected bool IfCookieExists()
         {
-
-            //return (!string.IsNullOrEmpty(Response.Cookies["WZFOUserName"].Value) && !string.IsNullOrEmpty(Response.Cookies["WZFOPassword"].Value));
-
-            //return (!string.IsNullOrEmpty(Request.Cookies["WFZOSingleSignOn"]["Username"]) && !string.IsNullOrEmpty(Request.Cookies["WFZOSingleSignOn"]["Password"]));
-
-
-            return (Request.Cookies["WFZOSingleSignOn"] != null);
+            return ((!string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"])) && !string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]))));
         }
 
-        
+
     }
 }
