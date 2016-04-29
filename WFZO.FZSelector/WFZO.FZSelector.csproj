@@ -72,6 +72,7 @@
     <Compile Include="Classes\Category.cs" />
     <Compile Include="Classes\ClsDBAccess.cs" />
     <Compile Include="Classes\Connection.cs" />
+    <Compile Include="Classes\Encryption.cs" />
     <Compile Include="Classes\FreezoneAnalyticData.cs" />
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\Subcategory.cs" />
