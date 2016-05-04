@@ -53,40 +53,7 @@ namespace WFZO.FZSelector
 
 
             var row1 = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
-            var rowRegion = workSheet.Cells[2, 1, 2, workSheet.Dimension.End.Column];
-            int count2 = 1;
-            foreach (var cell in row1)
-            {
-                if (!string.IsNullOrWhiteSpace(cell.Text) && count2 >= 10)
-                {
-                    string Country = rowRegion[1, cell.Start.Column].Text;
-
-                    string RegionName = rowRegion[2, cell.Start.Column].Text;
-
-                    if (!string.IsNullOrWhiteSpace(Country) && !string.IsNullOrWhiteSpace(RegionName) && !Country.Equals("Average") && !Country.Equals("Median") && !Country.Equals("Minimum") && !Country.Equals("Maximum"))
-                    {
-                        SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
-
-                        new_identity.Direction = ParameterDirection.Output;
-
-                        SqlParameter RegionIDParam = new SqlParameter("@RegionName", SqlDbType.VarChar, 50);
-                        RegionIDParam.Value = RegionName;
-                        RegionIDParam.Direction = ParameterDirection.Input;
-
-                        SqlParameter CountryNameParam = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                        CountryNameParam.Value = Convert.ToString(Country);
-                        CountryNameParam.Direction = ParameterDirection.Input;
-
-                        catID = InSertDataGETID(con, "InsertCountry", CountryNameParam, RegionIDParam, new_identity);
-                    }
-
-                }
-                else
-                {
-                    // newRow[cell.Start.Column - 1] = "";
-                }
-                count2 = count2 + 1;
-            }
+           
 
             SqlParameter new_identity1 = new SqlParameter("@new_identity", SqlDbType.Int);
             new_identity1.Direction = ParameterDirection.Output;
@@ -632,7 +599,7 @@ namespace WFZO.FZSelector
                                     {
                                         foreach (var cell in row2)
                                         {
-                                            if (count >= 7)
+                                            if (count > 7)
                                             {
                                                 if (string.IsNullOrWhiteSpace(cell.Text))
                                                 {
@@ -640,12 +607,13 @@ namespace WFZO.FZSelector
                                                     break;
                                                 }
                                                 else
-                                                    if (!string.IsNullOrWhiteSpace(cell.Text) && row[rowNumber, 5].Text != "Desk Research")
                                                     {
 
 
 
                                                         string FreeZoneName = temprow[1, cell.Start.Column].Text;
+
+
 
                                                         SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
                                                         new_identity.Direction = ParameterDirection.Output;
@@ -672,22 +640,35 @@ namespace WFZO.FZSelector
                                                         new_FreeZoneName.Direction = ParameterDirection.Input;
 
                                                         SqlParameter new_FreezoneRanking = new SqlParameter("@FreezoneRanking", SqlDbType.Float);
+                                                        SqlParameter flagged = new SqlParameter("@flagged", SqlDbType.Bit);
 
                                                         if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
                                                         {
                                                             new_FreezoneRanking.Value = -1;
+                                                            flagged.Value = false;
                                                         }
                                                         else
                                                         {
 
-                                                            new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text);
+                                                            if (row2[rowNumber, cell.Start.Column].Text.Contains("*").Equals(true))
+                                                            {
+
+                                                                new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text.Replace("*", ""));
+                                                                flagged.Value = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text);
+                                                                flagged.Value = false;
+                                                            }
                                                         }
 
                                                         new_FreezoneRanking.Direction = ParameterDirection.Input;
+                                                        flagged.Direction = ParameterDirection.Input;
 
                                                         if (!string.IsNullOrWhiteSpace(row[rowNumber, 6].Text))
                                                         {
-                                                            SubcatID = InSertDataGETID(con, "InsertUpdateFreezoneRanking", SubCategoryName, new_Year1, new_identity, CategoryLevel, new_FreeZoneName, new_FreezoneRanking);
+                                                            SubcatID = InSertDataGETID(con, "InsertUpdateFreezoneRanking", SubCategoryName, new_Year1, new_identity, CategoryLevel, new_FreeZoneName, new_FreezoneRanking, flagged);
                                                         }
                                                     }
                                             }
@@ -811,7 +792,7 @@ namespace WFZO.FZSelector
                                             int count = 1;
                                             foreach (var cell in row2)
                                             {
-                                                if (count >= 7)
+                                                if (count > 7)
                                                 {
                                                     if (string.IsNullOrWhiteSpace(cell.Text))
                                                     {
@@ -819,7 +800,7 @@ namespace WFZO.FZSelector
                                                         break;
                                                     }
                                                     else
-                                                        if (!string.IsNullOrWhiteSpace(cell.Text) && row[rowNumber, 5].Text != "Desk Research")
+                                                        if (!string.IsNullOrWhiteSpace(cell.Text))
                                                         {
                                                             string FreeZone = temprow[1, cell.Start.Column].Text;
 
@@ -846,17 +827,31 @@ namespace WFZO.FZSelector
                                                                 new_FreezoneId.Direction = ParameterDirection.Input;
 
                                                                 SqlParameter new_FreezoneRanking = new SqlParameter("@FreezoneRanking", SqlDbType.Float);
+                                                                SqlParameter flagged = new SqlParameter("@flagged", SqlDbType.Bit);
 
                                                                 if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
                                                                 {
                                                                     new_FreezoneRanking.Value = -1;
+                                                                    flagged.Value = false;
                                                                 }
                                                                 else
                                                                 {
-                                                                    new_FreezoneRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
+                                                                    if (row2[rowNumber, cell.Start.Column].Text.Contains("*").Equals(true))
+                                                                    {
+
+                                                                        new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text.Replace("*", ""));
+                                                                        flagged.Value = true;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text);
+                                                                        flagged.Value = false;
+                                                                    }
                                                                 }
 
                                                                 new_FreezoneRanking.Direction = ParameterDirection.Input;
+                                                                flagged.Direction = ParameterDirection.Input;
+
 
                                                                 SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
                                                                 new_Year.Value = Convert.ToString(row2[rowNumber, 6].Text);
@@ -864,7 +859,7 @@ namespace WFZO.FZSelector
 
 
 
-                                                                FreeZoneyRankingID = InSertDataGETID(con, "InsertFreeZoneRanking", new_FreeZoneRankingID, new_SubCategoryId, new_FreezoneId, new_FreezoneRanking, new_Year);
+                                                                FreeZoneyRankingID = InSertDataGETID(con, "InsertFreeZoneRanking", new_FreeZoneRankingID, new_SubCategoryId, new_FreezoneId, new_FreezoneRanking, new_Year, flagged);
                                                             }
 
                                                         }
@@ -1137,7 +1132,7 @@ namespace WFZO.FZSelector
                                                         }
                                                         else
                                                         {
-                                                            Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim(); 
+                                                            Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim();
                                                         }
 
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint.WebPartPages;
 using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -9,6 +10,20 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
 {
     public partial class FeedbackFormWPUserControl : UserControl
     {
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            if (SPWebPartManager.GetCurrentWebPartManager(Page).DisplayMode != WebPartManager.BrowseDisplayMode)
+            {
+                foreach (object validator in Page.Validators)
+                {
+                    if (validator is BaseValidator)
+                    {
+                        ((BaseValidator)validator).Enabled = false;
+                    }
+                }
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -31,6 +46,7 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
                         {
                             txtFrom.Text = web.CurrentUser.Email;
                             txtFrom.Enabled = false;
+                            txtFrom.CssClass += "form-control txt-box";
 
                         }
                         else
@@ -44,6 +60,7 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
 
                             txtName.Text = web.CurrentUser.Name;
                             txtName.Enabled = false;
+                            txtFrom.CssClass += "form-control txt-box";
                         }
                         else
                         {

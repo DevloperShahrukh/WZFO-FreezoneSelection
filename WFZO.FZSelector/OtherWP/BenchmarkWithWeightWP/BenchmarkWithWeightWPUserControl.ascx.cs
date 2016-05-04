@@ -8,6 +8,7 @@ using System.Linq;
 using WFZO.FZSelector.Classes;
 using System.Collections.Generic;
 using Microsoft.SharePoint;
+using Microsoft.SharePoint.WebPartPages;
 
 namespace WFZO.FZSelector.BenchmarkWithWeightWP
 {
@@ -15,6 +16,20 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
     {
         public List<FreezoneAnalyticData> FreezoneDataList = new List<FreezoneAnalyticData>();
         ClsDBAccess obj = new ClsDBAccess();
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            if (SPWebPartManager.GetCurrentWebPartManager(Page).DisplayMode != WebPartManager.BrowseDisplayMode)
+            {
+                foreach (object validator in Page.Validators)
+                {
+                    if (validator is BaseValidator)
+                    {
+                        ((BaseValidator)validator).Enabled = false;
+                    }
+                }
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)

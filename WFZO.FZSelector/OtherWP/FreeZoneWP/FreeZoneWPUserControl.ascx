@@ -36,11 +36,10 @@
             UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {
-            alert('Select one of the category or sub category');
+            alert(ErrorVariable);
         }
     }
 </script>
-
 
 <div class="inner-container">
     <div class="">
@@ -100,7 +99,8 @@
                 <div>
                     <div class="col-md-1"></div>
                     <div class="col-md-8">
-                        <h4 class="tree-head">Free zone Information</h4>
+                        <asp:Panel ID="pnlTreeviews" runat="server" Visible="false">
+                        <h4 class="tree-head">Free Zone Information</h4>
                         <asp:TreeView ID="tvFreezoneProfileCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
@@ -110,7 +110,7 @@
                             <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
 
                         </asp:TreeView>
-                        <h4 class="tree-head2">Free zone Level</h4>
+                        <h4 class="tree-head2">Country Level</h4>
                         <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
@@ -120,7 +120,7 @@
                             <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
 
                         </asp:TreeView>
-                        <h4 class="tree-head2">Free zone Level</h4>
+                        <h4 class="tree-head2">Free Zone Level</h4>
                         <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
@@ -130,7 +130,7 @@
                             <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
 
                         </asp:TreeView>
-
+                            </asp:Panel>
                         <asp:HiddenField ID="hdnFreezoneProfileCatIds" runat="server" />
                         <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
                         <asp:HiddenField ID="hdnCountryCatIds" runat="server" />

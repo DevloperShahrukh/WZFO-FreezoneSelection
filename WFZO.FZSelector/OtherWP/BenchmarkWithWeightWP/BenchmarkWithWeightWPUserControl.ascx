@@ -30,9 +30,7 @@
             window.open(ReportUrl);
 
             UpdateCategoryAnalyticsOfWeigthted('<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
-
-            //UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
-
+            
             UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {

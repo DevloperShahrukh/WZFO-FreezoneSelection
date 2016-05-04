@@ -1,4 +1,5 @@
 ﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint.WebPartPages;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,21 @@ namespace WFZO.FZSelector.FreeZoneWP
     {
         public List<FreezoneAnalyticData> FreezoneDataList = new List<FreezoneAnalyticData>();
         ClsDBAccess obj = new ClsDBAccess();
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            base.OnPreRender(e);
+            if (SPWebPartManager.GetCurrentWebPartManager(Page).DisplayMode != WebPartManager.BrowseDisplayMode)
+            {
+                foreach (object validator in Page.Validators)
+                {
+                    if (validator is BaseValidator)
+                    {
+                        ((BaseValidator)validator).Enabled = false;
+                    }
+                }
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -287,6 +303,9 @@ namespace WFZO.FZSelector.FreeZoneWP
             FAD.FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
             FAD.RegionId = Convert.ToInt32(ddlRegion.SelectedItem.Value);
             FreezoneDataList.Add(FAD);
+
+
+            pnlTreeviews.Visible = true;
             }
             catch (Exception ex)
             {
