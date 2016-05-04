@@ -15,7 +15,7 @@
     </HeaderTemplate>
     <ItemTemplate>
         <div id="panelItem" runat="server">
-            <img src='<%# GetSrcFromImgTag(Eval("ImageColumn").ToString())%>' alt="slide1" class="img-responsive" />
+            <img src='<%# GetSrcFromImgTag(Eval("ImageColumn").ToString())%>?renditionId=5' alt="slide1" class="img-responsive" />
             <div class="carousel-caption2">
                 <h2>
                     <asp:Label ID="lblTitle" runat="server" Text='<%# Bind("Title") %>'></asp:Label></h2>

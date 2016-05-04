@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="../../Style%20Library/WFZO/css/treeViewStyle.css" />
 
 
-<script src="/Style%20Library/WFZO/js/jquery-1.12.0.min.js" type="text/javascript"> </script>
 <script src="/Style%20Library/WFZO/js/jquery.dataTables.min.js" type="text/javascript"> </script>
 <link rel="stylesheet" href="../../Style%20Library/WFZO/css/jquery.dataTables.min.css" />
 

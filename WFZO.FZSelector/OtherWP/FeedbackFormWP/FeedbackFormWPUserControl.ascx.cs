@@ -149,7 +149,7 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
                 {
                     using (SPWeb web = site.OpenWeb())
                     {
-                        WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, txtName.Text, txtFrom.Text, txtSubject.Text);
+                        //WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, txtName.Text, txtFrom.Text, txtSubject.Text);
                     }
                 }
             }

@@ -75,5 +75,14 @@ namespace WFZO.FZSelector.HomeWP.BottomImageSlider
             }
             return result;
         }
+        public string GetSrcFromLinkField(string value)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] getLink = value.Split(',');
+                return getLink[0];
+            }
+            else return string.Empty;
+        }
     }
 }

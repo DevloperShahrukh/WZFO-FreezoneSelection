@@ -80,11 +80,11 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                     if (lblInWindow.Text == "1")
                     {
-                        lit.Text = "<a href='" + getLink[0] + "' target='_blank'>" + Title.Text + "</a>";
+                        lit.Text = "<a href='" + getLink[0] + "' target='_blank' title='" + Title.Text + "'>" + Title.Text + "</a>";
                     }
                     else
                     {
-                        lit.Text = "<a href='" + getLink[0] + "'>" + Title.Text + "</a>";
+                        lit.Text = "<a href='" + getLink[0] + "' title='" + Title.Text + "'>" + Title.Text + "</a>";
                     }
                 }
             }

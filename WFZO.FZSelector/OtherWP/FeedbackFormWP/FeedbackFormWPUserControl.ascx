@@ -11,48 +11,48 @@
 <asp:HiddenField ID="errorMessage" runat="server" />
 
 <div class="inner-container">
-    <div class="row">
-        <div class="country-form">
-            <div class="form-horizontal">
-                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">From <span>*</span></label>
+    <div class="">
+        <div class="col-md-8">
+            <div role="form" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-2" for="inputEmail1">From <span class="error">*</span></label>
                     <div class="col-md-8">
-                        <asp:TextBox ID="txtFrom" runat="server" class="form-control txt-box"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="Name Required" ControlToValidate="txtFrom" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:TextBox ID="txtFrom" runat="server" class="form-control txt-box"/>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator5" runat="server" ErrorMessage="Name Required" ControlToValidate="txtFrom" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Name <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Name <span class="error">*</span></label>
                     <div class="col-md-8">
-                        <asp:TextBox ID="txtName" runat="server" class="form-control txt-box"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Name Required" ControlToValidate="txtName" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:TextBox ID="txtName" runat="server" class="form-control txt-box"/>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" runat="server" ErrorMessage="Name Required" ControlToValidate="txtName" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Subject <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Subject <span class="error">*</span></label>
                     <div class="col-md-8">
-                        <asp:TextBox ID="txtSubject" runat="server" class="form-control txt-box"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Subject Required" ControlToValidate="txtSubject" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:TextBox ID="txtSubject" runat="server" class="form-control txt-box"/>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator2" runat="server" ErrorMessage="Subject Required" ControlToValidate="txtSubject" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Type <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Type <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
-                            <asp:DropDownList ID="drpDownType" runat="server"></asp:DropDownList>
+                            <asp:DropDownList ID="drpDownType" runat="server"/>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please Select" InitialValue="1" ControlToValidate="drpDownType" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please Select" InitialValue="1" ControlToValidate="drpDownType" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="freezone">Details <span>*</span></label>
+                    <label class="col-md-2" for="freezone">Details <span class="error">*</span></label>
                     <div class="col-md-8">
-                        <asp:TextBox ID="txtDetails" runat="server" Rows="5" TextMode="MultiLine" class="form-control txt-box"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Details Required" ControlToValidate="txtDetails" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:TextBox ID="txtDetails" runat="server" Rows="5" TextMode="MultiLine" class="form-control txt-box"/>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator3" runat="server" ErrorMessage="Details Required" ControlToValidate="txtDetails" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="freezone" class="col-md-4 text-right"></label>
+                    <label for="freezone" class="col-md-2"></label>
                     <div class="col-md-8 text-center">
                         <asp:Button ID="Button1" runat="server" Text="SUBMIT" class="btn btn-genreport" OnClick="Button1_Click" />
                     </div>

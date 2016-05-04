@@ -28,33 +28,3 @@
         $(this).toggleClass("expanded");
     });
 </script>
-<style>
-    #faqs dt, #faqs dd {
-        padding: 0 0 0 50px;
-    }
-
-    #faqs dt {
-        font-size: 14px;
-        color: #006281;
-        cursor: pointer;
-        height: 37px;
-        line-height: 37px;
-        margin: 0 0 15px 25px;
-        font-family: Univers (45 Light);
-    }
-
-    #faqs dd {
-        font-size: 14px;
-        color: #8E7630;
-        margin: 0 0 20px 25px;
-        font-family: Univers (45 Light);
-    }
-
-    #faqs dt {
-        background: url("../../Style%20Library/Images/toggle-expand-alt_blue.png") no-repeat left;
-    }
-
-    #faqs .expanded {
-        background: url("../../Style%20Library/Images/toggle-collapse-alt_blue.png") no-repeat left;
-    }
-</style>

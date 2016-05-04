@@ -7,7 +7,7 @@
     </metaData>
     <data>
       <properties>
-        <property name="Title" type="string">WFZO.FZSelector - BenchmarkingWP</property>
+        <property name="Title" type="string">BenchmarkingWP</property>
         <property name="Description" type="string">My Visual Web Part</property>
       </properties>
     </data>

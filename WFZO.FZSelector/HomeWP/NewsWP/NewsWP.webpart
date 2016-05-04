@@ -7,7 +7,7 @@
     </metaData>
     <data>
       <properties>
-        <property name="Title" type="string">WFZO.FZSelector - NewsWP</property>
+        <property name="Title" type="string">NewsWP</property>
         <property name="Description" type="string">My Visual Web Part</property>
 
         <property name="ChromeType" type="string">None</property>

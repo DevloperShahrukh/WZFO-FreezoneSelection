@@ -52,7 +52,7 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                         DataTable NewDT = new DataTable();
                         NewDT.Columns.Add("Title", typeof(string));
                         NewDT.Columns.Add("ArticleStartDate", typeof(string));
-                        NewDT.Columns.Add("Comments", typeof(string));
+                        NewDT.Columns.Add("ArticleByLine", typeof(string));
                         NewDT.Columns.Add("Image", typeof(string));
                         NewDT.Columns.Add("Url", typeof(string));
                         foreach (SPListItem item in col)
@@ -60,7 +60,7 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                             DataRow row = NewDT.NewRow();
                             row["Title"] = Convert.ToString(item[Constants.List.BaseColumns.Title]);
                             row["ArticleStartDate"] = Convert.ToDateTime(item[Constants.ContentType.News.Date]).ToLongDateString();
-                            row["Comments"] = Convert.ToString(item[Constants.ContentType.News.Comments]);
+                            row["ArticleByLine"] = Convert.ToString(item["ArticleByLine"]);
 
 
                             string defaultiamge = "../../Style Library/WFZO/img/news.jpg";
@@ -165,8 +165,7 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
                     Label Title = (Label)e.Item.FindControl("lblTitle");
                     Label LinkURL = (Label)e.Item.FindControl("lblUrl");
 
-                    string[] getLink = LinkURL.Text.Split(',');
-                    lit.Text = "<a href='" + getLink[0] + "'>" + Title.Text + "</a>";
+                    lit.Text = "<a href='" + LinkURL.Text  + "'>" + Title.Text + "</a>";
 
                 }
             }

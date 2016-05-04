@@ -21,6 +21,29 @@ namespace WFZO.FZSelector.Classes
         //     public string fromName = "Mobilink LMS Admin";
         public static string mailServer = SPAdministrationWebApplication.Local.OutboundMailServiceInstance.Server.Address;
 
+        public static string GetConfigurationValue(string key)
+        {
+            using (SPSite site = new SPSite(SPContext.Current.Web.Site.RootWeb.Url))
+            {
+                using (SPWeb web = site.OpenWeb())
+                {
+                    SPList list = web.Lists.TryGetList("Configuration");
+                    SPQuery query = new SPQuery();
+                    query.Query = "<Where>"
+                        + "<Eq>"
+                        + "<FieldRef Name='Title' /><Value Type='Text'>"+ key +"</Value>"
+                        + "</Eq>"
+                        + "</Where>";
+                    query.ViewFields = "<FieldRef Name='Value' />";
+                    SPListItemCollection items = list.GetItems(query);
+
+                    if (items.Count > 0)
+                        return Convert.ToString(items[0]["Value"]);
+                    else
+                        return string.Empty;
+                }
+            }
+        }
 
         public static string getfromAddress()
         {

@@ -2,7 +2,7 @@
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
   <Module Name="NewsWP" List="113" Url="_catalogs/wp">
     <File Path="NewsWP\NewsWP.webpart" Url="WFZO.FZSelector_NewsWP.webpart" Type="GhostableInLibrary" >
-      <Property Name="Group" Value="Custom" />
+      <Property Name="Group" Value="Free zone selector" />
     </File>
   </Module>
 </Elements>

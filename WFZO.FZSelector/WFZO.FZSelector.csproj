@@ -52,6 +52,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.SharePoint.IdentityModel\v4.0_15.0.0.0__71e9bce111e9429c\Microsoft.SharePoint.IdentityModel.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SharePoint.Publishing, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -77,6 +78,13 @@
     <Compile Include="Classes\Helper.cs" />
     <Compile Include="Classes\Subcategory.cs" />
     <Compile Include="Classes\WZFOUtility.cs" />
+    <Compile Include="ControlTemplates\WFZO.FZSelector\FormattedNews.ascx.cs">
+      <DependentUpon>FormattedNews.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlTemplates\WFZO.FZSelector\FormattedNews.ascx.designer.cs">
+      <DependentUpon>FormattedNews.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx.cs">
       <DependentUpon>LoginUC.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -172,14 +180,6 @@
     <Compile Include="HomeWP\BottomImageSlider\BottomImageSliderUserControl.ascx.designer.cs">
       <DependentUpon>BottomImageSliderUserControl.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="HomeWP\DashBoardWP\DashBoardWP.cs" />
-    <Compile Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx.cs">
-      <DependentUpon>DashBoardWPUserControl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx.designer.cs">
-      <DependentUpon>DashBoardWPUserControl.ascx.cs</DependentUpon>
-    </Compile>
     <Compile Include="HomeWP\NewsWP\NewsWP.cs" />
     <Compile Include="HomeWP\NewsWP\NewsWPUserControl.ascx.cs">
       <DependentUpon>NewsWPUserControl.ascx</DependentUpon>
@@ -246,10 +246,6 @@
     <None Include="HomeWP\BottomImageSlider\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{4800e96d-c267-42fc-87c1-2a96cb2afc31}</SharePointProjectItemId>
     </None>
-    <None Include="HomeWP\DashBoardWP\DashBoardWP.webpart" />
-    <None Include="HomeWP\DashBoardWP\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{4c0171df-0844-479c-bb2b-a52785a6e39a}</SharePointProjectItemId>
-    </None>
     <None Include="HomeWP\TopImageSlider\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{859ac23c-8f62-4901-9018-0cfe7993ec38}</SharePointProjectItemId>
     </None>
@@ -276,6 +272,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="ControlTemplates\WFZO.FZSelector\FormattedNews.ascx" />
     <Content Include="ControlTemplates\WFZO.FZSelector\LoginUC.ascx" />
     <Content Include="ControlTemplates\WFZO.FZSelector\TopBar.ascx" />
     <Content Include="Layouts\WFZO.FZSelector\js\CustomScript.js" />
@@ -300,8 +297,6 @@
     <Content Include="OtherWP\FreeZoneWP\FreeZoneWPUserControl.ascx" />
     <Content Include="HomeWP\BottomImageSlider\BottomImageSliderUserControl.ascx" />
     <Content Include="HomeWP\BottomImageSlider\Elements.xml" />
-    <Content Include="HomeWP\DashBoardWP\DashBoardWPUserControl.ascx" />
-    <Content Include="HomeWP\DashBoardWP\Elements.xml" />
     <Content Include="HomeWP\NewsWP\Elements.xml" />
     <Content Include="HomeWP\NewsWP\NewsWPUserControl.ascx" />
     <Content Include="HomeWP\TopImageSlider\Elements.xml" />

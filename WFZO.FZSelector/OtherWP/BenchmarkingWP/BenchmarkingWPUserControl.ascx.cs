@@ -195,8 +195,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
 
 
                     lblError.Visible = false;
-                    btnReport.Enabled = true;
-                    btnReport.Visible = true;
+                    //btnReport.Enabled = true;
+                    //btnReport.Visible = true;
                     tvCountryCategories.Visible = true;
                     tvFreezoneCategories.Visible = true;
 
@@ -204,7 +204,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                 else
                 {
                     lblError.Visible = false;
-                    btnReport.Enabled = false;
+                    //btnReport.Enabled = false;
                     tvCountryCategories.Visible = false;
                     tvFreezoneCategories.Visible = false;
                 }
@@ -277,14 +277,14 @@ namespace WFZO.FZSelector.BenchmarkingWP
                         BindFreezoneTreeView(hdnFreezoneIds.Value);
 
                         lblError.Visible = false;
-                        btnReport.Visible = true;
+                        //btnReport.Visible = true;
                         tvCountryCategories.Visible = true;
                         tvFreezoneCategories.Visible = true;
                     }
                     else
                     {
                         lblError.Visible = false;
-                        btnReport.Visible = false;
+                        //btnReport.Visible = false;
                         tvCountryCategories.Visible = false;
                         tvFreezoneCategories.Visible = false;
                     }
@@ -452,6 +452,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
                             rblReportType.DataTextField = "Title";
                             rblReportType.DataValueField = "FileLeafRef";
                             rblReportType.DataBind();
+                            rblReportType.SelectedIndex = 0;
                         }
                     }
                 }

@@ -9,7 +9,6 @@
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 <asp:HiddenField ID="errorMessage" runat="server" />
 
-<script src="/Style Library/WFZO/js/jquery.min.js"></script>
 <script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
 <script>
     function CollectParameters() {
@@ -20,21 +19,21 @@
 
     function getAndShowReport() {
         var ErrorVariable = { Error: "" };
-        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= hdnFreezoneProfileCatIds.ID %>', ErrorVariable)) {
+        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvFreezoneProfileCategories.ID %>', ErrorVariable)) {
             CollectParameters();
 
-            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/rptFreezoneProfile.rdl';
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/FreezoneProfile.rdl';
 
-                ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
-            + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
+            ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
+        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
                 + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
                 + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
 
-                window.open(ReportUrl);
+            window.open(ReportUrl);
 
-                UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
+            UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
 
-                UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+            UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {
             alert('Select one of the category or sub category');
@@ -44,44 +43,44 @@
 
 
 <div class="inner-container">
-    <div class="row">
-        <div class="country-form">
-            <div class="form-horizontal">
+    <div class="">
+        <div class="col-md-8">
+            <div role="form" class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Region <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Region <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
                             <asp:DropDownList ID="ddlRegion" runat="server" OnSelectedIndexChanged="ddlRegion_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlRegion" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlRegion" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Country <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Country <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
                             <asp:DropDownList ID="ddlCountry" runat="server" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCountry" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCountry" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
 
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">City <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">City <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
                             <asp:DropDownList ID="ddlCity" runat="server" OnSelectedIndexChanged="ddlCity_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCity" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator3" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCity" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="freezone">Free Zone <span>*</span></label>
+                    <label class="col-md-2" for="freezone">Free Zone <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
                             <asp:DropDownList ID="ddlFreeZone" runat="server" OnSelectedIndexChanged="ddlFreeZone_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlFreeZone" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlFreeZone" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
@@ -90,12 +89,19 @@
                         <%--<asp:Button ID="Button1" runat="server" Text="ADD TO SELECTION" class="btn btn-collection" OnClick="Button1_Click" />--%>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="inner-container">
+    <div>
+        <div class="country-form">
+            <div class="form-horizontal">
+                <div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-8">
-
-                        <asp:TreeView ID="tvFreezoneProfileCategories" runat="server"   ShowExpandCollapse="true"     ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                        <h4 class="tree-head">Free zone Information</h4>
+                        <asp:TreeView ID="tvFreezoneProfileCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                             <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
@@ -104,7 +110,7 @@
                             <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
 
                         </asp:TreeView>
-
+                        <h4 class="tree-head2">Free zone Level</h4>
                         <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
@@ -114,8 +120,8 @@
                             <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
 
                         </asp:TreeView>
-
-                        <asp:TreeView ID="tvFreezoneCategories" runat="server"  ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                        <h4 class="tree-head2">Free zone Level</h4>
+                        <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                             <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
                             <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
@@ -129,13 +135,16 @@
                         <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
                         <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
                     </div>
+                    <div class="col-md-3"></div>
                 </div>
-
+            </div>
+        </div>
+        <div class="country-form">
+            <div class="form-horizontal">
                 <div class="form-group">
-                    <label for="freezone" class="col-md-4 text-right"></label>
+                    <label for="freezone" class="col-md-10 text-right"></label>
                     <div class="col-md-8 text-center">
-                        <input  type="button" class="btn btn-collection" onclick="getAndShowReport();" value="View Report"  />
-
+                        <input type="button" class="btn btn-collection" onclick="getAndShowReport();" value="GENERATE REPORT" />
                     </div>
                 </div>
             </div>

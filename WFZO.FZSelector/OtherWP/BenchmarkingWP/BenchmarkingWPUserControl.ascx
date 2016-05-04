@@ -7,7 +7,6 @@
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BenchmarkingWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.BenchmarkingWP.BenchmarkingWPUserControl" %>
 
-<script src="/Style Library/WFZO/js/jquery.min.js"></script>
 <script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
 <script>
     function CollectParameters() {
@@ -47,66 +46,59 @@
 <asp:HiddenField ID="errorMessage" runat="server" />
 
 <div class="inner-container">
-    <div class="row">
-        <div class="country-form">
-            <div class="form-horizontal">
-
-
+    <div class="">
+        <div class="col-md-8">
+            <div role="form" class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Region <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Region <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
-                            <asp:DropDownList ID="ddlRegion" runat="server" OnSelectedIndexChanged="ddlRegion_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlRegion" runat="server" ValidationGroup="form" OnSelectedIndexChanged="ddlRegion_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlRegion" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" ValidationGroup="form" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlRegion" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">Country <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">Country <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
-                            <asp:DropDownList ID="ddlCountry" runat="server" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlCountry" runat="server" ValidationGroup="form" OnSelectedIndexChanged="ddlCountry_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCountry" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator2" ValidationGroup="form" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCountry" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
 
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="inputEmail1">City <span>*</span></label>
+                    <label class="col-md-2" for="inputEmail1">City <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
-                            <asp:DropDownList ID="ddlCity" runat="server" OnSelectedIndexChanged="ddlCity_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlCity" runat="server" ValidationGroup="form" OnSelectedIndexChanged="ddlCity_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCity" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator3" ValidationGroup="form" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlCity" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 text-right" for="freezone">Free Zone <span>*</span></label>
+                    <label class="col-md-2" for="freezone">Free Zone <span class="error">*</span></label>
                     <div class="col-md-8">
                         <div class="select-style">
-                            <asp:DropDownList ID="ddlFreeZone" runat="server"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlFreeZone" runat="server" ValidationGroup="form"></asp:DropDownList>
                         </div>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlFreeZone" Display="Dynamic"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator4" ValidationGroup="form" runat="server" ErrorMessage="Please Select" InitialValue="0" ControlToValidate="ddlFreeZone" Display="Dynamic"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="freezone" class="col-md-4 text-right"></label>
+                    <label for="freezone" class="col-md-2"></label>
                     <div class="col-md-8 text-center">
-                        <asp:Button ID="Button1" runat="server" Text="ADD TO SELECTION" class="btn btn-collection" OnClick="Button1_Click" />
+                        <asp:Button ID="Button1" runat="server" ValidationGroup="form" Text="ADD TO SELECTION" class="btn btn-collection" OnClick="Button1_Click" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="form-group">
-    <label for="freezone" class="col-md-4 text-right"></label>
-    <div class="col-md-8 text-center">
-         <a href='/Pages/CategoryMap.aspx' target='_blank'>Category Map</a>
-    </div>
-</div>
+
 <asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
-    <div class="row">
+    <div>
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="panel panel-default">
@@ -129,15 +121,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-2"></div>
     </div>
 
     <div class="inner-container">
-        <div class="row">
+        <div>
             <div class="country-form">
                 <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-2"></div>
+                    <div>
+                        <div class="col-md-1"></div>
                         <div class="col-md-8">
+                            <h4 class="tree-head">Country Level</h4>
 
                             <asp:TreeView ID="tvCountryCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
@@ -149,6 +143,7 @@
 
                             </asp:TreeView>
 
+                            <h4 class="tree-head2">Free zone Level</h4>
                             <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
                                 <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
@@ -164,18 +159,20 @@
                             <asp:HiddenField ID="hdnCountryIds" runat="server" />
                             <asp:HiddenField ID="hdnFreezoneIds" runat="server" />
 
+                            <h4 class="tree-head2">Report Output</h4>
+                            <asp:RadioButtonList CssClass="tree-box" ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
+
                         </div>
+                        <div class="col-md-3"></div>
                     </div>
+                </div>
+            </div>
+            <div class="country-form">
+                <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="freezone" class="col-md-4 text-right"></label>
+                        <label for="freezone" class="col-md-10 text-right"></label>
                         <div class="col-md-8 text-center">
-                            <asp:RadioButtonList ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="freezone" class="col-md-4 text-right"></label>
-                        <div class="col-md-8 text-center">
-                            <asp:Button Enabled="false" ID="btnReport" runat="server" Text="Generate Report" class="btn btn-collection" OnClientClick="getAndShowReport();return false" />
+                            <input type="button" id="btnShowReport" runat="server" value="GENERATE REPORT" class="btn btn-collection" onclick="getAndShowReport();">
                         </div>
                     </div>
                 </div>

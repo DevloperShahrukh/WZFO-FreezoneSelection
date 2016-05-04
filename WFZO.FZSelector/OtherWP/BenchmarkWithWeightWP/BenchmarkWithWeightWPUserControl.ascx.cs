@@ -23,6 +23,13 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 bindRegion();
                 PopluateReportTypeList();
             }
+            else
+            {
+                if (ViewState["FreezoneDataList"] != null)
+                {
+                    FreezoneDataList = (List<FreezoneAnalyticData>)ViewState["FreezoneDataList"];
+                }
+            }
         }
         public void bindRegion()
         {
@@ -168,7 +175,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarkingCategories.Rows.Count > 1*/)
             {
                 PlSelectedZone.Visible = true;
-                btnReport.Enabled = true;
+                //btnReport.Enabled = true;
 
                 if (GridView1.Rows.Count > 1)
                 {
@@ -180,7 +187,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
             else
             {
                 PlSelectedZone.Visible = false;
-                btnReport.Enabled = false;
+                //btnReport.Enabled = false;
                 pnlCategories.Visible = false;
             }
 
@@ -256,13 +263,13 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarkingCategories.Rows.Count > 0*/)
                 {
                     PlSelectedZone.Visible = true;
-                    btnReport.Enabled = true;
+                    //btnReport.Enabled = true;
                     //  GridView2.Visible = true;
                 }
                 else
                 {
                     PlSelectedZone.Visible = false;
-                    btnReport.Enabled = false;
+                    //btnReport.Enabled = false;
                     //GridView2.Visible = false;
                 }
 
@@ -527,6 +534,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                         rblReportType.DataTextField = "Title";
                         rblReportType.DataValueField = "FileLeafRef";
                         rblReportType.DataBind();
+                        rblReportType.SelectedIndex = 0;
                     }
                 }
             }

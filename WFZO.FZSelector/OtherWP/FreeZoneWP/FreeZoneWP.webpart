@@ -7,7 +7,7 @@
     </metaData>
     <data>
       <properties>
-        <property name="Title" type="string">WFZO.FZSelector - FreeZoneWP</property>
+        <property name="Title" type="string">FreeZoneWP</property>
         <property name="Description" type="string">My Visual Web Part</property>
       </properties>
     </data>

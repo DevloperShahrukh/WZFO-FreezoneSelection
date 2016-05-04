@@ -153,8 +153,8 @@ namespace WFZO.FZSelector.FreeZoneWP
                 {
                     TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                     root.SelectAction = TreeNodeSelectAction.Expand;
-                    
-                    CreateNode(root, ds.Tables[0], tvFreezoneProfileCategories);
+
+                    CreateNodeForProfileTreeview(root, ds.Tables[0], tvFreezoneProfileCategories);
                     tvFreezoneProfileCategories.Nodes.Add(root);
                 }
             }
@@ -214,6 +214,31 @@ namespace WFZO.FZSelector.FreeZoneWP
                 WZFOUtility.LogException(ex, "CreateNode", SPContext.Current.Site);
             }
 
+        }
+        public void CreateNodeForProfileTreeview(TreeNode node, DataTable Dt, TreeView Control)
+        {
+            try
+            {
+                DataRow[] Rows = Dt.Select("parentId =" + node.Value);
+                if (Rows.Length == 0) { return; }
+                for (int i = 0; i < Rows.Length; i++)
+                {
+                    TreeNode Childnode = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
+                    Childnode.SelectAction = TreeNodeSelectAction.Expand;
+
+                    //Childnode.ToolTip = Convert.ToString(Rows[i]["Definition"]);
+                    Childnode.Target = "target";
+                    Childnode.Text = "<span id='" + Childnode.Value + "' class='treeviewnode'>" + Childnode.Text + "</span>";
+                    node.ChildNodes.Add(Childnode);
+
+                    //CreateNode(Childnode, Dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+                WZFOUtility.LogException(ex, "CreateNode", SPContext.Current.Site);
+            }
         }
 
 

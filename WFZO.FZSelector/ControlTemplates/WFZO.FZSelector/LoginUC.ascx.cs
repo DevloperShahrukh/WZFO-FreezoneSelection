@@ -17,8 +17,21 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 {
     public partial class LoginUC : UserControl
     {
-        string wfzoSiteUrl = "http://sps2013:200";
+
         string wfzoVisitorGrp = "WFZO FBA Visitors";
+        private string wfzoSiteUrl
+        {
+            get
+            {
+                if (ViewState["wfzoSiteUrl"] == null)
+                    ViewState["wfzoSiteUrl"] = Helper.GetConfigurationValue("WfzoSiteUrl");
+                return Convert.ToString(ViewState["wfzoSiteUrl"]);
+            }
+            set
+            {
+                ViewState["wfzoSiteUrl"] = value;
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -89,26 +102,33 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                     //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
+                    
                     using (SPSite site1 = new SPSite(wfzoSiteUrl))
                     {
                         using (SPWeb web1 = site1.OpenWeb())
                         {
+
+                            web1.AllowUnsafeUpdates = true;
                             string CheckuserName = "i:0#.f|fbamembershipprovider|" + txtUserID.Text;
 
                             SPUser SU = null;
                             try
                             {
-                                using (SPSite CuurentSite = new SPSite(wfzoSiteUrl))
+                                using (SPSite CurrentSite = new SPSite(wfzoSiteUrl))
                                 {
-                                    using (SPWeb CuurentWeb = site1.OpenWeb())
+                                    using (SPWeb CurrentWeb = CurrentSite.OpenWeb())
                                     {
-                                        SU = CuurentWeb.SiteUsers[CheckuserName];
+                                        CurrentWeb.AllowUnsafeUpdates = true;
+                                        SU = CurrentWeb.SiteUsers[CheckuserName];
+
+                                        
                                     }
                                 }
                             }
 
                             catch (Exception ex)
                             {
+                                WZFOUtility.LogException(ex, "Login getting the user", SPContext.Current.Site);
                                 lblInvalidUser.Text = "Invalid User name or Password";
                                 lblInvalidUser.Visible = true;
                                 txtPassword.Text = "";
@@ -157,7 +177,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     return;
                                 }
 
-                                string _renew = "<a href='http://sps2013:200/pages/MembershipRegistration.aspx?code=" + txtUserID.Text + "&rn=1' >Renew</a>";
+                                string _renew = "<a href='"+wfzoSiteUrl +"/pages/MembershipRegistration.aspx?code=" + txtUserID.Text + "&rn=1' >Renew</a>";
 
                                 lblInvalidUser.Text = "Please renew your account to Login. \n " + _renew;
                                 lblInvalidUser.Visible = true;
@@ -168,13 +188,21 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                             }
+                            
+
+
                             // FBA authentication it is. 
-                            SPIisSettings iisSettings = SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
+                            //SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
+                            SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(Microsoft.SharePoint.SPContext.Current.Site.Zone);
+                            
+                            
                             SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
 
                             //formsClaimsAuthenticationProvider.
-
+                           
                             SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
+
+                           
                             if (null != token)
                             {
 
@@ -183,7 +211,6 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                                 SetCookieForStaySignedIn();
-
                                 //LblSignedInUser.Text = TxtUserID.Text;
                                 // DivMemberLogin.Visible = false;
                                 //DivWelcomUser.Visible = true;
@@ -229,7 +256,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     }
 
                                     if (UserLoginNumber == 0)
-                                        Response.Redirect("http://sps2013:200/Pages/ChangePassword.aspx");
+                                        Response.Redirect(wfzoSiteUrl+"/Pages/ChangePassword.aspx");
                                     else
                                         Response.Redirect("/Pages/Dashboard.aspx", false);
                                 }
@@ -245,7 +272,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 liLogin.Attributes["class"] += " open";
                                 // check if the user is blocked, then send 
                             }
-
+                            
                             MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
                             if (p != null)
                             {
@@ -405,6 +432,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 }
                 else
                 {
+                    
                     Response.Cookies["WFZOSingleSignOn"]["Username"] = Encryption.Encrypt(txtUserID.Text);
                     Response.Cookies["WFZOSingleSignOn"]["Password"] = Encryption.Encrypt(txtPassword.Text);
                     Response.Cookies["WFZOSingleSignOn"].Expires = DateTime.Now.AddDays(30);
@@ -470,12 +498,9 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             }
         }
 
-
         protected bool IfCookieExists()
         {
             return ((!string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"])) && !string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]))));
         }
-
-
     }
 }

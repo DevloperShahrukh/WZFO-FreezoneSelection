@@ -1,4 +1,4 @@
-﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>
+﻿<%@ Assembly Name="$SharePoint.Project.AssemblyFullName$" %>'
 <%@ Assembly Name="Microsoft.Web.CommandUI, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register TagPrefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register TagPrefix="Utilities" Namespace="Microsoft.SharePoint.Utilities" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
@@ -8,14 +8,13 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="BottomImageSliderUserControl.ascx.cs" Inherits="WFZO.FZSelector.HomeWP.BottomImageSlider.BottomImageSliderUserControl" %>
 <asp:HiddenField ID="errorMessage" runat="server" />
 
-		<div class="row">
     <asp:Repeater ID="Repeater1" runat="server">
         <HeaderTemplate>
             <div class="owl-carousel m-logos">
         </HeaderTemplate>
         <ItemTemplate>
-            <div class="item">
-                <a href="/Pages/Dashboard.aspx">
+            <div class="item effect1">
+                <a href='<%# Convert.ToString(Eval("Link")).Split(',')[0] %>' title='<%# Eval("Title")%>' target="_blank" >
                 <img src='<%# GetSrcFromImgTag(Eval("ImageColumn").ToString())%>' alt="logo" /></a>
             </div>
         </ItemTemplate>
@@ -23,10 +22,8 @@
             </div>
         </FooterTemplate>
     </asp:Repeater>
-            </div>
       
  
-<script src="../../Style%20Library/WFZO/js/jquery.min.js"></script>
 <script src="../../Style%20Library/WFZO/js/bootstrap.js"></script>
 <script src="../../Style%20Library/WFZO/js/owl.carousel.js"></script>
 

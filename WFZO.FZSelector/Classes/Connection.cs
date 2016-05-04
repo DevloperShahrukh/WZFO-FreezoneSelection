@@ -17,30 +17,17 @@ public class Connection
 {
     private string Str_StringCon; //;= ConfigurationManager.ConnectionStrings["UBLconnection"].ToString(); 
     public Connection(){}
-    public string getstrConnection()
-    {
-        return ""; //Str_StringCon;
-    }
+
     public SqlConnection getConnection()
     {
-        using (SPSite site = new SPSite(SPContext.Current.Web.Site.RootWeb.Url))
+        string value = Helper.GetConfigurationValue("Connection String");
+        if (value != string.Empty)
         {
-            using (SPWeb web = site.OpenWeb())
-            {
-                SPList list = web.Lists.TryGetList("Configuration");
-                SPQuery query = new SPQuery();
-                query.Query = "<Where>"
-                    + "<Eq>"
-                    + "<FieldRef Name='Title' /><Value Type='Text'>Connection String</Value>"
-                    + "</Eq>"
-                    + "</Where>";
-                query.ViewFields = "<FieldRef Name='Value' />";
-                SPListItemCollection item = list.GetItems(query);
-                Str_StringCon = "Data Source=SPS2013;Initial Catalog=WFZO;User ID=sa; Password=P@ssw0rd" ;
-                //Decrypt(item[0]["Value"].ToString())
-                return new SqlConnection(Str_StringCon);
-            }
+            //value = Encryption.Decrypt(value);
+            return new SqlConnection(value);
         }
+        else
+            return null;
     }
 
     

@@ -7,7 +7,7 @@
     </metaData>
     <data>
       <properties>
-        <property name="Title" type="string">WFZO.FZSelector - BottomImageSlider</property>
+        <property name="Title" type="string">BottomImageSlider</property>
         <property name="Description" type="string">My Visual Web Part</property>
       </properties>
     </data>

@@ -7,53 +7,6 @@
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="NewsListingWPUserControl.ascx.cs" Inherits="WFZO.FZSelector.OtherWP.NewsListingWP.NewsListingWPUserControl" %>
 
-<style type="text/css">
-    /*body {
-        font-family: Arial;
-        font-size: 10pt;
-    }*/
-
-    .Repeater, .Repeater td, .Repeater td {
-        border: 1px solid #ccc;
-    }
-
-        .Repeater td {
-            background-color: #eee !important;
-        }
-
-        .Repeater th {
-            background-color: #6C6C6C !important;
-            color: White;
-            font-size: 10pt;
-            line-height: 200%;
-        }
-
-        .Repeater span {
-            color: black;
-            font-size: 10pt;
-            line-height: 200%;
-        }
-
-    .page_enabled, .page_disabled {
-        display: inline-block;
-        height: 20px;
-        min-width: 20px;
-        line-height: 20px;
-        text-align: center;
-        text-decoration: none;
-        border: 1px solid #ccc;
-    }
-
-    .page_enabled {
-        background-color: #eee;
-        color: #000;
-    }
-
-    .page_disabled {
-        background-color: #6C6C6C;
-        color: #fff !important;
-    }
-</style>
 <asp:HiddenField ID="errorMessage" runat="server" />
 <asp:Repeater ID="NewsRP" runat="server" OnItemDataBound="NewsRP_ItemDataBound">
     <HeaderTemplate>
@@ -66,7 +19,7 @@
     <ItemTemplate>
         <div class="news-row col-xs-12">
             <div class="col-sm-3">
-                <img src="<%# Eval("Image") %>" class="news-img" />
+                <img src="<%# Eval("Image") %>?renditionid=6" class="news-img" title='<%# Eval("Title") %>' />
             </div>
             <div class="col-sm-9">
                 <div class="news-list">
@@ -76,7 +29,7 @@
                         <asp:Label ID="lblUrl" runat="server" Text='<%# Eval("URL") %>' Visible="false"></asp:Label>
                     </h2>
                     <h5><%# Eval("ArticleStartDate") %></h5>
-                        <p><%# Eval("Comments") %></p>
+                        <p><%# Eval("ArticleByLine") %></p>
                 </div>
             </div>
         </div>
