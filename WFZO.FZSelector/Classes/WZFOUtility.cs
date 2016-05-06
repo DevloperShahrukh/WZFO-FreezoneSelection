@@ -54,8 +54,6 @@ namespace WFZO.FZSelector.Classes
             {
 
 
-
-
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
 

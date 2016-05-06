@@ -103,7 +103,7 @@
                                     <td><%# Eval("SubCategoryName") %></td>
                                     <td><%# Eval("Unit") %></td>
                                     <td><%# Eval("Methodology") %></td>
-                                    <td><%# Eval("Direction") %></td>
+                                    <td><%# Eval("Direction").ToString() == "-1" ? "-" : "+" %></td>
                                     <td><%# Eval("Definition") %></td>
                                 </tr>
                                 <%--<li><a><%# Eval("SubCategoryName") %></a>--%>

@@ -38,38 +38,29 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             try
             {
-                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
-                    using (SPWeb web = site.OpenWeb())
+                    using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                     {
-                        if (!string.IsNullOrWhiteSpace(web.CurrentUser.Email))
+                        using (SPWeb web = site.OpenWeb())
                         {
-                            txtFrom.Text = web.CurrentUser.Email;
-                            txtFrom.Enabled = false;
-                            txtFrom.CssClass += "form-control txt-box";
+                            if (!string.IsNullOrWhiteSpace(web.CurrentUser.Email))
+                            {
+                                txtFrom.Text = web.CurrentUser.Email;
+                                txtFrom.Enabled = false;
+                                txtFrom.CssClass += "form-control txt-box";
 
-                        }
-                        else
-                        {
-                            txtFrom.Text = string.Empty;
-                            txtFrom.Enabled = true;
+                            }
+                            else
+                            {
+                                txtFrom.Text = string.Empty;
+                                txtFrom.Enabled = true;
 
-                        }
-                        if (!string.IsNullOrWhiteSpace(web.CurrentUser.Name))
-                        {
+                            }
 
-                            txtName.Text = web.CurrentUser.Name;
-                            txtName.Enabled = false;
-                            txtFrom.CssClass += "form-control txt-box";
-                        }
-                        else
-                        {
-
-                            txtName.Text = string.Empty;
-                            txtName.Enabled = true;
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -81,43 +72,46 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             try
             {
-                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
-                    using (SPWeb web = site.OpenWeb())
+                    using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                     {
-                        SPList list = web.Lists.TryGetList("FeedbackForm");
-                        if (list != null)
+                        using (SPWeb web = site.OpenWeb())
                         {
-                            SPListItem NewItem = list.Items.Add();
+                            SPList list = web.Lists.TryGetList("FeedbackForm");
+                            if (list != null)
                             {
-                                web.AllowUnsafeUpdates = true;
-                                NewItem["From"] = txtFrom.Text;
-                                NewItem["Name"] = txtName.Text;
-                                NewItem["Subject"] = txtSubject.Text;
+                                SPListItem NewItem = list.Items.Add();
+                                {
+                                    web.AllowUnsafeUpdates = true;
+                                    NewItem["From"] = txtFrom.Text;
+                                    NewItem["Name"] = txtName.Text;
+                                    NewItem["Subject"] = drpDownType.SelectedValue;
 
-                                SPFieldLookupValueCollection newType = new SPFieldLookupValueCollection();
-                                newType.Add(new SPFieldLookupValue(Convert.ToInt32(drpDownType.SelectedValue), drpDownType.SelectedItem.Text));
-                                NewItem["Types"] = newType;
+                                    SPFieldLookupValueCollection newType = new SPFieldLookupValueCollection();
+                                    newType.Add(new SPFieldLookupValue(Convert.ToInt32(drpDownType.SelectedValue), drpDownType.SelectedItem.Text));
+                                    NewItem["Types"] = newType;
 
-                                NewItem["Details"] = txtDetails.Text;
+                                    NewItem["Details"] = txtDetails.Text;
 
-                                //if (CheckBox1.Checked)
-                                //{
-                                //    NewItem["SendEmail"] = true;
-                                //}
-                                //else
-                                //{
-                                //    NewItem["SendEmail"] = false;
-                                //}
+                                    //if (CheckBox1.Checked)
+                                    //{
+                                    //    NewItem["SendEmail"] = true;
+                                    //}
+                                    //else
+                                    //{
+                                    //    NewItem["SendEmail"] = false;
+                                    //}
 
-                                web.AllowUnsafeUpdates = false;
-                                NewItem.Update();
+                                    web.AllowUnsafeUpdates = false;
+                                    NewItem.Update();
 
-                                //CheckBox1.Checked = false;
+                                    //CheckBox1.Checked = false;
+                                }
                             }
                         }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -129,17 +123,20 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             try
             {
-                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
-                    using (SPWeb web = site.OpenWeb())
+                    using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                     {
-                        SPList list = web.Lists["Type"];
-                        drpDownType.DataSource = list.GetItems();
-                        drpDownType.DataValueField = "ID";
-                        drpDownType.DataTextField = "Title";
-                        drpDownType.DataBind();
+                        using (SPWeb web = site.OpenWeb())
+                        {
+                            SPList list = web.Lists["Type"];
+                            drpDownType.DataSource = list.GetItems();
+                            drpDownType.DataValueField = "ID";
+                            drpDownType.DataTextField = "Title";
+                            drpDownType.DataBind();
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -151,7 +148,6 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             //txtFrom.Text = string.Empty;
             txtName.Text = string.Empty;
-            txtSubject.Text = string.Empty;
             txtDetails.Text = string.Empty;
             drpDownType.SelectedIndex = -1;
             CheckEmployeeEmail();
@@ -162,13 +158,16 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             try
             {
-                using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+                SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
-                    using (SPWeb web = site.OpenWeb())
+                    using (SPSite site = new SPSite(SPContext.Current.Web.Url))
                     {
-                        //WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, txtName.Text, txtFrom.Text, txtSubject.Text);
+                        using (SPWeb web = site.OpenWeb())
+                        {
+                            WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, txtName.Text, txtFrom.Text, drpDownType.SelectedItem.Value, txtDetails.Text);
+                        }
                     }
-                }
+                });
             }
             catch (Exception ex)
             {

@@ -17,8 +17,9 @@
                 <div class="form-group">
                     <label class="col-md-2" for="inputEmail1">From <span class="error">*</span></label>
                     <div class="col-md-8">
-                        <asp:TextBox ID="txtFrom" runat="server" class="form-control txt-box"/>
+                        <asp:TextBox ID="txtFrom" TextMode="Email" runat="server" class="form-control txt-box"/>
                         <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator5" runat="server" ErrorMessage="Name Required" ControlToValidate="txtFrom" Display="Dynamic"/>
+
                     </div>
                 </div>
                 <div class="form-group">
@@ -26,13 +27,6 @@
                     <div class="col-md-8">
                         <asp:TextBox ID="txtName" runat="server" class="form-control txt-box"/>
                         <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator1" runat="server" ErrorMessage="Name Required" ControlToValidate="txtName" Display="Dynamic"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2" for="inputEmail1">Subject <span class="error">*</span></label>
-                    <div class="col-md-8">
-                        <asp:TextBox ID="txtSubject" runat="server" class="form-control txt-box"/>
-                        <asp:RequiredFieldValidator CssClass="error" ID="RequiredFieldValidator2" runat="server" ErrorMessage="Subject Required" ControlToValidate="txtSubject" Display="Dynamic"/>
                     </div>
                 </div>
                 <div class="form-group">

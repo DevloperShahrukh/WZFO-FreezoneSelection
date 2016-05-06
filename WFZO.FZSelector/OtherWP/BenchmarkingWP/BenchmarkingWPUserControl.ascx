@@ -98,6 +98,8 @@
 </div>
 
 <asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
+
+    
     <div>
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -123,6 +125,30 @@
         </div>
         <div class="col-md-2"></div>
     </div>
+    <div class="inner-container">
+
+        <div class="country-form">
+
+            <div class="form-horizontal">
+
+                <div class="col-md-1"></div>
+
+                <div class="col-md-11">
+
+                    <div class="help-link">
+                        For more information on the definitions, sources and methodology of the (sub-)categories you can select below, please click 
+
+       <b><a title="manual" href="/pages/categorydefinition.aspx" target="_blank">here</a></b>.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div><br />
 
     <div class="inner-container">
         <div>

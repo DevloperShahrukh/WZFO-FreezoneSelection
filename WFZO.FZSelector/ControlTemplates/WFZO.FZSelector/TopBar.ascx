@@ -11,7 +11,7 @@
     <ul>
         <li>
             <asp:HyperLink ID="hypHome" runat="server" ToolTip="Home" NavigateUrl="/"><span class="glyphicon glyphicon-home"></span></asp:HyperLink></li>
-        <li><a href="http://wwww.worldfzo.org" title="WorldFZO Home"  target="_blank">WorldFZO<span class="glyphicon glyphicon-home"></span></a></li>
+       <%-- <li><a href="http://wwww.worldfzo.org" title="WorldFZO Home"  target="_blank">WorldFZO<span class="glyphicon glyphicon-home"></span></a></li>--%>
         <li>
             <asp:HyperLink ID="hypDashboard" ToolTip="Dashboard" runat="server" Enabled ="false" NavigateUrl="/pages/dashboard.aspx"><i class="fa fa-server" aria-hidden="true"></i></asp:HyperLink></li>
         <li class="welcome">

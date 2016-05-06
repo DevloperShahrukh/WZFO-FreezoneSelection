@@ -51,6 +51,16 @@ namespace WFZO.FZSelector
                 }
             }
 
+            public static class EmailTemplates 
+            {
+                public const string Name = "EmailTemplates";
+                public static class Fields
+                {
+                    public const string Subject = "Subject";
+                    public const string Body = "Body";
+                }
+            }
+
             public static class Pages
             {
                 public const string Name = "Pages";

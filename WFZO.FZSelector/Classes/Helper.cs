@@ -469,7 +469,7 @@ namespace WFZO.FZSelector.Classes
         }
 
         //myfunctionforFeeddbackEmail
-        public static bool PrepareEmail(int emailTemplateId, SPWeb web, string FromName, string FromEmail, string subject)
+        public static bool PrepareEmail(int emailTemplateId, SPWeb web, string FromName, string FromEmail, string Type, string Message)
         {
             try
             {
@@ -481,21 +481,22 @@ namespace WFZO.FZSelector.Classes
                                            <Value Type='" + Commons.Type.Text + @"'>FeedBackEmailTemplate</Value>
                                          </Eq>
                                 </Where>";
-                DataTable emailTemplateItem = web.Lists.TryGetList(Constants.List.Configuration.Name).GetItems(query).GetDataTable();
+                DataTable emailTemplateItem = web.Lists.TryGetList(Constants.List.EmailTemplates.Name).GetItems(query).GetDataTable();
 
-                string emailBody = Convert.ToString(emailTemplateItem.Rows[0][Constants.List.Configuration.Fields.Value]);
+                string emailBody = Convert.ToString(emailTemplateItem.Rows[0][Constants.List.EmailTemplates.Fields.Body]);
+                string subject = Convert.ToString(emailTemplateItem.Rows[0][Constants.List.EmailTemplates.Fields.Subject]);
 
-                //LogMessage("PrepareEmail", emailBody + " : " + getfromName() + " : " + employee.Email);
-
-                if (!string.IsNullOrEmpty(emailBody) && !string.IsNullOrEmpty(getfromName()) && !string.IsNullOrEmpty(FromEmail))
+                if (!string.IsNullOrEmpty(emailBody) && !string.IsNullOrEmpty(FromEmail))
                 {
+                    subject = Regex.Replace(subject, "###Type###", Type);
+
                     emailBody = Regex.Replace(emailBody, "&quot;", "\"");
                     emailBody = Regex.Replace(emailBody, "%23", "#");
                     emailBody = Regex.Replace(emailBody, "###UserName###", FromName);
-                    //  emailBody = Regex.Replace(emailBody, "###CoursePath###", web.Url + "/" + course.Folder.Url + "/" + Constants.PagesLink.CourseLandingPageName);
-                    emailBody = Regex.Replace(emailBody, "###RefferedBy###", FromEmail);
-                    //string taskLink = SPContext.Current.Web.Url + "/" + "_layouts/listform.aspx?PageType=6&ListId=" + wFTaskItem.ParentList.ID + "&ID=" + Convert.ToString(wFTaskItem[Constants.List.Common.ID]);
+                    emailBody = Regex.Replace(emailBody, "###UserEmail###", FromEmail);
+                    emailBody = Regex.Replace(emailBody, "###Message###", Message);
 
+                    //string taskLink = SPContext.Current.Web.Url + "/" + "_layouts/listform.aspx?PageType=6&ListId=" + wFTaskItem.ParentList.ID + "&ID=" + Convert.ToString(wFTaskItem[Constants.List.Common.ID]);
                     //emailBody = emailBody.Replace("###TaskURL###", @"<a href='" + taskLink + "'><font color='#0072bc'>Click to View</font></a>");
 
                     SPSecurity.RunWithElevatedPrivileges(delegate()
@@ -506,25 +507,7 @@ namespace WFZO.FZSelector.Classes
                         //SPGroup ccGroup = oweb.SiteGroups["FIN-INS-Email-Group"];
                         MailAddressCollection multiCc = new MailAddressCollection();
 
-                        //foreach (SPUser user in ccGroup.Users)
-                        //{
-                        //    if (!string.IsNullOrEmpty(user.Email))
-                        //    {
-                        //        string _toEmail = user.Email;
-                        //        string _to = user.Name;
-                        //        multiCc.Add(new MailAddress(_toEmail, _to));
-                        //    }
-                        //}
-                        //if (Convert.ToBoolean(emailTemplateItem[Constants.List.EmailTemplates.Fields.ManagerInCC]))
-                        //{
-                        //    //SPUser user = Common.GetUserFromSpListItem(oweb, workflowProperties.Item, Constants.List.Initiation.InitiationBaseColumn.PocManager);
-                        //    if (manager != null && !string.IsNullOrEmpty(manager.Email))
-                        //    {
-                        //        string _toEmail = manager.Email;
-                        //        string _to = manager.Name;
-                        //        multiCc.Add(new MailAddress(_toEmail, _to));
-                        //    }
-                        //}
+                        
 
                         SendEmail(FromName, FromEmail, subject, emailBody, multiCc);
                         //oweb.Close();

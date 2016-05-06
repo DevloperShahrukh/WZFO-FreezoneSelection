@@ -92,63 +92,149 @@
         </div>
     </div>
 </div>
-<div class="inner-container">
-    <div>
+<asp:Panel ID="pnlTreeviews" runat="server" Visible="false">
+
+    <div class="inner-container">
+
         <div class="country-form">
+
             <div class="form-horizontal">
-                <div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-8">
-                        <asp:Panel ID="pnlTreeviews" runat="server" Visible="false">
-                        <h4 class="tree-head">Free Zone Information</h4>
-                        <asp:TreeView ID="tvFreezoneProfileCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
 
-                            <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
-                            <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
-                            <ParentNodeStyle Font-Bold="False" />
-                            <LeafNodeStyle CssClass="tvFreezoneProfileCategoriesChild" />
-                            <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+                <div class="col-md-1"></div>
 
-                        </asp:TreeView>
-                        <h4 class="tree-head2">Country Level</h4>
-                        <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+                <div class="col-md-11">
 
-                            <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
-                            <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
-                            <ParentNodeStyle Font-Bold="False" />
-                            <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
-                            <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
+                    <div class="help-link">
+                        For more information on the definitions, sources and methodology of the (sub-)categories you can select below, please click 
 
-                        </asp:TreeView>
-                        <h4 class="tree-head2">Free Zone Level</h4>
-                        <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+       <b><a title="manual" href="/pages/categorydefinition.aspx" target="_blank">here</a></b>.
 
-                            <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
-                            <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
-                            <ParentNodeStyle Font-Bold="False" />
-                            <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
-                            <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
-
-                        </asp:TreeView>
-                            </asp:Panel>
-                        <asp:HiddenField ID="hdnFreezoneProfileCatIds" runat="server" />
-                        <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
-                        <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
                     </div>
-                    <div class="col-md-3"></div>
+
                 </div>
+
             </div>
+
         </div>
-        <div class="country-form">
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label for="freezone" class="col-md-10 text-right"></label>
-                    <div class="col-md-8 text-center">
-                        <input type="button" class="btn btn-collection" onclick="getAndShowReport();" value="GENERATE REPORT" />
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
-</div>
 
+    <div class="inner-container">
+
+        <div>
+
+            <div class="country-form">
+
+                <div class="form-horizontal">
+
+                    <div>
+
+                        <div class="col-md-1"></div>
+
+                        <div class="col-md-8">
+
+
+
+                            <h4 class="tree-head">Free Zone Information</h4>
+
+                            <asp:TreeView ID="tvFreezoneProfileCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
+
+
+                                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+
+                                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+
+                                <ParentNodeStyle Font-Bold="False" />
+
+                                <LeafNodeStyle CssClass="tvFreezoneProfileCategoriesChild" />
+
+                                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+
+
+
+                            </asp:TreeView>
+
+                            <h4 class="tree-head2">Country Level</h4>
+
+                            <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
+
+
+                                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+
+                                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+
+                                <ParentNodeStyle Font-Bold="False" />
+
+                                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+
+                                <LeafNodeStyle CssClass="tvCountryCategoriesChild" />
+
+
+
+                            </asp:TreeView>
+
+                            <h4 class="tree-head2">Free Zone Level</h4>
+
+                            <asp:TreeView ID="tvFreezoneCategories" runat="server" ShowExpandCollapse="true" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
+
+
+
+                                <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
+
+                                <NodeStyle Font-Names="istok web" Font-Size="14px" ForeColor="#FF3300" HorizontalPadding="5px" NodeSpacing="0px" VerticalPadding="0px" />
+
+                                <ParentNodeStyle Font-Bold="False" />
+
+                                <SelectedNodeStyle Font-Underline="False" ForeColor="#FF3300" HorizontalPadding="0px" VerticalPadding="0px" />
+
+                                <LeafNodeStyle CssClass="tvFreezoneCategoriesChild" />
+
+
+
+                            </asp:TreeView>
+
+
+
+                            <asp:HiddenField ID="hdnFreezoneProfileCatIds" runat="server" />
+
+                            <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
+
+                            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+
+                        </div>
+
+                        <div class="col-md-3"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="country-form">
+
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+
+                        <label for="freezone" class="col-md-10 text-right"></label>
+
+                        <div class="col-md-8 text-center">
+
+                            <input type="button" class="btn btn-collection" onclick="getAndShowReport();" value="GENERATE REPORT" />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</asp:Panel>

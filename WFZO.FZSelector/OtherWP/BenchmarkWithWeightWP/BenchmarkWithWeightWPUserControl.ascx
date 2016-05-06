@@ -30,7 +30,7 @@
             window.open(ReportUrl);
 
             UpdateCategoryAnalyticsOfWeigthted('<%= WFZO.FZSelector.Constants.Modules.Weighted %>');
-            
+
             UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
         }
         else {
@@ -101,7 +101,9 @@
         </div>
     </div>
 </div>
+
 <asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
+
     <div>
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -114,7 +116,7 @@
                             <asp:BoundField DataField="Region" HeaderText="Region" />
                             <asp:BoundField DataField="Country" HeaderText="Country" />
                             <asp:BoundField DataField="City" HeaderText="City" />
-                            <asp:BoundField DataField="FreeZone" HeaderText="FreeZone" />
+                            <asp:BoundField DataField="FreeZone" HeaderText="Free Zone" />
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <asp:LinkButton ID="LinkButton1" runat="server" CssClass="remove" CommandName="delRow" CommandArgument='<%# Bind("SR") %>'><span class="glyphicon glyphicon-trash" ></span></asp:LinkButton>
@@ -131,7 +133,32 @@
 </asp:Panel>
 
 <asp:Panel ID="pnlCategories" runat="server" Visible="false">
-    <div class="col-md-2"></div>
+    <div class="inner-container">
+
+        <div class="country-form">
+
+            <div class="form-horizontal">
+
+                <div class="col-md-1"></div>
+
+                <div class="col-md-11">
+
+                    <div class="help-link">
+                        For more information on the definitions, sources and methodology of the (sub-)categories you can select below, please click 
+
+       <b><a title="manual" href="/pages/categorydefinition.aspx" target="_blank">here</a></b>.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="inner-container">
     <div class="col-md-8">
         <div class="panel panel-default">
             <div class="panel-heading grid-header">Categories <span>*</span></div>
@@ -171,7 +198,8 @@
 
             <input type="button" id="btnShowReport" runat="server" value="GENERATE REPORT" class="btn btn-collection" onclick="getAndShowReport();">
         </div>
-    </div>
+    </div></div>
+
 </asp:Panel>
 
 
