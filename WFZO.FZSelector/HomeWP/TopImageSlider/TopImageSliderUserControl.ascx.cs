@@ -77,29 +77,57 @@ namespace WFZO.FZSelector.HomeWP.TopImageSlider
         }
         protected void Repeater2_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+
             try
             {
+
                 if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
                 {
+
                     HtmlGenericControl divControl = e.Item.FindControl("panelItem") as HtmlGenericControl;
 
-                    ListItemType type = e.Item.ItemType;
+                    HtmlGenericControl dvCaption = e.Item.FindControl("dvCaption") as HtmlGenericControl;
+
+                    Label lbl = e.Item.FindControl("lblTitle") as Label;
+
+
+
+                    //ListItemType type = e.Item.ItemType;
+
+
+                    if (lbl.Text.Trim() == "")
+
+                        dvCaption.Visible = false;
+
+
+
                     if (e.Item.ItemIndex == 0)
                     {
+
                         divControl.Attributes.Add("class", "item active");
+
                     }
+
                     else
                     {
+
                         divControl.Attributes.Add("class", "item");
+
                     }
+
                 }
+
             }
 
             catch (Exception ex)
             {
+
                 errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+
                 WZFOUtility.LogException(ex, "Page_Load", SPContext.Current.Site);
+
             }
+
         }
     }
 }

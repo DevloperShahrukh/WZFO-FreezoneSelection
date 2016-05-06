@@ -359,7 +359,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     textbox.Text = Convert.ToString(avg);
 
                     HiddenField hdnSubCatIds = (HiddenField)row.FindControl("hdnSubCatIds");
-                    if (row.Cells[1].Text.Equals("Country level"))
+                    if (row.Cells[1].Text.Equals("Country Level"))
                     {
                         if(string.IsNullOrEmpty(hdnCountryCatIds.Value))
                         {
@@ -371,7 +371,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                         }
 
                     }
-                    else if (row.Cells[1].Text.Equals("FreeZone level"))
+                    else if (row.Cells[1].Text.Equals("Free Zone Level"))
                     {
                         hdnFreezoneCatIds.Value += hdnSubCatIds.Value;
                     }
