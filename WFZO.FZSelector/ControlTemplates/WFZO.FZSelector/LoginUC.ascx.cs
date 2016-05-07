@@ -50,6 +50,10 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     }
 
                 }
+                else
+                {
+                    SSOMethod();
+                }
             }
 
 
@@ -205,13 +209,10 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                             {
 
                                 EstablishSessionWithToken(token);
-                                //base.RedirectToSuccessUrl();
 
+                                InsertEncryptedPassword();
 
                                 SetCookieForStaySignedIn();
-                                //LblSignedInUser.Text = TxtUserID.Text;
-                                // DivMemberLogin.Visible = false;
-                                //DivWelcomUser.Visible = true;
 
                                 PlLogin.Visible = false;
                                 Pllogout.Visible = true;
@@ -325,70 +326,6 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             }
         }
 
-        //private void SetUserLabel()
-        //{
-        //    if (SPContext.Current.Web.CurrentUser != null)
-        //    {
-        //        string userId = SPContext.Current.Web.CurrentUser.LoginName;
-
-        //        if (userId.Contains("|"))
-        //        {
-        //            userId = userId.Substring(userId.LastIndexOf('|') + 1);
-        //            txtUserID.Text = userId;
-
-        //            #region expiry period
-        //            SPSite wSite = new SPSite(wfzoSiteUrl);
-        //            SPWeb sWeb = wSite.RootWeb;
-        //            SPList UserLst = sWeb.Lists["Users"];
-        //            SPQuery query = new SPQuery();
-        //            query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + userId + "</Value></Eq></And></Where>";
-        //            SPListItemCollection UserColl = UserLst.GetItems(query);
-
-        //            DataTable dtuserdata = null;
-
-        //            if (UserColl.Count > 0)
-        //            {
-        //                dtuserdata = UserColl.GetDataTable();
-        //                if (dtuserdata.Rows[0]["Expiry_x0020_Date"] != DBNull.Value)
-        //                {
-
-
-        //                    string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
-        //                    //
-        //                    string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
-
-        //                    int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
-        //                    int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
-
-        //                    DateTime dt = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(-_idays);
-        //                    DateTime dtexp = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"]));
-
-        //                    DateTime dtexpGrace = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
-
-        //                    if (((DateTime.Now.Date >= dt.Date) && (DateTime.Now.Date <= dtexp.Date)) || ((DateTime.Now.Date >= dtexp.Date) && (DateTime.Now.Date <= dtexpGrace)))
-        //                    {
-        //                        if (dtuserdata.Rows[0]["RequestType"].ToString() != "Renewal")
-        //                        {
-        //                            _membershipperiod = _membershipperiod + "\n" + _renew;
-        //                        }
-        //                    }
-        //                    //
-        //                    //ltmembershipperiod.Text = _membershipperiod;
-        //                    //ltmembershipperiod.Visible = true;
-        //                }
-        //            }
-        //            #endregion
-        //        }
-        //        PlLogin.Visible = false;
-        //        Pllogout.Visible = true;
-        //    }
-        //    else
-        //    {
-        //        PlLogin.Visible = true;
-        //        Pllogout.Visible = false;
-        //    }
-
-        //}
         private void EstablishSessionWithToken(SecurityToken securityToken)
         {
             if (securityToken == null)

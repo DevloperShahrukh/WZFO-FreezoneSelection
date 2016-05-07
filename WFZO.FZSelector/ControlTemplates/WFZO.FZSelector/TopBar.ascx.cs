@@ -190,7 +190,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 if (Request.Cookies.Get("WZFOPassword") != null)
                 {
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies["WZFOUserName"].Value = null;
+                    Response.Cookies["WZFOPassword"].Value = null;
                 }
             }
             catch (Exception ex)
