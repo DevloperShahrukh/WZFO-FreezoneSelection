@@ -4,6 +4,7 @@ using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.IdentityModel;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.IdentityModel.Tokens;
 using System.Web;
 using System.Web.ApplicationServices;
@@ -38,12 +39,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             {
                 if (SPContext.Current.Web.CurrentUser == null)
                 {
-                    if (Request.Cookies.Get("WFZOSingleSignOn") != null)
+                    if (Request.Cookies.Get("WZFOUserName") != null && Request.Cookies.Get("WZFOPassword") != null)
                     {
 
                         if (IfCookieExists())
                         {
-                            LoginWithoutLog(Encryption.Decrypt(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"])), Encryption.Encrypt(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"])));
+
+                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"])), Encryption.Encrypt(Convert.ToString(Request.Cookies["WZFOPassword"])));
                         }
                     }
 
@@ -66,25 +68,25 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             Login(txtUserID.Text, txtPassword.Text);
         }
 
-        protected void LoginWithoutLog(string strUserName, string strPassword)
-        {
+        //protected void LoginWithoutLog(string strUserName, string strPassword)
+        //{
 
 
-            SPSecurity.RunWithElevatedPrivileges(delegate()
-                {
-                    SPIisSettings iisSettings = SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
-                    SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
+        //    SPSecurity.RunWithElevatedPrivileges(delegate()
+        //        {
+        //            SPIisSettings iisSettings = SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
+        //            SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
 
-                    //formsClaimsAuthenticationProvider.
+        //            //formsClaimsAuthenticationProvider.
 
-                    SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
-                    if (null != token)
-                    {
+        //            SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
+        //            if (null != token)
+        //            {
 
-                        EstablishSessionWithToken(token);
-                    }
-                });
-        }
+        //                EstablishSessionWithToken(token);
+        //            }
+        //        });
+        //}
 
         protected void Login(string strUserName, string strPassword)
         {
@@ -189,16 +191,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                             }
                             
-
-
-                            // FBA authentication it is. 
-                            //SPContext.Current.Site.WebApplication.IisSettings[SPUrlZone.Intranet];
                             SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(Microsoft.SharePoint.SPContext.Current.Site.Zone);
                             
                             
                             SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
 
-                            //formsClaimsAuthenticationProvider.
+                            
                            
                             SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
 
@@ -409,12 +407,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         private void SetTextBoxFromCookies()
         {
-            if (IfCookieExists())
+            if (Request.Cookies["WZFOUserName"] != null)
             {
 
-                txtUserID.Text = Encryption.Decrypt(Request.Cookies["WFZOSingleSignOn"]["Username"]);
+                txtUserID.Text = Request.Cookies["WZFOUserName"].Value;
                 //TxtPassword.Text = Request.Cookies["WZFOPassword"].Value;
-                txtPassword.Attributes.Add("value", Encryption.Decrypt(Request.Cookies["WFZOSingleSignOn"]["Password"]));
+                txtPassword.Attributes.Add("value", Request.Cookies["WZFOPassword"].Value);
                 chkStaySignedIn.Checked = true;
             }
         }
@@ -422,21 +420,35 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             if (chkStaySignedIn.Checked)
             {
-                if (Response.Cookies["WFZOSingleSignOn"] == null)
+                
+                if (Request.Cookies.Get("WZFOUserName") == null)
                 {
-                    HttpCookie aCookie = new HttpCookie("WFZOSingleSignOn");
-                    aCookie.Values["Username"] = Encryption.Encrypt(txtUserID.Text);
-                    aCookie.Values["Password"] = Encryption.Encrypt(txtPassword.Text);
-                    aCookie.Expires = DateTime.Now.AddDays(30);
-                    Response.Cookies.Add(aCookie);
+                    Response.Cookies.Add(new HttpCookie("WZFOUserName", txtUserID.Text));
+                    Response.Cookies.Add(new HttpCookie("WZFOPassword", txtPassword.Text));
+                    Response.Cookies.Add(new HttpCookie("SSOC", txtUserID.Text));
+
+                    Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(30);
+                    Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(30);
                 }
                 else
                 {
-                    
-                    Response.Cookies["WFZOSingleSignOn"]["Username"] = Encryption.Encrypt(txtUserID.Text);
-                    Response.Cookies["WFZOSingleSignOn"]["Password"] = Encryption.Encrypt(txtPassword.Text);
-                    Response.Cookies["WFZOSingleSignOn"].Expires = DateTime.Now.AddDays(30);
-                    Response.Cookies.Add(Response.Cookies["WFZOSingleSignOn"]);
+                    Response.Cookies["WZFOUserName"].Value = txtUserID.Text;
+                    Response.Cookies["WZFOPassword"].Value = txtPassword.Text;
+                }
+
+            }
+            else
+            {
+                if (Request.Cookies.Get("WZFOUserName") != null)
+                {
+                    Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOUserName"].Value = null;
+
+                }
+                if (Request.Cookies.Get("WZFOPassword") != null)
+                {
+                    Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOPassword"].Value = null;
                 }
             }
         }
@@ -456,10 +468,6 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             {
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                    {
-                       //SPSite parentSite = new SPSite(SPContext.Current.Site.ID);
-                       //SPUserToken systemToken = parentSite.SystemAccount.UserToken;
-
-                       //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
                        using (SPSite parentSite = new SPSite(wfzoSiteUrl))
                        {
                            using (SPWeb web = parentSite.OpenWeb())
@@ -502,5 +510,76 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             return ((!string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"])) && !string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]))));
         }
+
+        private void SSOMethod()
+        {
+            try
+            {
+                string userId = "";
+                if (Request.QueryString["wToken"] != null)
+                {
+                    string wToken = Request.QueryString["wToken"].ToString();
+
+                    userId = Secure.getedecryptedToken(wToken);
+                }
+                else
+                {
+                    return;
+                }
+                string conString = System.Configuration.ConfigurationManager.ConnectionStrings["FBADB2"].ConnectionString;
+                SqlConnection con = new SqlConnection(conString);//"Data Source=VM-2;Initial Catalog=aspnetdb; Trusted_Connection=Yes;");//Persist Security Info=True;User ID=KARACHI\\SPFarmUser;Password=abcd@1234");
+                SqlCommand cmd1 = new SqlCommand("select Email,EncyPass from aspnet_Membership where Email=@EmailId", con);
+                cmd1.Parameters.AddWithValue("@EmailId", userId);
+                con.Open();
+                string pwd = string.Empty;
+                using (SqlDataReader reader = cmd1.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        string id = reader["Email"].ToString();
+                        pwd = Secure.getedecryptedToken(reader["EncyPass"].ToString());
+                    }
+                }
+
+                if (pwd == string.Empty)
+                {
+
+                    return;
+                }
+                con.Close();
+                Login(userId, pwd);
+                
+            }
+            catch (Exception ex)
+            {
+
+                WZFOUtility.LogException(ex, "LoginUC - SSO Method ", SPContext.Current.Site);
+            }
+        }
+
+        private void InsertEncryptedPassword()
+        {
+            try
+            {
+                string conString = System.Configuration.ConfigurationManager.ConnectionStrings["FBADB"].ConnectionString;
+                string pwd = Secure.getencryptedToken(txtPassword.Text);
+
+                SqlConnection con = new SqlConnection(conString);
+                SqlCommand cmd1 = new SqlCommand("update aspnet_Membership set EncyPass=@pwd,Machine=@MachineName,IsLoggedIn='true' where Email=@EmailId", con);
+                cmd1.Parameters.AddWithValue("@EmailId", txtUserID.Text);
+                cmd1.Parameters.AddWithValue("@pwd", pwd);
+                cmd1.Parameters.AddWithValue("@MachineName", "");
+                con.Open();
+                cmd1.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                WZFOUtility.LogException(ex, "LoginUC - InsertEncryptedPassword", SPContext.Current.Site);
+            }
+        }
+
+
+
     }
 }

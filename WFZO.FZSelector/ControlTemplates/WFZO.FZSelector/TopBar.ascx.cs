@@ -36,7 +36,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 //this.Page.LoadComplete += new EventHandler(Page_LoadComplete);
             }
 
-            SetUserLabel();
+
 
         }
 
@@ -96,11 +96,9 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     {
                         SetUserLabelProcess(userId);
                     }
-                    //PlLogin.Visible = false;
                 }
                 else
                 {
-                    //PlLogin.Visible = true;
                     lnkLogout.Visible = false;
                 }
             }
@@ -119,55 +117,62 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 ltrWelcome.Text = "Welcome " + userId;
 
                 #region expiry period
-                SPSite wSite = new SPSite(wfzoSiteUrl);
-                SPWeb sWeb = wSite.RootWeb;
-                SPList UserLst = sWeb.Lists["Users"];
-                SPQuery query = new SPQuery();
-                query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + userId + "</Value></Eq></And></Where>";
-                SPListItemCollection UserColl = UserLst.GetItems(query);
-
-                DataTable dtuserdata = null;
-
-                if (UserColl.Count > 0)
+                if (string.IsNullOrEmpty(Convert.ToString(ViewState["MembershipPeriod"])))
                 {
-                    dtuserdata = UserColl.GetDataTable();
-                    if (dtuserdata.Rows[0]["Expiry_x0020_Date"] != DBNull.Value)
+                    SPSite wSite = new SPSite(wfzoSiteUrl);
+                    SPWeb sWeb = wSite.RootWeb;
+                    SPList UserLst = sWeb.Lists["Users"];
+                    SPQuery query = new SPQuery();
+                    query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + userId + "</Value></Eq></And></Where>";
+                    SPListItemCollection UserColl = UserLst.GetItems(query);
+
+                    DataTable dtuserdata = null;
+
+                    if (UserColl.Count > 0)
                     {
-
-
-                        string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
-                        //
-                        string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
-
-                        int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
-                        int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
-
-                        DateTime dt = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(-_idays);
-                        DateTime dtexp = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"]));
-
-                        DateTime dtexpGrace = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
-
-                        if (((DateTime.Now.Date >= dt.Date) && (DateTime.Now.Date <= dtexp.Date)) || ((DateTime.Now.Date >= dtexp.Date) && (DateTime.Now.Date <= dtexpGrace)))
+                        dtuserdata = UserColl.GetDataTable();
+                        if (dtuserdata.Rows[0]["Expiry_x0020_Date"] != DBNull.Value)
                         {
-                            if (dtuserdata.Rows[0]["RequestType"].ToString() != "Renewal")
+
+                            string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
+                            //
+                            string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
+
+                            int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
+                            int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
+
+                            DateTime dt = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(-_idays);
+                            DateTime dtexp = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"]));
+
+                            DateTime dtexpGrace = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
+
+                            if (((DateTime.Now.Date >= dt.Date) && (DateTime.Now.Date <= dtexp.Date)) || ((DateTime.Now.Date >= dtexp.Date) && (DateTime.Now.Date <= dtexpGrace)))
                             {
-                                _membershipperiod = _membershipperiod + "\n" + _renew;
+                                if (dtuserdata.Rows[0]["RequestType"].ToString() != "Renewal")
+                                {
+                                    _membershipperiod = _membershipperiod + "\n" + _renew;
+                                }
                             }
+                            ViewState["MembershipPeriod"] = _membershipperiod;
+                            ltrMembershipValidity.Text = _membershipperiod;
+                            ltrMembershipValidity.Visible = true;
                         }
-                        //
-                        //ltmembershipperiod.Text = _membershipperiod;
-                        //ltmembershipperiod.Visible = true;
                     }
                 }
+                else
+                {
+                    ltrMembershipValidity.Text = Convert.ToString(ViewState["MembershipPeriod"]);
+                    ltrMembershipValidity.Visible = true;
+                }
+
                 #endregion
 
-                //PlLogin.Visible = false;
                 lnkLogout.Visible = true;
             }
             catch (Exception ex)
             {
                 errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "BindFooterRP", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "TopBarUC - SetUserLabelProcess", SPContext.Current.Site);
             }
         }
 
@@ -176,18 +181,22 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             try
             {
 
-                Response.Cookies["WFZOSingleSignOn"].Expires = DateTime.Now.AddDays(-1);
-                Response.Cookies.Remove("WFZOSingleSignOn");
+                if (Request.Cookies.Get("WZFOUserName") != null)
+                {
+                    Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOUserName"].Value = null;
 
-                Response.Cookies["WFZOSingleSignOn"]["Username"] = null;
-                Response.Cookies["WFZOSingleSignOn"]["Pasword"] = null;
-
+                }
+                if (Request.Cookies.Get("WZFOPassword") != null)
+                {
+                    Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOUserName"].Value = null;
+                }
             }
-
             catch (Exception ex)
             {
                 errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "SetUserLabel", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "TopBarUC -  RemoveCookies", SPContext.Current.Site);
             }
         }
     }

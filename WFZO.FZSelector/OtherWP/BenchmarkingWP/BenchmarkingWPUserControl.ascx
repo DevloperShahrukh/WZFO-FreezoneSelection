@@ -97,9 +97,9 @@
     </div>
 </div>
 
-<asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
 
-    
+
+    <asp:Panel ID="PlSelectedZone" runat="server" Visible="false">
     <div>
         <div class="col-md-2"></div>
         <div class="col-md-8">
@@ -125,6 +125,8 @@
         </div>
         <div class="col-md-2"></div>
     </div>
+        </asp:Panel>
+<asp:Panel ID="PnlTreeViews" runat="server" Visible="false">
     <div class="inner-container">
 
         <div class="country-form">

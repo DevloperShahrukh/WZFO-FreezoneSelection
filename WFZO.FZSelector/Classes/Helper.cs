@@ -55,11 +55,12 @@ namespace WFZO.FZSelector.Classes
                     query.Query = @"<Where>
                                     <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.Title + @"' />
-                                           <Value Type='" + Commons.Type.Text + @"'>FeedBackEmailTemplate</Value>
+                                           <Value Type='" + Commons.Type.Text + @"'>FromEmailAddress</Value>
                                          </Eq>
                                 </Where>";
                     DataTable emailTemplateItem = web.Lists.TryGetList(Constants.List.Configuration.Name).GetItems(query).GetDataTable();
-                    return Convert.ToString(emailTemplateItem.Rows[0]["FromEmail"]);
+                    //return Convert.ToString(emailTemplateItem.Rows[0]["Value"]);
+                    return SPAdministrationWebApplication.Local.OutboundMailSenderAddress.ToString();
                 }
             }
             //   return GetAppSetting("LMS_FromAddress");
@@ -74,11 +75,11 @@ namespace WFZO.FZSelector.Classes
                     query.Query = @"<Where>
                                     <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.Title + @"' />
-                                           <Value Type='" + Commons.Type.Text + @"'>FeedBackEmailTemplate</Value>
+                                           <Value Type='" + Commons.Type.Text + @"'>FromEmailSenderName</Value>
                                          </Eq>
                                 </Where>";
                     DataTable emailTemplateItem = web.Lists.TryGetList(Constants.List.Configuration.Name).GetItems(query).GetDataTable();
-                    return Convert.ToString(emailTemplateItem.Rows[0]["FromName"]);
+                    return Convert.ToString(emailTemplateItem.Rows[0]["Value"]);
                 }
             }
             //     return GetAppSetting("LMS_FromName");
@@ -367,7 +368,7 @@ namespace WFZO.FZSelector.Classes
             }
             catch (Exception ex)
             {
-                WZFOUtility.LogException(ex, "GetPageSize", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "SendEmail", SPContext.Current.Site);
             }
         }
         public static void SendEmail(string to, string toAddress, string subject, string body, List<string> emailCC)
@@ -411,7 +412,7 @@ namespace WFZO.FZSelector.Classes
             }
             catch (Exception ex)
             {
-                WZFOUtility.LogException(ex, "GetPageSize", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "Send Email", SPContext.Current.Site);
             }
         }
         public static void SendEmail(MailAddressCollection multiTo, string subject, string body, MailAddressCollection cc)
@@ -457,7 +458,7 @@ namespace WFZO.FZSelector.Classes
             }
             catch (Exception ex)
             {
-                WZFOUtility.LogException(ex, "GetPageSize", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "Send Email", SPContext.Current.Site);
             }
         }
         private static bool IsEmail(string email)
@@ -469,7 +470,7 @@ namespace WFZO.FZSelector.Classes
         }
 
         //myfunctionforFeeddbackEmail
-        public static bool PrepareEmail(int emailTemplateId, SPWeb web, string FromName, string FromEmail, string Type, string Message)
+        public static bool PrepareEmail(int emailTemplateId, SPWeb web,string ToAddress, string FromName, string FromEmail, string Type, string Message)
         {
             try
             {
@@ -492,9 +493,10 @@ namespace WFZO.FZSelector.Classes
 
                     emailBody = Regex.Replace(emailBody, "&quot;", "\"");
                     emailBody = Regex.Replace(emailBody, "%23", "#");
-                    emailBody = Regex.Replace(emailBody, "###UserName###", FromName);
-                    emailBody = Regex.Replace(emailBody, "###UserEmail###", FromEmail);
-                    emailBody = Regex.Replace(emailBody, "###Message###", Message);
+                    emailBody = Regex.Replace(emailBody, "###UserName###", Convert.ToString(FromName));
+                    emailBody = Regex.Replace(emailBody, "###Type###", Convert.ToString(Type));
+                    emailBody = Regex.Replace(emailBody, "###UserEmail###", Convert.ToString(FromEmail));
+                    emailBody = Regex.Replace(emailBody, "###Message###",Convert.ToString(Message));
 
                     //string taskLink = SPContext.Current.Web.Url + "/" + "_layouts/listform.aspx?PageType=6&ListId=" + wFTaskItem.ParentList.ID + "&ID=" + Convert.ToString(wFTaskItem[Constants.List.Common.ID]);
                     //emailBody = emailBody.Replace("###TaskURL###", @"<a href='" + taskLink + "'><font color='#0072bc'>Click to View</font></a>");
@@ -507,9 +509,9 @@ namespace WFZO.FZSelector.Classes
                         //SPGroup ccGroup = oweb.SiteGroups["FIN-INS-Email-Group"];
                         MailAddressCollection multiCc = new MailAddressCollection();
 
-                        
 
-                        SendEmail(FromName, FromEmail, subject, emailBody, multiCc);
+
+                        SendEmail("FZMonitor", ToAddress, subject, emailBody, multiCc);
                         //oweb.Close();
                         //oweb.Dispose();
                         //oSite.Dispose();
@@ -519,7 +521,7 @@ namespace WFZO.FZSelector.Classes
             }
             catch (Exception ex)
             {
-                WZFOUtility.LogException(ex, "GetPageSize", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "Prepare Email", SPContext.Current.Site);
                 return false;
             }
         }

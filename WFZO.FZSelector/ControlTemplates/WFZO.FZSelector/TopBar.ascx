@@ -6,14 +6,40 @@
 <%@ Import Namespace="Microsoft.SharePoint" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TopBar.ascx.cs" Inherits="WFZO.FZSelector.ControlTemplates.WFZO.FZSelector.TopBar" %>
+
+<script>
+
+    $(document).ready(function () {
+
+        var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.Email) : string.Empty %>';
+
+        if (EncryptedTokenString != '') {
+            var anchors = $('a');
+
+            anchors.each(function (index) {
+
+                var Link = $(this).attr('href');
+
+                if (Link != undefined) {
+                    if (Link.indexOf('worldfzo') > -1) {
+                        $(this).attr('href', Link + '?wToken=' + EncryptedTokenString);
+                    }
+                }
+            });
+        }
+    });
+</script>
+
 <asp:HiddenField ID="errorMessage" runat="server" />
 <div class="logout-box">
     <ul>
+        <li class="welcome">
+            <asp:Literal ID="ltrMembershipValidity" runat="server" Visible="false" /></li>
         <li>
             <asp:HyperLink ID="hypHome" runat="server" ToolTip="Home" NavigateUrl="/"><span class="glyphicon glyphicon-home"></span></asp:HyperLink></li>
-       <%-- <li><a href="http://wwww.worldfzo.org" title="WorldFZO Home"  target="_blank">WorldFZO<span class="glyphicon glyphicon-home"></span></a></li>--%>
+        <%-- <li><a href="http://wwww.worldfzo.org" title="WorldFZO Home"  target="_blank">WorldFZO<span class="glyphicon glyphicon-home"></span></a></li>--%>
         <li>
-            <asp:HyperLink ID="hypDashboard" ToolTip="Dashboard" runat="server" Enabled ="false" NavigateUrl="/pages/dashboard.aspx"><i class="fa fa-server" aria-hidden="true"></i></asp:HyperLink></li>
+            <asp:HyperLink ID="hypDashboard" ToolTip="Dashboard" runat="server" Enabled="false" NavigateUrl="/pages/dashboard.aspx"><i class="fa fa-server" aria-hidden="true"></i></asp:HyperLink></li>
         <li class="welcome">
             <asp:Literal ID="ltrWelcome" runat="server" /></li>
         <li>

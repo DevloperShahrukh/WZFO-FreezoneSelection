@@ -1,6 +1,7 @@
 ﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebPartPages;
 using System;
+using System.Data;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
@@ -84,7 +85,6 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
                                 SPListItem NewItem = list.Items.Add();
                                 {
                                     web.AllowUnsafeUpdates = true;
-                                    NewItem["From"] = txtFrom.Text;
                                     NewItem["Name"] = txtName.Text;
                                     NewItem["Subject"] = drpDownType.SelectedValue;
 
@@ -103,7 +103,7 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
                                     //    NewItem["SendEmail"] = false;
                                     //}
 
-                                    web.AllowUnsafeUpdates = false;
+                                    
                                     NewItem.Update();
 
                                     //CheckBox1.Checked = false;
@@ -164,7 +164,17 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
                     {
                         using (SPWeb web = site.OpenWeb())
                         {
-                            WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, txtName.Text, txtFrom.Text, drpDownType.SelectedItem.Value, txtDetails.Text);
+                            
+                                SPQuery query = new SPQuery();
+                                query.Query = @"<Where>
+                                    <Eq>
+                                           <FieldRef Name='" + Constants.List.BaseColumns.Title + @"' />
+                                           <Value Type='" + Commons.Type.Text + @"'>ContactEmailAddress</Value>
+                                         </Eq>
+                                </Where>";
+                                string toContactEmailAddress= Convert.ToString(web.Lists.TryGetList(Constants.List.Configuration.Name).GetItems(query).GetDataTable().Rows[0]["Value"]);
+
+                                WFZO.FZSelector.Classes.Helper.PrepareEmail(1, web, toContactEmailAddress, txtName.Text, txtFrom.Text, drpDownType.SelectedItem.Text, txtDetails.Text);
                         }
                     }
                 });

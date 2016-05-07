@@ -31,13 +31,11 @@ namespace WFZO.FZSelector.HomeWP.TopImageSlider
                         SPList list = web.Lists[Constants.List.TopSlider.Name];
                         SPQuery query = new SPQuery();
                         query.Query = @"<Where>
-                                       
                                             <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.IsActive + @"' />
                                            <Value Type='" + Commons.Type.Boolean + @"'>" + 1 + @"</Value>
                                          </Eq>
-                                       
-                                    </Where>";
+                                        </Where>";
 
 
                         SPListItemCollection Itemcol = list.GetItems(query);

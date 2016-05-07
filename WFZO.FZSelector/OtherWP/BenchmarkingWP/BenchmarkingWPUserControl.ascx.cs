@@ -152,8 +152,6 @@ namespace WFZO.FZSelector.BenchmarkingWP
             try
             {
 
-                //if (rblReportType.SelectedItem.Text.Equals(Constants.ReportTypes.Normal))
-                //{
                 PlSelectedZone.Visible = true;
                 DataTable dt = ViewState["TempBenchmarking"] as DataTable;
                 DataRow[] temprow = dt.Select("Region ='" + ddlRegion.SelectedItem.Text + "' AND Country='" + ddlCountry.SelectedItem.Text + "' AND City='" + ddlCity.SelectedItem.Text + "' AND FreeZone = '" + ddlFreeZone.SelectedItem.Text + "'");
@@ -180,6 +178,7 @@ namespace WFZO.FZSelector.BenchmarkingWP
 
                 if (GridView1.Rows.Count >= 2)
                 {
+                    PnlTreeViews.Visible = true;
                     FreezoneDataList = new List<FreezoneAnalyticData>();
                     hdnCountryIds.Value = "0";
                     for (int i = 0; i < dt.Rows.Count; i++)
