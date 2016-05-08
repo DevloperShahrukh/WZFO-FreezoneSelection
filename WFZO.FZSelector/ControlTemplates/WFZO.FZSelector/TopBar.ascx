@@ -11,7 +11,7 @@
 
     $(document).ready(function () {
 
-        var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.Email) : string.Empty %>';
+        <%--var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.Email) : string.Empty %>';
 
         if (EncryptedTokenString != '') {
             var anchors = $('a');
@@ -21,12 +21,12 @@
                 var Link = $(this).attr('href');
 
                 if (Link != undefined) {
-                    if (Link.indexOf('worldfzo') > -1) {
+                    if (Link.indexOf('http://www.worldfzo.org') > -1) {
                         $(this).attr('href', Link + '?wToken=' + EncryptedTokenString);
                     }
                 }
             });
-        }
+        }--%>
     });
 </script>
 
