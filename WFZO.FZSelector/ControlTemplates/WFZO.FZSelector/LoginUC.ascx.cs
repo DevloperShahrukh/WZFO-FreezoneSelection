@@ -48,12 +48,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                             Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"])), Encryption.Encrypt(Convert.ToString(Request.Cookies["WZFOPassword"])));
                         }
                     }
-
+                    else
+                    {
+                        SSOMethod();
+                    }
                 }
-                else
-                {
-                    SSOMethod();
-                }
+               
             }
 
 
@@ -344,7 +344,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         private void SetTextBoxFromCookies()
         {
-            if (Request.Cookies["WZFOUserName"] != null)
+            if (Request.Cookies.Get("WZFOUserName") != null)
             {
 
                 txtUserID.Text = Request.Cookies["WZFOUserName"].Value;
@@ -360,17 +360,16 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 
                 if (Request.Cookies.Get("WZFOUserName") == null)
                 {
-                    Response.Cookies.Add(new HttpCookie("WZFOUserName", txtUserID.Text));
-                    Response.Cookies.Add(new HttpCookie("WZFOPassword", txtPassword.Text));
-                    Response.Cookies.Add(new HttpCookie("SSOC", txtUserID.Text));
-
+                    Response.Cookies.Add(new HttpCookie("WZFOUserName", Encryption.Encrypt(txtUserID.Text)));
+                    Response.Cookies.Add(new HttpCookie("WZFOPassword", Encryption.Encrypt(txtPassword.Text)));
+                   
                     Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(30);
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(30);
                 }
                 else
                 {
-                    Response.Cookies["WZFOUserName"].Value = txtUserID.Text;
-                    Response.Cookies["WZFOPassword"].Value = txtPassword.Text;
+                    Response.Cookies["WZFOUserName"].Value = Encryption.Encrypt(txtUserID.Text);
+                    Response.Cookies["WZFOPassword"].Value = Encryption.Encrypt(txtPassword.Text);
                 }
 
             }

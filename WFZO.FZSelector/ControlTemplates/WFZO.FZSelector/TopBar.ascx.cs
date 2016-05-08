@@ -25,6 +25,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 ViewState["wfzoSiteUrl"] = value;
             }
         }
+
         string wfzoVisitorGrp = "WFZO FBA Visitors";
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -33,7 +34,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 if (this.Page.Request.Url.AbsolutePath.ToLower() == "/pages/default.aspx")
                     hypHome.Enabled = false;
 
-                //this.Page.LoadComplete += new EventHandler(Page_LoadComplete);
+                this.Page.LoadComplete += new EventHandler(Page_LoadComplete);
             }
 
 
@@ -119,45 +120,52 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 #region expiry period
                 if (string.IsNullOrEmpty(Convert.ToString(ViewState["MembershipPeriod"])))
                 {
-                    SPSite wSite = new SPSite(wfzoSiteUrl);
-                    SPWeb sWeb = wSite.RootWeb;
-                    SPList UserLst = sWeb.Lists["Users"];
-                    SPQuery query = new SPQuery();
-                    query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + userId + "</Value></Eq></And></Where>";
-                    SPListItemCollection UserColl = UserLst.GetItems(query);
-
-                    DataTable dtuserdata = null;
-
-                    if (UserColl.Count > 0)
+                    SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    using (SPSite wSite = new SPSite(wfzoSiteUrl))
                     {
-                        dtuserdata = UserColl.GetDataTable();
-                        if (dtuserdata.Rows[0]["Expiry_x0020_Date"] != DBNull.Value)
+                        using (SPWeb sWeb = wSite.RootWeb)
                         {
+                            SPList UserLst = sWeb.Lists["Users"];
+                            SPQuery query = new SPQuery();
+                            query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + userId + "</Value></Eq></And></Where>";
+                            SPListItemCollection UserColl = UserLst.GetItems(query);
 
-                            string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
-                            //
-                            string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
+                            DataTable dtuserdata = null;
 
-                            int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
-                            int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
-
-                            DateTime dt = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(-_idays);
-                            DateTime dtexp = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"]));
-
-                            DateTime dtexpGrace = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
-
-                            if (((DateTime.Now.Date >= dt.Date) && (DateTime.Now.Date <= dtexp.Date)) || ((DateTime.Now.Date >= dtexp.Date) && (DateTime.Now.Date <= dtexpGrace)))
+                            if (UserColl.Count > 0)
                             {
-                                if (dtuserdata.Rows[0]["RequestType"].ToString() != "Renewal")
+                                dtuserdata = UserColl.GetDataTable();
+                                if (dtuserdata.Rows[0]["Expiry_x0020_Date"] != DBNull.Value)
                                 {
-                                    _membershipperiod = _membershipperiod + "\n" + _renew;
+
+                                    string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
+                                    //
+                                    string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
+
+                                    int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
+                                    int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
+
+                                    DateTime dt = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(-_idays);
+                                    DateTime dtexp = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"]));
+
+                                    DateTime dtexpGrace = Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
+
+                                    if (((DateTime.Now.Date >= dt.Date) && (DateTime.Now.Date <= dtexp.Date)) || ((DateTime.Now.Date >= dtexp.Date) && (DateTime.Now.Date <= dtexpGrace)))
+                                    {
+                                        if (dtuserdata.Rows[0]["RequestType"].ToString() != "Renewal")
+                                        {
+                                            _membershipperiod = _membershipperiod + "\n" + _renew;
+                                        }
+                                    }
+                                    ViewState["MembershipPeriod"] = _membershipperiod;
+                                    ltrMembershipValidity.Text = _membershipperiod;
+                                    ltrMembershipValidity.Visible = true;
                                 }
                             }
-                            ViewState["MembershipPeriod"] = _membershipperiod;
-                            ltrMembershipValidity.Text = _membershipperiod;
-                            ltrMembershipValidity.Visible = true;
                         }
                     }
+                });
                 }
                 else
                 {

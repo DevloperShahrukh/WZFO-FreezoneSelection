@@ -40,6 +40,15 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP {
         protected global::System.Web.UI.WebControls.Label lblCurrentPage;
         
         /// <summary>
+        /// rptPages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptPages;
+        
+        /// <summary>
         /// cmdFirst control.
         /// </summary>
         /// <remarks>
@@ -56,15 +65,6 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button cmdPrev;
-        
-        /// <summary>
-        /// rptPages control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptPages;
         
         /// <summary>
         /// cmdNext control.

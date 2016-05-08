@@ -155,27 +155,7 @@ namespace WFZO.FZSelector.OtherWP.NewsListingWP
             return result;
         }
 
-        protected void NewsRP_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            try
-            {
-                if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-                {
-                    Literal lit = (Literal)e.Item.FindControl("ltrUrl");
-                    Label Title = (Label)e.Item.FindControl("lblTitle");
-                    Label LinkURL = (Label)e.Item.FindControl("lblUrl");
-
-                    lit.Text = "<a href='" + LinkURL.Text  + "'>" + Title.Text + "</a>";
-
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "NewsRP_ItemDataBound", SPContext.Current.Site);
-            }
-        }
-
+        
         //Pageing
         protected int CurrentPage
         {

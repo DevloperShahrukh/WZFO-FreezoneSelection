@@ -210,7 +210,8 @@ namespace WFZO.FZSelector.Classes
 
             catch (Exception ex)
             {
-
+               
+                WZFOUtility.LogException(ex, "WFZOUtility - SendEmail", SPContext.Current.Site);
             }
 
         }

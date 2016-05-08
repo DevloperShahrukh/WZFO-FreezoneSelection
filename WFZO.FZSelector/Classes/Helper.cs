@@ -331,40 +331,43 @@ namespace WFZO.FZSelector.Classes
         {
             try
             {
-                if (!string.IsNullOrEmpty(toAddress) && !string.IsNullOrEmpty(getfromAddress()))
+                SPSecurity.RunWithElevatedPrivileges(delegate
                 {
-
-                    MailMessage mMailMessage = new MailMessage();
-                    mMailMessage.From = new MailAddress(getfromAddress(), getfromName());
-                    mMailMessage.To.Add(new MailAddress(toAddress, to));
-
-                    if (cc != null)
+                    if (!string.IsNullOrEmpty(toAddress) && !string.IsNullOrEmpty(getfromAddress()))
                     {
-                        foreach (MailAddress address in cc)
+
+                        MailMessage mMailMessage = new MailMessage();
+                        mMailMessage.From = new MailAddress(getfromAddress(), getfromName());
+                        mMailMessage.To.Add(new MailAddress(toAddress, to));
+
+                        if (cc != null)
                         {
-                            mMailMessage.CC.Add(address);
+                            foreach (MailAddress address in cc)
+                            {
+                                mMailMessage.CC.Add(address);
+                            }
                         }
+
+                        //Added HardCoded CC
+                        mMailMessage.CC.Add(new MailAddress(getfromAddress(), getfromName()));
+
+                        mMailMessage.Subject = subject;
+                        mMailMessage.Body = body;
+                        mMailMessage.IsBodyHtml = true;
+                        mMailMessage.Priority = MailPriority.Normal;
+                        SmtpClient mSmtpClient = new SmtpClient(mailServer);
+                        //SmtpClient mSmtpClient = new SmtpClient();
+
+                        //mSmtpClient.Host = "smtp.gmail.com";
+                        //mSmtpClient.Port = 587;
+                        //mSmtpClient.EnableSsl = true;
+                        //mSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        //mSmtpClient.UseDefaultCredentials = false;
+                        //mSmtpClient.Credentials = new System.Net.NetworkCredential("test1email111@gmail.com", "testemail123");
+                        mSmtpClient.Timeout = 20000;
+                        mSmtpClient.Send(mMailMessage);
                     }
-
-                    //Added HardCoded CC
-                    mMailMessage.CC.Add(new MailAddress(getfromAddress(), getfromName()));
-
-                    mMailMessage.Subject = subject;
-                    mMailMessage.Body = body;
-                    mMailMessage.IsBodyHtml = true;
-                    mMailMessage.Priority = MailPriority.Normal;
-                    SmtpClient mSmtpClient = new SmtpClient(mailServer);
-                    //SmtpClient mSmtpClient = new SmtpClient();
-
-                    //mSmtpClient.Host = "smtp.gmail.com";
-                    //mSmtpClient.Port = 587;
-                    //mSmtpClient.EnableSsl = true;
-                    //mSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    //mSmtpClient.UseDefaultCredentials = false;
-                    //mSmtpClient.Credentials = new System.Net.NetworkCredential("test1email111@gmail.com", "testemail123");
-                    mSmtpClient.Timeout = 20000;
-                    mSmtpClient.Send(mMailMessage);
-                }
+                });
             }
             catch (Exception ex)
             {
@@ -510,8 +513,9 @@ namespace WFZO.FZSelector.Classes
                         MailAddressCollection multiCc = new MailAddressCollection();
 
 
+                        WZFOUtility.SendEmail(ToAddress, web, emailBody,subject,false);
 
-                        SendEmail("FZMonitor", ToAddress, subject, emailBody, multiCc);
+                        //SendEmail("FZMonitor", ToAddress, subject, emailBody, multiCc);
                         //oweb.Close();
                         //oweb.Dispose();
                         //oSite.Dispose();
