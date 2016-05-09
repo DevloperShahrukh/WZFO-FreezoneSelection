@@ -10,10 +10,24 @@
 <script>
 
     $(document).ready(function () {
+        
+        var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.LoginName.Replace("i:0#.f|fbamembershipprovider|", "")) : string.Empty %>';
 
-        <%--var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.Email) : string.Empty %>';
 
         if (EncryptedTokenString != '') {
+            
+            var Link = $('.logo-cont > a').attr('href');
+
+            if (Link != undefined) {
+
+                $('.logo-cont > a').attr('href', Link + '?wToken=' + EncryptedTokenString);
+            }
+        }
+
+
+        n
+
+        <%--if (EncryptedTokenString != '') {
             var anchors = $('a');
 
             anchors.each(function (index) {

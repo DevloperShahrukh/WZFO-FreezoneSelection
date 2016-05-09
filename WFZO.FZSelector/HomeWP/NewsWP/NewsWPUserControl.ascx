@@ -12,16 +12,19 @@
         <h3>LATEST NEWS</h3>
     </div>
     <ul>
-        <asp:Repeater ID="NewsRP" runat="server" OnItemDataBound="NewsRP_ItemDataBound">
+        <asp:Repeater ID="NewsRP" runat="server">
             <ItemTemplate>
                 <li>
                     <div class="trunc">
-                        <asp:Label ID="lblUrl" runat="server" Text='<%# Eval("URL") %>' Visible="False"></asp:Label>
-                        <asp:Label ID="lblTitle" runat="server" Text='<%# Eval("Title") %>' Visible="False"></asp:Label>
-                        <asp:Literal ID="ltrUrl" runat="server"></asp:Literal>
+                        <asp:HyperLink ID="hplNews" runat="server" NavigateUrl='<%# Eval("URL") %>'><%# Eval("Title") %></asp:HyperLink>
                     </div>
                 </li>
             </ItemTemplate>
+            <FooterTemplate>
+                    <div class="trunc" style="float:right; color:#004375;">
+                        <asp:HyperLink ID="hplViewAll" runat="server" NavigateUrl="/News" Visible="false">View All</asp:HyperLink>
+                    </div>
+            </FooterTemplate>
         </asp:Repeater>
     </ul>
 </div>

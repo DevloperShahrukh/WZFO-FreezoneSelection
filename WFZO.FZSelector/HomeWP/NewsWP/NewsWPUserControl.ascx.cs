@@ -34,8 +34,7 @@ namespace WFZO.FZSelector.NewsWP
                                             <Eq>
                                            <FieldRef Name='" + Constants.List.BaseColumns.IsActive + @"' />
                                            <Value Type='" + Commons.Type.Boolean + @"'>" + 1 + @"</Value>
-                                         </Eq>
-<Eq>
+                                         </Eq><Eq>
                                            <FieldRef Name='" + Constants.List.Pages.Fields.ContentType + @"' />
                                            <Value Type='" + Commons.Type.Computed + @"'>News</Value>
                                          </Eq>
@@ -44,20 +43,33 @@ namespace WFZO.FZSelector.NewsWP
                                     <OrderBy>
                                        <FieldRef Name='" + Constants.List.BaseColumns.Created + @"' Ascending='False' />
                                     </OrderBy>";
-                        query.RowLimit = 5;
+                        query.RowLimit = 6;
                         SPListItemCollection col = list.GetItems(query);
                         DataTable NewDT = new DataTable();
                         NewDT.Columns.Add("Title", typeof(string));
                         NewDT.Columns.Add("Url", typeof(string));
+
+                        int Counter = 0;
                         foreach (SPListItem item in col)
                         {
+                            if (Counter == 5) { break; }
+
                             DataRow row = NewDT.NewRow();
                             row["Title"] = Convert.ToString(item[Constants.List.BaseColumns.Title]);
                             row["URL"] = Convert.ToString(item.File.ServerRelativeUrl);
                             NewDT.Rows.Add(row);
+                            Counter++;
                         }
+
                         NewsRP.DataSource = NewDT;
                         NewsRP.DataBind();
+
+                        if (col.Count > 5)
+                        {
+                            Control FooterTemplate = NewsRP.Controls[NewsRP.Controls.Count - 1].Controls[0];
+                            HyperLink hplViewAll = FooterTemplate.FindControl("hplViewAll") as HyperLink;
+                            hplViewAll.Visible = true;
+                        }
                     }
                 }
             }
@@ -65,26 +77,9 @@ namespace WFZO.FZSelector.NewsWP
             catch (Exception ex)
             {
                 errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "Page_Load", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "NewsWPUser - BindNewsRP", SPContext.Current.Site);
             }
         }
-        protected void NewsRP_ItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            try { 
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                Literal lit = (Literal)e.Item.FindControl("ltrUrl");
-                Label Title = (Label)e.Item.FindControl("lblTitle");
-                Label Url = (Label)e.Item.FindControl("lblUrl");
-                lit.Text = "<a href='" + Url.Text + "'>" + Title.Text + "</a>";
-            }
-            }
 
-            catch (Exception ex)
-            {
-                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "Page_Load", SPContext.Current.Site);
-            }
-        }
     }
 }

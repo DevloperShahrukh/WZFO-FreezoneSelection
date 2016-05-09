@@ -9,7 +9,7 @@
 
 <asp:HiddenField ID="errorMessage" runat="server" />
 <%--OnItemDataBound="NewsRP_ItemDataBound"--%>
-<asp:Repeater ID="NewsRP" runat="server" >
+<asp:Repeater ID="NewsRP" runat="server">
     <HeaderTemplate>
         <div class="news-head col-xs-12">
             <div class="col-xs-12">
@@ -25,11 +25,10 @@
             <div class="col-sm-9">
                 <div class="news-list">
                     <h2>
-                       
                         <asp:HyperLink ID="hplTitle" runat="server" NavigateUrl='<%# Eval("URL") %>'><%# Eval("Title") %></asp:HyperLink>
                     </h2>
                     <h5><%# Eval("ArticleStartDate") %></h5>
-                        <p><%# Eval("ArticleByLine") %></p>
+                    <p><%# Eval("ArticleByLine") %></p>
                 </div>
             </div>
         </div>
@@ -38,70 +37,32 @@
 <br />
 
 
-
-
-
-
-
-
 <div class="col-md-4">
     <div>
-    <asp:Label ID="lblCurrentPage" runat="server"></asp:Label>
-</div>
+        <asp:Label ID="lblCurrentPage" runat="server"></asp:Label>
+    </div>
     <asp:Repeater ID="rptPages" runat="server">
-                    <HeaderTemplate>
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr class="text">
-                                <td>
-                    </HeaderTemplate>
-                    <ItemTemplate>
-                        <asp:LinkButton ID="btnPage" CommandName="Page" CommandArgument="<%# Container.DataItem %>"
-                            runat="server"><%# Container.DataItem %>
-                        </asp:LinkButton>&nbsp;
-                    </ItemTemplate>
-                    <FooterTemplate>
-                        </td> </tr> </table>
-                    </FooterTemplate>
-                </asp:Repeater>
+        <HeaderTemplate>
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr class="text">
+                    <td>
+        </HeaderTemplate>
+        <ItemTemplate>
+            <asp:LinkButton ID="btnPage" CommandName="Page" CommandArgument="<%# Container.DataItem %>"
+                runat="server"><%# Container.DataItem %>
+            </asp:LinkButton>&nbsp;
+        </ItemTemplate>
+        <FooterTemplate>
+            </td> </tr> </table>
+        </FooterTemplate>
+    </asp:Repeater>
 
-   <div class="btn-toolbar" role="toolbar">
-       <asp:Button ID="cmdFirst" runat="server" Text="<< First" OnClick="cmdFirst_Click" CssClass="btn btn-default"></asp:Button>&nbsp; 
-    <asp:Button ID="cmdPrev" runat="server" Text="< Prev" OnClick="cmdPrev_Click" CssClass="btn btn-default"></asp:Button>&nbsp;
-    <asp:Button ID="cmdNext" runat="server" Text="Next >" CssClass="btn btn-default " OnClick="cmdNext_Click"></asp:Button>
-     <asp:Button ID="cmdLast" runat="server" Text="Last >>" CssClass="btn btn-default " OnClick="cmdLast_Click"></asp:Button>
+    <div class="btn-toolbar" role="toolbar">
+        <asp:Button ID="cmdFirst" runat="server" Text="<< First" OnClick="cmdFirst_Click" CssClass="btn btn-default"></asp:Button>
+        <asp:Button ID="cmdPrev" runat="server" Text="< Prev" OnClick="cmdPrev_Click" CssClass="btn btn-default"></asp:Button>
+        <asp:Button ID="cmdNext" runat="server" Text="Next >" CssClass="btn btn-default " OnClick="cmdNext_Click"></asp:Button>
+        <asp:Button ID="cmdLast" runat="server" Text="Last >>" CssClass="btn btn-default " OnClick="cmdLast_Click"></asp:Button>
     </div>
 </div>
 
-<%--<div>
-    <table>
-        <tr>
-            <td>
-                <asp:Button ID="cmdFirst" runat="server" Text="<< First" OnClick="cmdFirst_Click" CssClass="btn btn-default"></asp:Button>&nbsp;
-            </td>
-            <td>
-                <asp:Button ID="cmdPrev" runat="server" Text="< Prev" OnClick="cmdPrev_Click" CssClass="btn btn-default"></asp:Button>&nbsp;
-            </td>
-            <td>
-                <asp:Repeater ID="rptPages" runat="server">
-                    <HeaderTemplate>
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <tr class="text">
-                                <td>
-                    </HeaderTemplate>
-                    <ItemTemplate>
-                        <asp:LinkButton ID="btnPage" CommandName="Page" CommandArgument="<%# Container.DataItem %>"
-                            runat="server"><%# Container.DataItem %>
-                        </asp:LinkButton>&nbsp;
-                    </ItemTemplate>
-                    <FooterTemplate>
-                        </td> </tr> </table>
-                    </FooterTemplate>
-                </asp:Repeater>
-            </td>
-            <td>&nbsp;<asp:Button ID="cmdNext" runat="server" Text="Next >" CssClass="btn btn-default form-control" OnClick="cmdNext_Click"></asp:Button>
-            </td>
-            <td>&nbsp;<asp:Button ID="cmdLast" runat="server" Text="Last >>" CssClass="btn btn-default form-control" OnClick="cmdLast_Click"></asp:Button>
-            </td>
-        </tr>
-    </table>
-</div>--%>
+

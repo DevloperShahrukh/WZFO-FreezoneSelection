@@ -76,9 +76,9 @@
 
 <script>
 
-    function showPopup() {
-        $("li.dropdown").addClass('open');
-    }
+    //function showPopup() {
+    //    $("li.dropdown").addClass('open');
+    //}
 
     <%--
     $('#check').click(function () {
@@ -92,4 +92,31 @@
         //        alert("Outside div");
         //    }
         //});--%>
+    
+    var myVar;
+    function showPopup() {
+        $("li.dropdown").addClass('open');
+        myVar = setTimeout(ClosePopup, 3000);
+    }
+
+    $('.form-control').blur(function () {
+        //alert('sdf');
+        myStopFunction();
+        myVar = setTimeout(ClosePopup, 5000);
+    });
+    $('.form-control').focus(function () {
+        //alert('sdf');
+        myStopFunction();
+        //myVar = setTimeout(ClosePopup, 10000);
+    });
+
+
+    function ClosePopup() {
+        $("li.dropdown").removeClass('open');
+    }
+    function myStopFunction() {
+        clearTimeout(myVar);
+    }
+
+
 </script>

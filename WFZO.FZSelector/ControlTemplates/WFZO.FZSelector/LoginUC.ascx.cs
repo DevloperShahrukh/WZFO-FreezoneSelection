@@ -37,23 +37,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             if (!IsPostBack)
             {
-                if (SPContext.Current.Web.CurrentUser == null)
-                {
-                    if (Request.Cookies.Get("WZFOUserName") != null && Request.Cookies.Get("WZFOPassword") != null)
-                    {
-
-                        if (IfCookieExists())
-                        {
-
-                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"])), Encryption.Encrypt(Convert.ToString(Request.Cookies["WZFOPassword"])));
-                        }
-                    }
-                    else
-                    {
-                        SSOMethod();
-                    }
-                }
-               
+                LoginProcess();
             }
 
 
@@ -66,6 +50,87 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 PlLogin.Visible = true;
             }
         }
+
+
+        protected void LoginProcess()
+        {
+            if (SPContext.Current.Web.CurrentUser == null)
+            {
+                if (Request.Cookies.Get("WZFOUserName") != null && Request.Cookies.Get("WZFOPassword") != null)
+                {
+                    if (Request.QueryString["wToken"] == null)
+                    {
+                        if (IfCookieExists())
+                        {
+
+                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOPassword"].Value)));
+                        }
+                    }
+                    else
+                    {
+                        dualLoginHandler();
+                    }
+                }
+                else
+                {
+                    SSOMethod();
+                }
+            }
+            else
+            {
+                dualLoginHandler();
+            }
+        }
+
+
+        protected void dualLoginHandler()
+        {
+            if (Request.QueryString["wToken"] != null)
+            {
+                if (!SPContext.Current.Web.CurrentUser.LoginName.Equals(Secure.getedecryptedToken(Request.QueryString["wToken"])))
+                {
+                    Logout();
+                    SSOMethod();
+                }
+            }
+        }
+
+
+        protected void Logout()
+        {
+            SPSecurity.RunWithElevatedPrivileges(delegate()
+            {
+                FederatedAuthentication.SessionAuthenticationModule.SignOut();
+                FormsAuthentication.SignOut();
+
+                RemoveCookie();
+                Response.Redirect("/Pages/default.aspx", false);
+            });
+        }
+
+        protected void RemoveCookie()
+        {
+            try
+            {
+                if (Request.Cookies.Get("WZFOUserName") != null)
+                {
+                    Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOUserName"].Value = null;
+
+                }
+                if (Request.Cookies.Get("WZFOPassword") != null)
+                {
+                    Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["WZFOPassword"].Value = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                WZFOUtility.LogException(ex, "TopBarUC -  RemoveCookies", SPContext.Current.Site);
+            }
+        }
+
 
         protected void btnUserLogin_Click(object sender, EventArgs e)
         {
@@ -108,26 +173,26 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                     //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
-                    
+
                     using (SPSite site1 = new SPSite(wfzoSiteUrl))
                     {
                         using (SPWeb web1 = site1.OpenWeb())
                         {
 
                             web1.AllowUnsafeUpdates = true;
-                            string CheckuserName = "i:0#.f|fbamembershipprovider|" + txtUserID.Text;
+                            string CheckuserName = "i:0#.f|fbamembershipprovider|" + strUserName;
 
                             SPUser SU = null;
                             try
                             {
-                                using (SPSite CurrentSite = new SPSite(wfzoSiteUrl))
+                                using (SPSite CurrentSite = new SPSite(SPContext.Current.Web.Url))
                                 {
                                     using (SPWeb CurrentWeb = CurrentSite.OpenWeb())
                                     {
                                         CurrentWeb.AllowUnsafeUpdates = true;
                                         SU = CurrentWeb.SiteUsers[CheckuserName];
 
-                                        
+
                                     }
                                 }
                             }
@@ -148,7 +213,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 SPList UserLst = web1.Lists["Users"];
                                 SPQuery query = new SPQuery();
 
-                                query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + txtUserID.Text + "</Value></Eq></And></Where>";
+                                query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
 
                                 SPListItemCollection CurUser = UserLst.GetItems(query);
 
@@ -183,7 +248,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     return;
                                 }
 
-                                string _renew = "<a href='"+wfzoSiteUrl +"/pages/MembershipRegistration.aspx?code=" + txtUserID.Text + "&rn=1' >Renew</a>";
+                                string _renew = "<a href='" + wfzoSiteUrl + "/pages/MembershipRegistration.aspx?code=" + strUserName + "&rn=1' >Renew</a>";
 
                                 lblInvalidUser.Text = "Please renew your account to Login. \n " + _renew;
                                 lblInvalidUser.Visible = true;
@@ -194,17 +259,17 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                             }
-                            
+
                             SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(Microsoft.SharePoint.SPContext.Current.Site.Zone);
-                            
-                            
+
+
                             SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
 
-                            
-                           
+
+
                             SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
 
-                           
+
                             if (null != token)
                             {
 
@@ -223,7 +288,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     SPList UserLst = web1.Lists["Users"];
                                     SPQuery query = new SPQuery();
 
-                                    query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + txtUserID.Text + "</Value></Eq></And></Where>";
+                                    query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
 
                                     SPListItemCollection CurUser = UserLst.GetItems(query);
                                     if (CurUser != null)
@@ -255,7 +320,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     }
 
                                     if (UserLoginNumber == 0)
-                                        Response.Redirect(wfzoSiteUrl+"/Pages/ChangePassword.aspx");
+                                        Response.Redirect(wfzoSiteUrl + "/Pages/ChangePassword.aspx");
                                     else
                                         Response.Redirect("/Pages/Dashboard.aspx", false);
                                 }
@@ -271,7 +336,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 liLogin.Attributes["class"] += " open";
                                 // check if the user is blocked, then send 
                             }
-                            
+
                             MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
                             if (p != null)
                             {
@@ -357,12 +422,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         {
             if (chkStaySignedIn.Checked)
             {
-                
+
                 if (Request.Cookies.Get("WZFOUserName") == null)
                 {
                     Response.Cookies.Add(new HttpCookie("WZFOUserName", Encryption.Encrypt(txtUserID.Text)));
                     Response.Cookies.Add(new HttpCookie("WZFOPassword", Encryption.Encrypt(txtPassword.Text)));
-                   
+
                     Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(30);
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(30);
                 }
@@ -444,7 +509,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         protected bool IfCookieExists()
         {
-            return ((!string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Username"])) && !string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WFZOSingleSignOn"]["Password"]))));
+            return ((!string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WZFOUserName"].Value)) && !string.IsNullOrEmpty(Convert.ToString(Request.Cookies["WZFOPassword"].Value))));
         }
 
         private void SSOMethod()
@@ -484,7 +549,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 }
                 con.Close();
                 Login(userId, pwd);
-                
+
             }
             catch (Exception ex)
             {
