@@ -9,7 +9,7 @@
 <asp:HiddenField ID="errorMessage" runat="server" />
 <div class="news-section">
     <div class="news-section-heading">
-        <h3>LATEST NEWS</h3>
+        <h3>LATEST NEWS</h3> <div runat="server" id="ViewAll" class="view-all" visible="false"><a href="/News">View All</a></div>
     </div>
     <ul>
         <asp:Repeater ID="NewsRP" runat="server">
@@ -22,7 +22,6 @@
             </ItemTemplate>
             <FooterTemplate>
                     <div class="trunc" style="float:right; color:#004375;">
-                        <asp:HyperLink ID="hplViewAll" runat="server" NavigateUrl="/News" Visible="false">View All</asp:HyperLink>
                     </div>
             </FooterTemplate>
         </asp:Repeater>

@@ -11,7 +11,7 @@
 
     $(document).ready(function () {
         
-        var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.LoginName.Replace("i:0#.f|fbamembershipprovider|", "")) : string.Empty %>';
+        var EncryptedTokenString = '<%= SPContext.Current.Web.CurrentUser != null ? WFZO.FZSelector.Classes.Secure.getencryptedToken(SPContext.Current.Web.CurrentUser.LoginName.Replace("i:0#.f|fbamembershipprovider|", "").Trim()) : string.Empty %>';
 
 
         if (EncryptedTokenString != '') {
@@ -23,9 +23,6 @@
                 $('.logo-cont > a').attr('href', Link + '?wToken=' + EncryptedTokenString);
             }
         }
-
-
-        n
 
         <%--if (EncryptedTokenString != '') {
             var anchors = $('a');
@@ -45,6 +42,10 @@
 </script>
 
 <asp:HiddenField ID="errorMessage" runat="server" />
+
+
+
+
 <div class="logout-box">
     <ul>
         <li class="welcome">

@@ -66,9 +66,7 @@ namespace WFZO.FZSelector.NewsWP
 
                         if (col.Count > 5)
                         {
-                            Control FooterTemplate = NewsRP.Controls[NewsRP.Controls.Count - 1].Controls[0];
-                            HyperLink hplViewAll = FooterTemplate.FindControl("hplViewAll") as HyperLink;
-                            hplViewAll.Visible = true;
+                            ViewAll.Visible = true;
                         }
                     }
                 }
