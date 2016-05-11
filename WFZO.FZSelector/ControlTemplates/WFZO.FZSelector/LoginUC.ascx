@@ -96,13 +96,13 @@
     var myVar;
     function showPopup() {
         $("li.dropdown").addClass('open');
-        myVar = setTimeout(ClosePopup, 3000);
+        myVar = setTimeout(ClosePopup, 2000);
     }
 
     $('.form-control').blur(function () {
         //alert('sdf');
         myStopFunction();
-        myVar = setTimeout(ClosePopup, 5000);
+        myVar = setTimeout(ClosePopup, 2000);
     });
     $('.form-control').focus(function () {
         //alert('sdf');

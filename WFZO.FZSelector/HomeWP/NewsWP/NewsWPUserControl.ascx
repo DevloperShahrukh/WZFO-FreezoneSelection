@@ -9,7 +9,7 @@
 <asp:HiddenField ID="errorMessage" runat="server" />
 <div class="news-section">
     <div class="news-section-heading">
-        <h3>LATEST NEWS</h3> <div runat="server" id="ViewAll" class="view-all" visible="false"><a href="/News">View All</a></div>
+        <h3>LATEST NEWS</h3> <div runat="server" id="ViewAll" class="view-all" visible="false" style="float:right !important; margin-top:7px !important; "><a style="font-size:15px !important;" href="/News">View All</a></div>
     </div>
     <ul>
         <asp:Repeater ID="NewsRP" runat="server">
