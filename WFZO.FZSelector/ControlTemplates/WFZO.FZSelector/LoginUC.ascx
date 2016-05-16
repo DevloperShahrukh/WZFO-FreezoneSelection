@@ -8,7 +8,7 @@
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="LoginUC.ascx.cs" Inherits="WFZO.FZSelector.ControlTemplates.WFZO.FZSelector.LoginUC" %>
 
 <asp:Panel ID="PlLogin" runat="server">
-<%--    <ul id="liNotLoggedin" class="nav navbar-right">
+    <%--    <ul id="liNotLoggedin" class="nav navbar-right">
         <li id="liHome"><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
         <li><a href="http://http://www.worldfzo.org/" target="_blank"><span class="wfzohome-icon"></span></a></li>
     </ul>--%>
@@ -18,7 +18,7 @@
             <div class="members dropdown-menu">
                 <ul id="login-dp" class="">
                     <div class="arrow-up"></div>
-                    <li>
+                    <li style="list-style-type: none;">
                         <div id="check" class="row">
                             <div class="col-md-12">
                                 <div class="form" id="login-nav">
@@ -67,7 +67,7 @@
         <ul>
             <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
             <li>
-                <asp:LinkButton ID="lblogout" runat="server" OnClick="lblogout_Click"><span class="glyphicon glyphicon-log-out"></span></asp:LinkButton>
+                <asp:LinkButton ID="lblogout" runat="server" OnClick="lblogout_Click"><span class="glyphicon glyphicon-log-out"></span> Logout</asp:LinkButton>
             </li>
             <li><a href="#"><span class="wfzohome-icon"></span></a></li>
         </ul>
@@ -75,48 +75,18 @@
 </asp:Panel>
 
 <script>
-
-    //function showPopup() {
-    //    $("li.dropdown").addClass('open');
-    //}
-
-    <%--
-    $('#check').click(function () {
-        var divid = this.id;
-        alert($('.item_' + divid).html());
-    });
-        //$("body").click(function (e) {
-        //    if (e.target.id == "login-dp" || $(e.target).parents("#login-dp").size()) {
-        //        alert("Inside div");
-        //    } else {
-        //        alert("Outside div");
-        //    }
-        //});--%>
-    
-    var myVar;
     function showPopup() {
         $("li.dropdown").addClass('open');
-        myVar = setTimeout(ClosePopup, 2000);
+
     }
 
-    $('.form-control').blur(function () {
-        //alert('sdf');
-        myStopFunction();
-        myVar = setTimeout(ClosePopup, 2000);
+    $("body").click(function (e) {
+
+        if ($("li.dropdown").hasClass('open')) {
+            var Array = $(".user-login-area *");
+            if (Array.find(e.target).length == 0) {
+                $("li.dropdown").removeClass('open');
+            }
+        }
     });
-    $('.form-control').focus(function () {
-        //alert('sdf');
-        myStopFunction();
-        //myVar = setTimeout(ClosePopup, 10000);
-    });
-
-
-    function ClosePopup() {
-        $("li.dropdown").removeClass('open');
-    }
-    function myStopFunction() {
-        clearTimeout(myVar);
-    }
-
-
 </script>

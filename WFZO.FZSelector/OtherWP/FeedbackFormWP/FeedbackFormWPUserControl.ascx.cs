@@ -189,6 +189,12 @@ namespace WFZO.FZSelector.OtherWP.FeedbackFormWP
         {
             saveData();
             SendEmail();
+            
+            
+            lblFeedbackType.Text = drpDownType.SelectedItem.Text;
+            pnlStatus.Visible = true;
+            pnlFeedback.Visible = false;
+
             resetfields();
         }
     }
