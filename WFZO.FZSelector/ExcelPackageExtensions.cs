@@ -13,9 +13,11 @@ namespace WFZO.FZSelector
 {
     public static class ExcelPackageExtensions
     {
+        static string error = "";
+
         public static string ToDataTable(this ExcelPackage package)
         {
-            string error = "";
+          //  string error = "";
             try
             {
 
@@ -170,9 +172,9 @@ namespace WFZO.FZSelector
                                             catch (Exception ex)
                                             {
                                                 error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
-                                                WZFOUtility.LogException(ex, "Country Import", SPContext.Current.Site);
+                                                WZFOUtility.LogException(ex, "Country Import  SubcatID = InSertDataGETID(con, DataCategoryYearExist", SPContext.Current.Site);
                                             }
-                                          
+
                                             if (SubcatID > 0)/////////////////////////////Delete and Update////////////////////////////////////////////
                                             {
                                                 var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
@@ -190,52 +192,71 @@ namespace WFZO.FZSelector
                                                         else
                                                             if (!string.IsNullOrWhiteSpace(cell.Text))
                                                             {
-
+                                                                string Country = string.Empty;
                                                                 try
                                                                 {
+                                                                    try
+                                                                    {
+                                                                        Country = temprow[1, cell.Start.Column].Text;
 
-                                                                    string Country = temprow[1, cell.Start.Column].Text;
+                                                                        SqlParameter new_CountryEXist = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                                        new_CountryEXist.Direction = ParameterDirection.Output;
 
-                                                                    SqlParameter new_CountryEXist = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                                    new_CountryEXist.Direction = ParameterDirection.Output;
+                                                                        SqlParameter new_CountryName2 = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
+                                                                        new_CountryName2.Value = Country;
+                                                                        new_CountryName2.Direction = ParameterDirection.Input;
 
-                                                                    SqlParameter new_CountryName2 = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                                                                    new_CountryName2.Value = Country;
-                                                                    new_CountryName2.Direction = ParameterDirection.Input;
+                                                                        CountryCount = InSertDataGETID(con, "CheckCountryExist", new_CountryEXist, new_CountryName2);
 
-                                                                    CountryCount = InSertDataGETID(con, "CheckCountryExist", new_CountryEXist, new_CountryName2);
+                                                                    }
+                                                                    catch (Exception ex)
+                                                                    {
+                                                                        error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
+                                                                        WZFOUtility.LogException(ex, "Country CountryCount = InSertDataGETID(con, CheckCountryExist", SPContext.Current.Site);
+                                                                    }
+
+
 
                                                                     if (CountryCount == 1)
                                                                     {
-                                                                        SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                                        new_CountryRankingID.Direction = ParameterDirection.Output;
-
-                                                                        SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
-                                                                        new_SubCategoryId.Value = SubcatID;
-                                                                        new_SubCategoryId.Direction = ParameterDirection.Input;
-
-                                                                        SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                                                                        new_CountryName.Value = Country;
-                                                                        new_CountryName.Direction = ParameterDirection.Input;
-
-                                                                        SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
-
-                                                                        if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                        try
                                                                         {
-                                                                            new_CountryRanking.Value = -1;
+                                                                            SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                                            new_CountryRankingID.Direction = ParameterDirection.Output;
+
+                                                                            SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
+                                                                            new_SubCategoryId.Value = SubcatID;
+                                                                            new_SubCategoryId.Direction = ParameterDirection.Input;
+
+                                                                            SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
+                                                                            new_CountryName.Value = Country;
+                                                                            new_CountryName.Direction = ParameterDirection.Input;
+
+                                                                            SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
+
+                                                                            if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                            {
+                                                                                new_CountryRanking.Value = -1;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
+                                                                            }
+
+                                                                            new_CountryRanking.Direction = ParameterDirection.Input;
+
+                                                                            SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
+                                                                            new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
+                                                                            new_Year.Direction = ParameterDirection.Input;
+
+                                                                            CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
                                                                         }
-                                                                        else
+                                                                        catch (Exception ex)
                                                                         {
-                                                                            new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
+                                                                            error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
+                                                                            WZFOUtility.LogException(ex, "Country Import CountryRankingID = InSertDataGETID(con, InsertCountryRanking", SPContext.Current.Site);
                                                                         }
-
-                                                                        new_CountryRanking.Direction = ParameterDirection.Input;
-
-                                                                        SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
-                                                                        new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
-                                                                        new_Year.Direction = ParameterDirection.Input;
-
-                                                                        CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
+                                                                    
                                                                     }
 
                                                                 }
@@ -282,7 +303,7 @@ namespace WFZO.FZSelector
                                                     error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
                                                     WZFOUtility.LogException(ex, "Country Import (  SubcatID = InSertDataGETID() )", SPContext.Current.Site);
                                                 }
-                                           
+
                                                 if (SubcatID > 0)/////////////////////////////Add new Record////////////////////////////////////////////
                                                 {
                                                     var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
@@ -312,38 +333,46 @@ namespace WFZO.FZSelector
                                                                         new_CountryName2.Direction = ParameterDirection.Input;
 
                                                                         CountryCount = InSertDataGETID(con, "CheckCountryExist", new_CountryEXist, new_CountryName2);
-
-                                                                        if (CountryCount > 0)
+                                                                        try
                                                                         {
-                                                                            SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                                            new_CountryRankingID.Direction = ParameterDirection.Output;
-
-                                                                            SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
-                                                                            new_SubCategoryId.Value = SubcatID;
-                                                                            new_SubCategoryId.Direction = ParameterDirection.Input;
-
-                                                                            SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                                                                            new_CountryName.Value = Country;
-                                                                            new_CountryName.Direction = ParameterDirection.Input;
-
-                                                                            SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
-
-                                                                            if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                            if (CountryCount > 0)
                                                                             {
-                                                                                new_CountryRanking.Value = -1;
+                                                                                SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                                                new_CountryRankingID.Direction = ParameterDirection.Output;
+
+                                                                                SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
+                                                                                new_SubCategoryId.Value = SubcatID;
+                                                                                new_SubCategoryId.Direction = ParameterDirection.Input;
+
+                                                                                SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
+                                                                                new_CountryName.Value = Country;
+                                                                                new_CountryName.Direction = ParameterDirection.Input;
+
+                                                                                SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
+
+                                                                                if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                                {
+                                                                                    new_CountryRanking.Value = -1;
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
+                                                                                }
+
+                                                                                new_CountryRanking.Direction = ParameterDirection.Input;
+
+                                                                                SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
+                                                                                new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
+                                                                                new_Year.Direction = ParameterDirection.Input;
+
+                                                                                CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
                                                                             }
-                                                                            else
-                                                                            {
-                                                                                new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
-                                                                            }
 
-                                                                            new_CountryRanking.Direction = ParameterDirection.Input;
-
-                                                                            SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
-                                                                            new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
-                                                                            new_Year.Direction = ParameterDirection.Input;
-
-                                                                            CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
+                                                                        }
+                                                                        catch (Exception ex)
+                                                                        {
+                                                                            error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
+                                                                            WZFOUtility.LogException(ex, "Country CountryRankingID = InSertDataGETID(con, InsertCountryRanking", SPContext.Current.Site);
                                                                         }
 
                                                                     }
@@ -373,7 +402,7 @@ namespace WFZO.FZSelector
                                             error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
                                             WZFOUtility.LogException(ex, "Country Import", SPContext.Current.Site);
                                         }
-                                 
+
 
                                         SubcatID = 0;
 
@@ -492,6 +521,7 @@ namespace WFZO.FZSelector
                                                         else
                                                             if (!string.IsNullOrWhiteSpace(cell.Text))
                                                             {
+                                                                
                                                                 string Country = temprow[1, cell.Start.Column].Text;
 
                                                                 SqlParameter new_CountryEXist = new SqlParameter("@new_identity", SqlDbType.Int);
@@ -502,38 +532,48 @@ namespace WFZO.FZSelector
                                                                 new_CountryName2.Direction = ParameterDirection.Input;
 
                                                                 CountryCount = InSertDataGETID(con, "CheckCountryExist", new_CountryEXist, new_CountryName2);
-
-                                                                if (CountryCount == 1)
+                                                                
+                                                                
+                                                                
+                                                                try
                                                                 {
-                                                                    SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                                    new_CountryRankingID.Direction = ParameterDirection.Output;
-
-                                                                    SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
-                                                                    new_SubCategoryId.Value = SubcatID;
-                                                                    new_SubCategoryId.Direction = ParameterDirection.Input;
-
-                                                                    SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                                                                    new_CountryName.Value = Country;
-                                                                    new_CountryName.Direction = ParameterDirection.Input;
-
-                                                                    SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
-
-                                                                    if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                    if (CountryCount == 1)
                                                                     {
-                                                                        new_CountryRanking.Value = -1;
+                                                                        SqlParameter new_CountryRankingID = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                                        new_CountryRankingID.Direction = ParameterDirection.Output;
+
+                                                                        SqlParameter new_SubCategoryId = new SqlParameter("@SubCategoryId", SqlDbType.Int);
+                                                                        new_SubCategoryId.Value = SubcatID;
+                                                                        new_SubCategoryId.Direction = ParameterDirection.Input;
+
+                                                                        SqlParameter new_CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
+                                                                        new_CountryName.Value = Country;
+                                                                        new_CountryName.Direction = ParameterDirection.Input;
+
+                                                                        SqlParameter new_CountryRanking = new SqlParameter("@CountryRanking", SqlDbType.Float);
+
+                                                                        if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                        {
+                                                                            new_CountryRanking.Value = -1;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
+                                                                        }
+
+                                                                        new_CountryRanking.Direction = ParameterDirection.Input;
+
+                                                                        SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
+                                                                        new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
+                                                                        new_Year.Direction = ParameterDirection.Input;
+
+                                                                        CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
                                                                     }
-                                                                    else
-                                                                    {
-                                                                        new_CountryRanking.Value = Convert.ToDecimal(row2[rowNumber, cell.Start.Column].Text);
-                                                                    }
-
-                                                                    new_CountryRanking.Direction = ParameterDirection.Input;
-
-                                                                    SqlParameter new_Year = new SqlParameter("@Year", SqlDbType.Int);
-                                                                    new_Year.Value = Convert.ToString(row2[rowNumber, 8].Text);
-                                                                    new_Year.Direction = ParameterDirection.Input;
-
-                                                                    CountryRankingID = InSertDataGETID(con, "InsertCountryRanking", new_CountryRankingID, new_SubCategoryId, new_CountryName, new_CountryRanking, new_Year);
+                                                                }
+                                                                catch (Exception ex)
+                                                                {
+                                                                    error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
+                                                                    WZFOUtility.LogException(ex, "Country Import", SPContext.Current.Site);
                                                                 }
 
                                                             }
@@ -557,7 +597,7 @@ namespace WFZO.FZSelector
                             error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
                             WZFOUtility.LogException(ex, "Country Import", SPContext.Current.Site);
                         }
-                   
+
 
                     }
                     else
@@ -593,7 +633,7 @@ namespace WFZO.FZSelector
 
         public static string FreeZoneImport(this ExcelPackage package)
         {
-            string error = "";
+           // string error = "";
             try
             {
                 SqlConnection con = new SqlConnection();
@@ -678,70 +718,70 @@ namespace WFZO.FZSelector
                                                     break;
                                                 }
                                                 else
+                                                {
+
+
+
+                                                    string FreeZoneName = temprow[1, cell.Start.Column].Text;
+
+
+
+                                                    SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                    new_identity.Direction = ParameterDirection.Output;
+
+                                                    SqlParameter SubCategoryName = new SqlParameter("@SubCategoryName", SqlDbType.VarChar, 500);
+                                                    SubCategoryName.Value = Convert.ToString(row[rowNumber, 1].Text);
+                                                    SubCategoryName.Direction = ParameterDirection.Input;
+
+                                                    if (row[rowNumber, 1].Text.Equals("Recycling Services"))
                                                     {
 
+                                                    }
 
+                                                    SqlParameter CategoryLevel = new SqlParameter("@CategoryLevel", SqlDbType.NVarChar, 50);
+                                                    CategoryLevel.Value = "Freezone level";
+                                                    CategoryLevel.Direction = ParameterDirection.Input;
 
-                                                        string FreeZoneName = temprow[1, cell.Start.Column].Text;
+                                                    SqlParameter new_Year1 = new SqlParameter("@Year", SqlDbType.Int);
+                                                    new_Year1.Value = Convert.ToString(row[rowNumber, 6].Text);
+                                                    new_Year1.Direction = ParameterDirection.Input;
 
+                                                    SqlParameter new_FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.NVarChar, 100);
+                                                    new_FreeZoneName.Value = FreeZoneName.Trim();
+                                                    new_FreeZoneName.Direction = ParameterDirection.Input;
 
+                                                    SqlParameter new_FreezoneRanking = new SqlParameter("@FreezoneRanking", SqlDbType.Float);
+                                                    SqlParameter flagged = new SqlParameter("@flagged", SqlDbType.Bit);
 
-                                                        SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                        new_identity.Direction = ParameterDirection.Output;
+                                                    if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                    {
+                                                        new_FreezoneRanking.Value = -1;
+                                                        flagged.Value = false;
+                                                    }
+                                                    else
+                                                    {
 
-                                                        SqlParameter SubCategoryName = new SqlParameter("@SubCategoryName", SqlDbType.VarChar, 500);
-                                                        SubCategoryName.Value = Convert.ToString(row[rowNumber, 1].Text);
-                                                        SubCategoryName.Direction = ParameterDirection.Input;
-
-                                                        if (row[rowNumber, 1].Text.Equals("Recycling Services"))
+                                                        if (row2[rowNumber, cell.Start.Column].Text.Contains("*").Equals(true))
                                                         {
 
-                                                        }
-
-                                                        SqlParameter CategoryLevel = new SqlParameter("@CategoryLevel", SqlDbType.NVarChar, 50);
-                                                        CategoryLevel.Value = "Freezone level";
-                                                        CategoryLevel.Direction = ParameterDirection.Input;
-
-                                                        SqlParameter new_Year1 = new SqlParameter("@Year", SqlDbType.Int);
-                                                        new_Year1.Value = Convert.ToString(row[rowNumber, 6].Text);
-                                                        new_Year1.Direction = ParameterDirection.Input;
-
-                                                        SqlParameter new_FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.NVarChar, 100);
-                                                        new_FreeZoneName.Value = FreeZoneName.Trim();
-                                                        new_FreeZoneName.Direction = ParameterDirection.Input;
-
-                                                        SqlParameter new_FreezoneRanking = new SqlParameter("@FreezoneRanking", SqlDbType.Float);
-                                                        SqlParameter flagged = new SqlParameter("@flagged", SqlDbType.Bit);
-
-                                                        if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
-                                                        {
-                                                            new_FreezoneRanking.Value = -1;
-                                                            flagged.Value = false;
+                                                            new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text.Replace("*", ""));
+                                                            flagged.Value = true;
                                                         }
                                                         else
                                                         {
-
-                                                            if (row2[rowNumber, cell.Start.Column].Text.Contains("*").Equals(true))
-                                                            {
-
-                                                                new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text.Replace("*", ""));
-                                                                flagged.Value = true;
-                                                            }
-                                                            else
-                                                            {
-                                                                new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text);
-                                                                flagged.Value = false;
-                                                            }
-                                                        }
-
-                                                        new_FreezoneRanking.Direction = ParameterDirection.Input;
-                                                        flagged.Direction = ParameterDirection.Input;
-
-                                                        if (!string.IsNullOrWhiteSpace(row[rowNumber, 6].Text))
-                                                        {
-                                                            SubcatID = InSertDataGETID(con, "InsertUpdateFreezoneRanking", SubCategoryName, new_Year1, new_identity, CategoryLevel, new_FreeZoneName, new_FreezoneRanking, flagged);
+                                                            new_FreezoneRanking.Value = Convert.ToDouble(row2[rowNumber, cell.Start.Column].Text);
+                                                            flagged.Value = false;
                                                         }
                                                     }
+
+                                                    new_FreezoneRanking.Direction = ParameterDirection.Input;
+                                                    flagged.Direction = ParameterDirection.Input;
+
+                                                    if (!string.IsNullOrWhiteSpace(row[rowNumber, 6].Text))
+                                                    {
+                                                        SubcatID = InSertDataGETID(con, "InsertUpdateFreezoneRanking", SubCategoryName, new_Year1, new_identity, CategoryLevel, new_FreeZoneName, new_FreezoneRanking, flagged);
+                                                    }
+                                                }
                                             }
                                             else
                                             {
@@ -986,7 +1026,7 @@ namespace WFZO.FZSelector
 
         public static string InsertUpdateSetUpData(this ExcelPackage package)
         {
-            string error = "";
+           // string error = "";
             try
             {
                 SqlConnection con = new SqlConnection();
@@ -1077,7 +1117,7 @@ namespace WFZO.FZSelector
                 }
                 con.Close();
                 con = null;
-               
+
             }
             catch (Exception ex)
             {
@@ -1087,7 +1127,7 @@ namespace WFZO.FZSelector
             return error;
         }
 
-        public static DataTable ProfileDataImport(this ExcelPackage package)
+        public static string ProfileDataImport(this ExcelPackage package)
         {
             try
             {
@@ -1136,18 +1176,25 @@ namespace WFZO.FZSelector
                             else if ((!string.IsNullOrWhiteSpace(row[rowNumber, 1].Text)) && (string.IsNullOrWhiteSpace(row[rowNumber, 2].Text)))
                             {
                                 // Insert Category
-
-                                SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
-                                new_identity.Direction = ParameterDirection.Output;
-
-                                SqlParameter CategoryParam = new SqlParameter("@CategoryName", SqlDbType.NVarChar, 50);
-                                CategoryParam.Value = Convert.ToString(row[rowNumber, 1].Text);
-                                CategoryParam.Direction = ParameterDirection.Input;
-
-                                catID = InSertDataGETID(con, "InsertFreezoneProfileCategory", CategoryParam, new_identity);
-                                if (catID == 0)
+                                try
                                 {
+                                    SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
+                                    new_identity.Direction = ParameterDirection.Output;
 
+                                    SqlParameter CategoryParam = new SqlParameter("@CategoryName", SqlDbType.NVarChar, 50);
+                                    CategoryParam.Value = Convert.ToString(row[rowNumber, 1].Text);
+                                    CategoryParam.Direction = ParameterDirection.Input;
+
+                                    catID = InSertDataGETID(con, "InsertFreezoneProfileCategory", CategoryParam, new_identity);
+                                    if (catID == 0)
+                                    {
+
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    error = "Error occure while inserting Profile Data.Please make sure the data is in correct formate.";
+                                    WZFOUtility.LogException(ex, "ProfileDataImport - else if ((!string.IsNullOrWhiteSpace(row[rowNumber, 1].Text)) && (string.IsNullOrWhiteSpace(row[rowNumber, 2].Text))) ", SPContext.Current.Site);
                                 }
 
                             }
@@ -1158,95 +1205,113 @@ namespace WFZO.FZSelector
 
                                 if (catID != 0)
                                 {
-
-                                    SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
-                                    new_identity.Direction = ParameterDirection.Output;
-
-                                    SqlParameter FreezoneProfileCategoryId = new SqlParameter("@FreezoneProfileCategoryId", SqlDbType.Int);
-                                    FreezoneProfileCategoryId.Value = catID;
-                                    FreezoneProfileCategoryId.Direction = ParameterDirection.Input;
-
-                                    SqlParameter FreezoneFieldName = new SqlParameter("@FreezoneFieldName", SqlDbType.VarChar, 100);
-                                    FreezoneFieldName.Value = Convert.ToString(row[rowNumber, 1].Text);
-                                    FreezoneFieldName.Direction = ParameterDirection.Input;
-
-                                    FreezoneProfileFieldID = InSertDataGETID(con, "InsertFreezoneProfileFields", new_identity, FreezoneProfileCategoryId, FreezoneFieldName);
-
-                                    // Insert InsertCountryRanking
-
-                                    if (FreezoneProfileFieldID > 0)
+                                    try
                                     {
-                                        var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
-                                        //foreach (var cell in temprow)
-                                        //{
-                                        //    int ab = cell.Start.Column;
-                                        //    string s1 = cell.FullAddress;
-                                        //    string first = firstRow[rowNumber, ab].Text;
-                                        //}
 
-                                        // var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
-                                        var row2 = workSheet.Cells[rowNumber, 1, rowNumber, workSheet.Dimension.End.Column];
-                                        int count = 1;
-                                        foreach (var cell in row2)
-                                        {
-                                            if (count >= 7)
-                                            {
-                                                if (string.IsNullOrWhiteSpace(cell.Text))
-                                                {
-                                                    endrowCol = true;
-                                                    break;
-                                                }
-                                                else
-                                                    if (!string.IsNullOrWhiteSpace(cell.Text))
-                                                    {
-                                                        string FreeZone = temprow[1, cell.Start.Column].Text;
+                                        SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
+                                        new_identity.Direction = ParameterDirection.Output;
 
-                                                        SqlParameter new_identity2 = new SqlParameter("@new_identity", SqlDbType.Int);
-                                                        new_identity2.Direction = ParameterDirection.Output;
+                                        SqlParameter FreezoneProfileCategoryId = new SqlParameter("@FreezoneProfileCategoryId", SqlDbType.Int);
+                                        FreezoneProfileCategoryId.Value = catID;
+                                        FreezoneProfileCategoryId.Direction = ParameterDirection.Input;
 
-                                                        SqlParameter Value = new SqlParameter("@Value", SqlDbType.VarChar, -1);
+                                        SqlParameter FreezoneFieldName = new SqlParameter("@FreezoneFieldName", SqlDbType.VarChar, 100);
+                                        FreezoneFieldName.Value = Convert.ToString(row[rowNumber, 1].Text);
+                                        FreezoneFieldName.Direction = ParameterDirection.Input;
 
-                                                        if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
-                                                        {
-                                                            Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim();
-                                                        }
-                                                        else
-                                                        {
-                                                            Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim();
-                                                        }
-
-
-
-                                                        Value.Direction = ParameterDirection.Input;
-
-
-                                                        SqlParameter new_FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.NVarChar, 50);
-                                                        new_FreeZoneName.Value = FreeZone.Trim();
-                                                        new_FreeZoneName.Direction = ParameterDirection.Input;
-
-                                                        SqlParameter FreezoneProfileFieldIDParam = new SqlParameter("@FreezoneProfileFieldID", SqlDbType.Int);
-                                                        FreezoneProfileFieldIDParam.Value = FreezoneProfileFieldID;
-                                                        FreezoneProfileFieldIDParam.Direction = ParameterDirection.Input;
-
-
-
-                                                        FreeZoneyRankingID = InSertDataGETID(con, "InsertFreezoneProfileValues", new_identity2, FreezoneProfileFieldIDParam, new_FreeZoneName, Value);
-
-
-                                                    }
-                                            }
-                                            else
-                                            {
-                                                // newRow[cell.Start.Column - 1] = "";
-                                            }
-                                            count = count + 1;
-                                            FreeZoneCount = 0;
-                                            //if (endrow.Equals(true))
-                                            //    break;
-                                        }
-
+                                        FreezoneProfileFieldID = InSertDataGETID(con, "InsertFreezoneProfileFields", new_identity, FreezoneProfileCategoryId, FreezoneFieldName);
 
                                     }
+                                    catch (Exception ex)
+                                    {
+                                        error = "Error occure while inserting Profile Data.Please make sure the data is in correct formate.";
+                                        WZFOUtility.LogException(ex, "ProfileDataImport - FreezoneProfileFieldID = InSertDataGETID(con, InsertFreezoneProfileFields ", SPContext.Current.Site);
+                                    }
+                                    // Insert InsertCountryRanking
+                                    try
+                                    {
+                                        if (FreezoneProfileFieldID > 0)
+                                        {
+                                            // try
+                                            //  {
+                                            var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
+                                            //foreach (var cell in temprow)
+                                            //{
+                                            //    int ab = cell.Start.Column;
+                                            //    string s1 = cell.FullAddress;
+                                            //    string first = firstRow[rowNumber, ab].Text;
+                                            //}
+
+                                            // var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
+                                            var row2 = workSheet.Cells[rowNumber, 1, rowNumber, workSheet.Dimension.End.Column];
+                                            int count = 1;
+                                            foreach (var cell in row2)
+                                            {
+                                                if (count >= 7)
+                                                {
+                                                    if (string.IsNullOrWhiteSpace(cell.Text))
+                                                    {
+                                                        endrowCol = true;
+                                                        break;
+                                                    }
+                                                    else
+                                                        if (!string.IsNullOrWhiteSpace(cell.Text))
+                                                        {
+                                                            try
+                                                            {
+                                                                string FreeZone = temprow[1, cell.Start.Column].Text;
+
+                                                                SqlParameter new_identity2 = new SqlParameter("@new_identity", SqlDbType.Int);
+                                                                new_identity2.Direction = ParameterDirection.Output;
+
+                                                                SqlParameter Value = new SqlParameter("@Value", SqlDbType.VarChar, -1);
+
+                                                                if (row2[rowNumber, cell.Start.Column].Text.Equals("N/A") || row2[rowNumber, cell.Start.Column].Text.Equals("-"))
+                                                                {
+                                                                    Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim();
+                                                                }
+                                                                else
+                                                                {
+                                                                    Value.Value = Convert.ToString(row2[rowNumber, cell.Start.Column].Text).Trim();
+                                                                }
+
+                                                                Value.Direction = ParameterDirection.Input;
+
+                                                                SqlParameter new_FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.NVarChar, 50);
+                                                                new_FreeZoneName.Value = FreeZone.Trim();
+                                                                new_FreeZoneName.Direction = ParameterDirection.Input;
+
+                                                                SqlParameter FreezoneProfileFieldIDParam = new SqlParameter("@FreezoneProfileFieldID", SqlDbType.Int);
+                                                                FreezoneProfileFieldIDParam.Value = FreezoneProfileFieldID;
+                                                                FreezoneProfileFieldIDParam.Direction = ParameterDirection.Input;
+
+                                                                FreeZoneyRankingID = InSertDataGETID(con, "InsertFreezoneProfileValues", new_identity2, FreezoneProfileFieldIDParam, new_FreeZoneName, Value);
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                error = "Error occure while inserting Profile Data.Please make sure the data is in correct formate.";
+                                                                WZFOUtility.LogException(ex, "ProfileDataImport -FreeZoneyRankingID = InSertDataGETID(con, InsertFreezoneProfileValues ", SPContext.Current.Site);
+                                                            }
+
+                                                        }
+                                                }
+                                                else
+                                                {
+                                                    // newRow[cell.Start.Column - 1] = "";
+                                                }
+                                                count = count + 1;
+                                                FreeZoneCount = 0;
+                                                //if (endrow.Equals(true))
+                                                //    break;
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        error = "Error occure while inserting Profile Data.Please make sure the data is in correct formate.";
+                                        WZFOUtility.LogException(ex, "ProfileDataImport ", SPContext.Current.Site);
+                                    }
+
                                 }
                             }
 
@@ -1274,31 +1339,28 @@ namespace WFZO.FZSelector
                 }
                 con.Close();
                 con = null;
-                return table;
+                return error;
 
             }
-            catch
+            catch (Exception ex)
             {
-
-                throw;
+                error = "Error occure while inserting Profile Data Import Data.Please make sure the data is in correct formate.";
+                WZFOUtility.LogException(ex, "ProfileDataImport ", SPContext.Current.Site);
             }
-
+            return error;
         }
-
 
         public static int InSertDataGETID(SqlConnection con, string SPName, params SqlParameter[] Parameters)
         {
-            int output = 0;
-
             SqlCommand cmd = new SqlCommand(SPName, con);
-
-            cmd.CommandType = CommandType.StoredProcedure;
-            if (Parameters != null)
-                foreach (SqlParameter item in Parameters)
-                    cmd.Parameters.Add(item);
-
+            int output = 0;
             try
             {
+                cmd.CommandType = CommandType.StoredProcedure;
+                if (Parameters != null)
+                    foreach (SqlParameter item in Parameters)
+                        cmd.Parameters.Add(item);
+
                 cmd.ExecuteScalar();
 
                 if (SPName.Equals("InsertCountryRanking"))
@@ -1311,10 +1373,12 @@ namespace WFZO.FZSelector
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
-                if (con != null) con.Close();
-                throw;
+              //  if (con != null) con.Close();
+              //  throw;
+                error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
+                WZFOUtility.LogException(ex, "InSertDataGETID SPName= " + SPName  + "", SPContext.Current.Site);
             }
 
             cmd = null;

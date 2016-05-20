@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectItem Type="Microsoft.VisualStudio.SharePoint.VisualWebPart" DefaultFile="SSOSignOutWPUserControl.ascx" SupportedTrustLevels="FullTrust" SupportedDeploymentScopes="Site" xmlns="http://schemas.microsoft.com/VisualStudio/2010/SharePointTools/SharePointProjectItemModel">
+  <Files>
+    <ProjectItemFile Source="Elements.xml" Target="SSOSignOutWP\" Type="ElementManifest" />
+    <ProjectItemFile Source="SSOSignOutWP.webpart" Target="SSOSignOutWP\" Type="ElementFile" />
+    <ProjectItemFile Source="SSOSignOutWPUserControl.ascx" Target="CONTROLTEMPLATES\WFZO.FZSelector.OtherWP\SSOSignOutWP\" Type="TemplateFile" />
+  </Files>
+  <SafeControls>
+    <SafeControl Name="SafeControlEntry1" Assembly="$SharePoint.Project.AssemblyFullName$" Namespace="WFZO.FZSelector.OtherWP.SSOSignOutWP" TypeName="*" IsSafe="true" IsSafeAgainstScript="false" />
+  </SafeControls>
+</ProjectItem>

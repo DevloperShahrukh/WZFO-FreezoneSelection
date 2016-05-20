@@ -13,27 +13,27 @@
 <script>
     function CollectParameters() {
         AddToHidden('<%= tvFreezoneProfileCategories.ID %>', '<%= hdnFreezoneProfileCatIds.ClientID %>');
-        AddToHidden('<%= tvFreezoneCategories.ID %>', '<%= hdnFreezoneCatIds.ClientID %>')
-        AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>')
+        <%--AddToHidden('<%= tvFreezoneCategories.ID %>', '<%= hdnFreezoneCatIds.ClientID %>');
+        AddToHidden('<%= tvCountryCategories.ID %>', '<%= hdnCountryCatIds.ClientID %>');--%>
     }
 
     function getAndShowReport() {
         var ErrorVariable = { Error: "" };
-        if (validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvFreezoneProfileCategories.ID %>', ErrorVariable)) {
+        if (<%--validateTreeviewNodesSelection('<%= tvFreezoneCategories.ID %>', ErrorVariable) || validateTreeviewNodesSelection('<%= tvCountryCategories.ID %>', ErrorVariable) ||--%> validateTreeviewNodesSelection('<%= tvFreezoneProfileCategories.ID %>', ErrorVariable)) {
             CollectParameters();
 
             var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/FreezoneProfile.rdl';
 
-            ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
+            <%--ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
         + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
                 + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
-                + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();
+                + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();--%>
 
             window.open(ReportUrl);
 
-            UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
+            <%--UpdateCategoryAnalytics($('#<%= hdnCountryCatIds.ClientID %>').val() + ',' + $('#<%= hdnFreezoneCatIds.ClientID %>').val(), '<%=  WFZO.FZSelector.Constants.Modules.Profile %>');
 
-            UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);
+            UpdateFreeZoneAnalytics(<%= new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(FreezoneDataList) %>);--%>
         }
         else {
             alert(ErrorVariable);
@@ -155,11 +155,9 @@
 
                             </asp:TreeView>
 
-                            <h4 class="tree-head2">Country Level</h4>
+                            <%--<h4 class="tree-head2">Country Level</h4>
 
                             <asp:TreeView ID="tvCountryCategories" runat="server" ShowCheckBoxes="All" CssClass="tree-box" CollapseImageUrl="/Style%20Library/WFZO/img/minus-sign.jpg" ExpandImageUrl="/Style%20Library/WFZO/img/plus-sign.jpg" ForeColor="#FF3300">
-
-
 
                                 <HoverNodeStyle Font-Underline="False" ForeColor="#5555DD" />
 
@@ -193,15 +191,15 @@
 
 
 
-                            </asp:TreeView>
+                            </asp:TreeView>--%>
 
 
 
                             <asp:HiddenField ID="hdnFreezoneProfileCatIds" runat="server" />
 
-                            <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
+                            <%--<asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
 
-                            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
+                            <asp:HiddenField ID="hdnCountryCatIds" runat="server" />--%>
 
                         </div>
 

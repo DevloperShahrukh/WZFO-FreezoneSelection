@@ -36,8 +36,8 @@ namespace WFZO.FZSelector.FreeZoneWP
             if (!IsPostBack)
             {
                 tvFreezoneProfileCategories.Attributes.Add("onclick", "OnTreeClick(event)");
-                tvFreezoneCategories.Attributes.Add("onclick", "OnTreeClick(event)");
-                tvCountryCategories.Attributes.Add("onclick", "OnTreeClick(event)");
+                //tvFreezoneCategories.Attributes.Add("onclick", "OnTreeClick(event)");
+                //tvCountryCategories.Attributes.Add("onclick", "OnTreeClick(event)");
                 bindRegion();
 
 
@@ -129,32 +129,32 @@ namespace WFZO.FZSelector.FreeZoneWP
         }
         
 
-        private void BindFreezoneTreeView(string FreezoneIds)
-        {
-            try
-            {
-                tvFreezoneCategories.Nodes.Clear();
-                Hashtable par = new Hashtable();
-                par.Add("@FreezoneIds", FreezoneIds);
-                DataSet ds = obj.SelectDataProc("GetFreezoneCategoriesAndSubCategoriesByFreezoneIds", par);                //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
-                DataRow[] Rows = ds.Tables[0].Select("parentId = 0"); // Get all parents nodes
-                for (int i = 0; i < Rows.Length; i++)
-                {
-                    TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
+        //private void BindFreezoneTreeView(string FreezoneIds)
+        //{
+        //    try
+        //    {
+        //        tvFreezoneCategories.Nodes.Clear();
+        //        Hashtable par = new Hashtable();
+        //        par.Add("@FreezoneIds", FreezoneIds);
+        //        DataSet ds = obj.SelectDataProc("GetFreezoneCategoriesAndSubCategoriesByFreezoneIds", par);                //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
+        //        DataRow[] Rows = ds.Tables[0].Select("parentId = 0"); // Get all parents nodes
+        //        for (int i = 0; i < Rows.Length; i++)
+        //        {
+        //            TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
                     
-                    root.SelectAction = TreeNodeSelectAction.Expand;
-                    CreateNode(root, ds.Tables[0], tvFreezoneCategories);
-                    tvFreezoneCategories.Nodes.Add(root);
-                }
-            }
+        //            root.SelectAction = TreeNodeSelectAction.Expand;
+        //            CreateNode(root, ds.Tables[0], tvFreezoneCategories);
+        //            tvFreezoneCategories.Nodes.Add(root);
+        //        }
+        //    }
              
-            catch (Exception ex)
-            {
-                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "BindFreezoneTreeView", SPContext.Current.Site);
-            }
+        //    catch (Exception ex)
+        //    {
+        //        errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+        //        WZFOUtility.LogException(ex, "BindFreezoneTreeView", SPContext.Current.Site);
+        //    }
 
-        }
+        //}
 
         private void BindFreezoneProfileCategoryTreeView(int FreezoneId)
         {
@@ -182,30 +182,30 @@ namespace WFZO.FZSelector.FreeZoneWP
 
         }
 
-        private void BindCountryCategoryTreeView(string CountryId)
-        {
-            try
-            {
-                tvCountryCategories.Nodes.Clear();
-                Hashtable par = new Hashtable();
-                par.Add("@CountryId", CountryId);
-                DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);                //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
-                DataRow[] Rows = ds.Tables[0].Select("parentId = 0"); // Get all parents nodes
-                for (int i = 0; i < Rows.Length; i++)
-                {
-                    TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
-                    root.SelectAction = TreeNodeSelectAction.Expand;
-                    CreateNode(root, ds.Tables[0], tvCountryCategories);
-                    tvCountryCategories.Nodes.Add(root);
-                }
-            }
-            catch (Exception ex)
-            {
-                errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
-                WZFOUtility.LogException(ex, "BindCountryCategoryTreeView", SPContext.Current.Site);
-            }
+        //private void BindCountryCategoryTreeView(string CountryId)
+        //{
+        //    try
+        //    {
+        //        tvCountryCategories.Nodes.Clear();
+        //        Hashtable par = new Hashtable();
+        //        par.Add("@CountryId", CountryId);
+        //        DataSet ds = obj.SelectDataProc("GetCategoriesandSubCategories", par);                //   DataSet ds = GetDataSet("Select ProductId,ProductName,ParentId from ProductTable");
+        //        DataRow[] Rows = ds.Tables[0].Select("parentId = 0"); // Get all parents nodes
+        //        for (int i = 0; i < Rows.Length; i++)
+        //        {
+        //            TreeNode root = new TreeNode(Rows[i]["Category"].ToString(), Rows[i]["Id"].ToString());
+        //            root.SelectAction = TreeNodeSelectAction.Expand;
+        //            CreateNode(root, ds.Tables[0], tvCountryCategories);
+        //            tvCountryCategories.Nodes.Add(root);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        errorMessage.Value = "message:'" + ex.Message + "'-stack:'" + ex.StackTrace + "'";
+        //        WZFOUtility.LogException(ex, "BindCountryCategoryTreeView", SPContext.Current.Site);
+        //    }
 
-        }
+        //}
         public void CreateNode(TreeNode node, DataTable Dt, TreeView Control)
         {
             try { 
@@ -293,8 +293,8 @@ namespace WFZO.FZSelector.FreeZoneWP
             int FreezoneId = Convert.ToInt32(ddlFreeZone.SelectedItem.Value);
 
             BindFreezoneProfileCategoryTreeView(FreezoneId);
-            BindCountryCategoryTreeView(ddlCountry.SelectedItem.Value);
-            BindFreezoneTreeView(ddlFreeZone.SelectedItem.Value);
+            //BindCountryCategoryTreeView(ddlCountry.SelectedItem.Value);
+            //BindFreezoneTreeView(ddlFreeZone.SelectedItem.Value);
 
 
             FreezoneAnalyticData FAD = new FreezoneAnalyticData();

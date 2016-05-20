@@ -204,6 +204,14 @@
     <Compile Include="OtherWP\NewsListingWP\NewsListingWPUserControl.ascx.designer.cs">
       <DependentUpon>NewsListingWPUserControl.ascx.cs</DependentUpon>
     </Compile>
+    <Compile Include="OtherWP\SSOSignOutWP\SSOSignOutWP.cs" />
+    <Compile Include="OtherWP\SSOSignOutWP\SSOSignOutWPUserControl.ascx.cs">
+      <DependentUpon>SSOSignOutWPUserControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OtherWP\SSOSignOutWP\SSOSignOutWPUserControl.ascx.designer.cs">
+      <DependentUpon>SSOSignOutWPUserControl.ascx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Secure.cs" />
   </ItemGroup>
@@ -263,6 +271,10 @@
     <None Include="OtherWP\NewsListingWP\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{90a845cc-25d8-4456-b2d6-5b2a9064507d}</SharePointProjectItemId>
     </None>
+    <None Include="OtherWP\SSOSignOutWP\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f6fa6c8d-94eb-44a0-9a97-502c4f54e71a}</SharePointProjectItemId>
+    </None>
+    <None Include="OtherWP\SSOSignOutWP\SSOSignOutWP.webpart" />
     <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{dfb169ce-5a41-46a9-bb7f-871417e9ea60}</PackageId>
@@ -304,6 +316,8 @@
     <Content Include="HomeWP\TopImageSlider\TopImageSliderUserControl.ascx" />
     <Content Include="OtherWP\NewsListingWP\Elements.xml" />
     <Content Include="OtherWP\NewsListingWP\NewsListingWPUserControl.ascx" />
+    <Content Include="OtherWP\SSOSignOutWP\Elements.xml" />
+    <Content Include="OtherWP\SSOSignOutWP\SSOSignOutWPUserControl.ascx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

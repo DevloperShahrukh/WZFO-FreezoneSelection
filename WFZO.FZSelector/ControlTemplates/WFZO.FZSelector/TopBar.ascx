@@ -7,6 +7,8 @@
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TopBar.ascx.cs" Inherits="WFZO.FZSelector.ControlTemplates.WFZO.FZSelector.TopBar" %>
 
+
+<script src="../_layouts/15/WFZO.FZSelector/js/CustomScript.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -24,27 +26,12 @@
             }
         }
 
-        <%--if (EncryptedTokenString != '') {
-            var anchors = $('a');
-
-            anchors.each(function (index) {
-
-                var Link = $(this).attr('href');
-
-                if (Link != undefined) {
-                    if (Link.indexOf('http://www.worldfzo.org') > -1) {
-                        $(this).attr('href', Link + '?wToken=' + EncryptedTokenString);
-                    }
-                }
-            });
-        }--%>
     });
+
+
 </script>
 
 <asp:HiddenField ID="errorMessage" runat="server" />
-
-
-
 
 <div class="logout-box">
     <ul>
@@ -58,6 +45,7 @@
         <li class="welcome">
             <asp:Literal ID="ltrWelcome" runat="server" /></li>
         <li>
-            <asp:LinkButton ID="lnkLogout" ToolTip="Logout" runat="server" OnClick="lnkLogout_Click"><span class="glyphicon glyphicon-log-out"></span></asp:LinkButton></li>
+            
+            <asp:LinkButton ID="lnkLogout" ToolTip="Logout" runat="server"  OnClick="lnkLogout_Click"><span class="glyphicon glyphicon-log-out"></span> Logout</asp:LinkButton></li>
     </ul>
 </div>

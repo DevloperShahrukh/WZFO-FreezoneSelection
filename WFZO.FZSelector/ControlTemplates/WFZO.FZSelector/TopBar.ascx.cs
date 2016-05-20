@@ -12,7 +12,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 {
     public partial class TopBar : UserControl
     {
-        private string wfzoSiteUrl
+        public string wfzoSiteUrl
         {
             get
             {
@@ -26,6 +26,20 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             }
         }
 
+        public string wfzoSignOutUrl
+        {
+            get
+            {
+                if (ViewState["wfzoSignOutUrl"] == null)
+                    ViewState["wfzoSignOutUrl"] = Helper.GetConfigurationValue("WfzoSignOutUrl");
+                return Convert.ToString(ViewState["wfzoSignOutUrl"]);
+            }
+            set
+            {
+                ViewState["wfzoSignOutUrl"] = value;
+            }
+        }
+
         string wfzoVisitorGrp = "WFZO FBA Visitors";
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,9 +50,6 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                 this.Page.LoadComplete += new EventHandler(Page_LoadComplete);
             }
-
-
-
         }
 
         protected void Page_LoadComplete(object sender, EventArgs e)
@@ -65,7 +76,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     FormsAuthentication.SignOut();
 
                     RemoveCookie();
-                    Response.Redirect("/Pages/default.aspx", false);
+                    Response.Redirect(wfzoSignOutUrl + "?Source=" + SPContext.Current.Web.Url, false);
                 });
             }
 

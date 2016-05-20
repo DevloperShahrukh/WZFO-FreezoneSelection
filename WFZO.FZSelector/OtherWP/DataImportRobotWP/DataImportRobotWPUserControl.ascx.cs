@@ -24,7 +24,7 @@ namespace WFZO.FZSelector.OtherWP.DataImportRobotWP
                     if (Path.GetExtension(FileUpload1.FileName) == ".xlsx")
                     {
                         ExcelPackage package = new ExcelPackage(FileUpload1.FileContent);
-                        errorMessage.Value =  package.ToDataTable();
+                        errorMessage.Value = package.ToDataTable();
 
                     }
                 }
@@ -46,7 +46,7 @@ namespace WFZO.FZSelector.OtherWP.DataImportRobotWP
                     if (Path.GetExtension(FileUpload1.FileName) == ".xlsx")
                     {
                         ExcelPackage package = new ExcelPackage(FileUpload1.FileContent);
-                        errorMessage.Value =  package.FreeZoneImport();
+                        errorMessage.Value = package.FreeZoneImport();
 
                     }
                 }
@@ -67,7 +67,7 @@ namespace WFZO.FZSelector.OtherWP.DataImportRobotWP
                     if (Path.GetExtension(FileUpload1.FileName) == ".xlsx")
                     {
                         ExcelPackage package = new ExcelPackage(FileUpload1.FileContent);
-                        errorMessage.Value =  package.InsertUpdateSetUpData();
+                        errorMessage.Value = package.InsertUpdateSetUpData();
 
                     }
                 }
