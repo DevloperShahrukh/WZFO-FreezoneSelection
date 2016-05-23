@@ -62,17 +62,17 @@
         </li>
     </ul>
 </asp:Panel>
-<asp:Panel ID="Pllogout" runat="server" Visible="false">
+<%--<asp:Panel ID="Pllogout" runat="server" Visible="false">
     <div class="logout-box">
         <ul>
             <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
             <li>
-                <asp:LinkButton ID="lblogout" runat="server" OnClick="lblogout_Click"><span class="glyphicon glyphicon-log-out"></span> Logout</asp:LinkButton>
+                <asp:LinkButton ID="lblogout" runat="server" ><span class="glyphicon glyphicon-log-out"></span> Logout</asp:LinkButton>
             </li>
             <li><a href="#"><span class="wfzohome-icon"></span></a></li>
         </ul>
     </div>
-</asp:Panel>
+</asp:Panel>--%>
 
 <script>
     function showPopup() {

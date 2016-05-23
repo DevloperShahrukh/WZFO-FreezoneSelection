@@ -152,7 +152,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                                     string _membershipperiod = "Membership validity till " + Convert.ToDateTime(Convert.ToString(dtuserdata.Rows[0]["Expiry_x0020_Date"])).ToString("dd-MMM-yyyy");
                                     //
-                                    string _renew = "<a href='/pages/MembershipRegistration.aspx?code=" + userId + "&rn=1' >Renew</a>";
+                                    string _renew = "<a target='_blank' href='" + wfzoSiteUrl + "/pages/MembershipRegistration.aspx?code=" + userId.Trim() + "&rn=1' >Renew</a>";
 
                                     int _idays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["AlertDays"].ToString());
                                     int GraceDays = int.Parse(sWeb.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());

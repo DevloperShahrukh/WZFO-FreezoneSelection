@@ -280,7 +280,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 SetCookieForStaySignedIn();
 
                                 PlLogin.Visible = false;
-                                Pllogout.Visible = true;
+                                //Pllogout.Visible = true;
 
                                 if (SU.IsSiteAdmin == false && WZFOUtility.IsUserMemberOfGroup(SU, wfzoVisitorGrp) == false)
                                 {
@@ -379,7 +379,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 {
                     FederatedAuthentication.SessionAuthenticationModule.SignOut();
                     FormsAuthentication.SignOut();
-                    Pllogout.Visible = false;
+                    //Pllogout.Visible = false;
                     PlLogin.Visible = true;
 
                     Response.Redirect("/Pages/default.aspx", false);
