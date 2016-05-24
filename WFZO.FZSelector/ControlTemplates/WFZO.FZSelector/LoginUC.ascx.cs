@@ -63,7 +63,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                         if (IfCookieExists())
                         {
 
-                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOPassword"].Value)));
+                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOPassword"].Value)),2);
                         }
                     }
                     else
@@ -134,7 +134,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
         protected void btnUserLogin_Click(object sender, EventArgs e)
         {
-            Login(txtUserID.Text, txtPassword.Text);
+            Login(txtUserID.Text, txtPassword.Text, 1);
         }
 
         //protected void LoginWithoutLog(string strUserName, string strPassword)
@@ -157,7 +157,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
         //        });
         //}
 
-        protected void Login(string strUserName, string strPassword)
+        protected void Login(string strUserName, string strPassword, int From)
         {
             try
             {
@@ -323,6 +323,10 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                         Response.Redirect(wfzoSiteUrl + "/Pages/ChangePassword.aspx");
                                     else
                                         Response.Redirect("/Pages/Dashboard.aspx", false);
+                                }
+                                if(From ==1)
+                                {
+                                    Response.Redirect(HttpContext.Current.Request.Url.ToString(), false);
                                 }
                                 /*else
                                     Response.Redirect("/Pages/Dashboard.aspx", false);*/
@@ -548,7 +552,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     return;
                 }
                 con.Close();
-                Login(userId, pwd);
+                Login(userId, pwd,2);
 
             }
             catch (Exception ex)
