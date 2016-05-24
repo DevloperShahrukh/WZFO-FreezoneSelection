@@ -324,7 +324,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     else
                                         Response.Redirect("/Pages/Dashboard.aspx", false);
                                 }
-                                if(From ==1)
+                                if (From == 1)
                                 {
                                     Response.Redirect(HttpContext.Current.Request.Url.ToString(), false);
                                 }
