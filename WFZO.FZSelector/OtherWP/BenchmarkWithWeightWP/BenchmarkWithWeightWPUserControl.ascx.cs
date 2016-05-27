@@ -187,6 +187,9 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
             }
+
+            hdnFreezoneCount.Value = Convert.ToString(GridView1.Rows.Count);
+
             if (GridView1.Rows.Count > 0 /*&& grdWeightedBenchmarkingCategories.Rows.Count > 1*/)
             {
                 PlSelectedZone.Visible = true;
@@ -298,6 +301,7 @@ namespace WFZO.FZSelector.BenchmarkWithWeightWP
                     pnlCategories.Visible = false;
 
                 }
+                hdnFreezoneCount.Value = Convert.ToString(GridView1.Rows.Count);
             }
             }
             catch (Exception ex)

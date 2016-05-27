@@ -25,7 +25,7 @@
 
             var reportName = $('#<%= rblReportType.ClientID %>').find('input:checked').val();
 
-            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName;
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName.split('.')[0] + (isReportLandscape('<%= hdnFreezoneCount.ClientID %>') ? '-landscape.' : '.') + reportName.split('.')[1];
 
             ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
             + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
@@ -186,6 +186,7 @@
                             <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
                             <asp:HiddenField ID="hdnCountryIds" runat="server" />
                             <asp:HiddenField ID="hdnFreezoneIds" runat="server" />
+                            <asp:HiddenField ID="hdnFreezoneCount" runat="server" />
 
                             <h4 class="tree-head2">Report Output</h4>
                             <asp:RadioButtonList CssClass="tree-box" ID="rblReportType" runat="server" Visible="false" RepeatLayout="UnorderedList"></asp:RadioButtonList>

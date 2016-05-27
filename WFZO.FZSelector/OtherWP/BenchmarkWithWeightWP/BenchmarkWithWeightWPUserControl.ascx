@@ -20,7 +20,10 @@
             AddCategoryWithWeights("[name*='chkSelectedCategory']:checked", '<%= hdnCatIdAndWeightageValue.ClientID %>');
             var reportName = $('#<%= rblReportType.ClientID %>').find('input:checked').val();
 
-            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName;
+
+            var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName.split('.')[0] + (isReportLandscape('<%= hdnFreezoneCount.ClientID %>') ? '-landscape.' : '.') + reportName.split('.')[1];
+
+            <%--var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/' + reportName;--%>
 
             ReportUrl += '&rp:CountryIds=' + $('#<%= hdnCountryIds.ClientID %>').val()
             + '&rp:FreezoneIds=' + $('#<%= hdnFreezoneIds.ClientID %>').val() + '&rp:MacroCategoryIds='
@@ -47,6 +50,7 @@
 <asp:HiddenField ID="hdnCountryCatIds" runat="server" />
 <asp:HiddenField ID="hdnFreezoneCatIds" runat="server" />
 <asp:HiddenField ID="hdnCatIdAndWeightageValue" runat="server" />
+<asp:HiddenField ID="hdnFreezoneCount" runat="server" />
 
 <asp:HiddenField ID="errorMessage" runat="server" />
 

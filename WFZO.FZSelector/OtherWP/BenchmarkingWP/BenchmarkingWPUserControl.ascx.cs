@@ -176,6 +176,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
                     GridView1.DataBind();
                 }
 
+                hdnFreezoneCount.Value = Convert.ToString(GridView1.Rows.Count);
+
                 if (GridView1.Rows.Count >= 2)
                 {
                     PnlTreeViews.Visible = true;
@@ -303,6 +305,8 @@ namespace WFZO.FZSelector.BenchmarkingWP
                         tvCountryCategories.Visible = false;
                         tvFreezoneCategories.Visible = false;
                     }
+
+                    hdnFreezoneCount.Value = Convert.ToString(GridView1.Rows.Count);
                 }
             }
             catch (Exception ex)

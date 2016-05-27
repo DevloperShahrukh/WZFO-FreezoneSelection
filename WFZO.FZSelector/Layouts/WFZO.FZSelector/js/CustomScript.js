@@ -237,4 +237,9 @@ function GetParentByTagName(parentTagName, childElementObj) {
     return parent;
 }
 
+function isReportLandscape(FreezoneCountElement)
+{
+    return ($('#' + FreezoneCountElement).val() > 2);
+}
+
 
