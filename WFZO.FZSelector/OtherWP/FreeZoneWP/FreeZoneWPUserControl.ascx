@@ -24,10 +24,7 @@
 
             var ReportUrl = '<%= SPContext.Current.Web.Url %>/_layouts/15/ReportServer/RSViewerPage.aspx?rv:RelativeReportUrl=/Reports/FreezoneProfile.rdl';
 
-            <%--ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val()
-        + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds='
-                + $('#<%= hdnCountryCatIds.ClientID %>').val() + '&rp:FreezoneLevelSubCategoryIds=' + $('#<%= hdnFreezoneCatIds.ClientID %>').val()
-                + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val();--%>
+            ReportUrl += '&rp:CountryID=' + $('#<%= ddlCountry.ClientID %>').val() + '&rp:FreezoneId=' + $('#<%= ddlFreeZone.ClientID %>').val() + '&rp:FreezoneProfileFieldsId=' + $('#<%= hdnFreezoneProfileCatIds.ClientID %>').val() + '&rp:CountryLevelSubCategoryIds=0&rp:FreezoneLevelSubCategoryIds=0';
 
             window.open(ReportUrl);
 

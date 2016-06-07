@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="dfb169ce-5a41-46a9-bb7f-871417e9ea60" solutionId="dfb169ce-5a41-46a9-bb7f-871417e9ea60" resetWebServer="false" sharePointProductVersion="15.0" name="WFZO.FZSelector" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <customAssembly location="EPPlus.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll">
+      <safeControls>
+        <safeControl assemblyName="EPPlus.dll" namespaceName="EPPlus" typeName="*" isSafeAgainstScript="false" />
+      </safeControls>
+    </customAssembly>
+  </assemblies>
   <features>
     <featureReference itemId="b74aed29-bd91-4845-8246-2ecb520ddd86" />
   </features>

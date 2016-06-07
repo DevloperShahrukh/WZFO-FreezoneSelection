@@ -17,12 +17,19 @@ namespace WFZO.FZSelector
 
         public static string ToDataTable(this ExcelPackage package)
         {
-          //  string error = "";
+            //  string error = "";
             try
             {
 
                 SqlConnection con = new SqlConnection();
-                con.ConnectionString = "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+                con = new Connection().getConnection();
+
+                //   "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+
+
+
+
+
 
                 ExcelWorksheet workSheet = package.Workbook.Worksheets.First();
                 DataTable table = new DataTable();
@@ -216,8 +223,11 @@ namespace WFZO.FZSelector
                                                                     }
 
 
+                                                                    
 
-                                                                    if (CountryCount == 1)
+
+
+                                                                    if (CountryCount > 0)
                                                                     {
                                                                         try
                                                                         {
@@ -256,7 +266,7 @@ namespace WFZO.FZSelector
                                                                             error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
                                                                             WZFOUtility.LogException(ex, "Country Import CountryRankingID = InSertDataGETID(con, InsertCountryRanking", SPContext.Current.Site);
                                                                         }
-                                                                    
+
                                                                     }
 
                                                                 }
@@ -265,7 +275,7 @@ namespace WFZO.FZSelector
                                                                     error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
                                                                     WZFOUtility.LogException(ex, "Country Import", SPContext.Current.Site);
                                                                 }
-                                                                return error;
+                                                               // return error;
 
                                                             }
                                                     }
@@ -308,6 +318,9 @@ namespace WFZO.FZSelector
                                                 {
                                                     var temprow = workSheet.Cells[1, 1, 1, workSheet.Dimension.End.Column];
                                                     var row2 = workSheet.Cells[rowNumber, 1, rowNumber, workSheet.Dimension.End.Column];
+
+                                                    int row2Count = workSheet.Cells[rowNumber, 1, rowNumber, workSheet.Dimension.End.Column].Count();
+
                                                     int count = 1;
                                                     foreach (var cell in row2)
                                                     {
@@ -521,7 +534,7 @@ namespace WFZO.FZSelector
                                                         else
                                                             if (!string.IsNullOrWhiteSpace(cell.Text))
                                                             {
-                                                                
+
                                                                 string Country = temprow[1, cell.Start.Column].Text;
 
                                                                 SqlParameter new_CountryEXist = new SqlParameter("@new_identity", SqlDbType.Int);
@@ -532,9 +545,9 @@ namespace WFZO.FZSelector
                                                                 new_CountryName2.Direction = ParameterDirection.Input;
 
                                                                 CountryCount = InSertDataGETID(con, "CheckCountryExist", new_CountryEXist, new_CountryName2);
-                                                                
-                                                                
-                                                                
+
+
+
                                                                 try
                                                                 {
                                                                     if (CountryCount == 1)
@@ -633,11 +646,12 @@ namespace WFZO.FZSelector
 
         public static string FreeZoneImport(this ExcelPackage package)
         {
-           // string error = "";
+            
             try
             {
+
                 SqlConnection con = new SqlConnection();
-                con.ConnectionString = "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+                con = new Connection().getConnection();
 
                 ExcelWorksheet workSheet = package.Workbook.Worksheets["Micro-Level Database"];
                 DataTable table = new DataTable();
@@ -791,10 +805,10 @@ namespace WFZO.FZSelector
 
                                         }
                                     }
-                                    catch
+                                    catch(Exception ex)
                                     {
-
-                                        throw;
+                                        error = "Error occure while inserting Freezone Data.Please make sure the data is in correct formate.";
+                                        WZFOUtility.LogException(ex, "FreeZone Import  procedure InsertUpdateFreezoneRanking", SPContext.Current.Site);
                                     }
                                     ///////////////////////////////////////////Get SubcategoryID and Insert New Data/////////////////////////////
 
@@ -1026,17 +1040,23 @@ namespace WFZO.FZSelector
 
         public static string InsertUpdateSetUpData(this ExcelPackage package)
         {
-           // string error = "";
+            // string error = "";
             try
             {
+                //SqlConnection con = new SqlConnection();
+                //con.ConnectionString = "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+                bool endfile = false;
+
                 SqlConnection con = new SqlConnection();
-                con.ConnectionString = "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+                con = new Connection().getConnection();
 
                 ExcelWorksheet workSheet = package.Workbook.Worksheets["SetupData"];
                 DataTable table = new DataTable();
 
                 int id = 0;
                 con.Open();
+
+
 
                 for (var rowNumber = 2; rowNumber <= workSheet.Dimension.End.Row; rowNumber++)
                 {
@@ -1045,78 +1065,155 @@ namespace WFZO.FZSelector
                     string a = row[rowNumber, 1].Text;
                     string b = row[rowNumber, 2].Text;
 
-                    SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
-                    new_identity.Direction = ParameterDirection.Output;
 
-                    SqlParameter RegionName = new SqlParameter("@RegionName", SqlDbType.VarChar, 50);
-                    RegionName.Value = Convert.ToString(row[rowNumber, 1].Text);
-                    RegionName.Direction = ParameterDirection.Input;
-
-                    SqlParameter RegionStatus = new SqlParameter("@RegionStatus", SqlDbType.Bit);
-                    if (row[rowNumber, 2].Text.ToLower().Equals("1"))
+                    if (endfile.Equals(false))
                     {
-                        RegionStatus.Value = true;
-                    }
-                    if (row[rowNumber, 2].Text.ToLower().Equals("0"))
-                    {
-                        RegionStatus.Value = false;
-                    }
 
-                    RegionStatus.Direction = ParameterDirection.Input;
+                        if (row[rowNumber, 1].Text.Equals("*******************************"))
+                        {
+                            // File End
+                            endfile = true;
+                            break;
+                        }
+                        else
+                        {
+                            SqlParameter new_identity = new SqlParameter("@new_identity", SqlDbType.Int);
+                            new_identity.Direction = ParameterDirection.Output;
+
+                            SqlParameter RegionName = new SqlParameter("@RegionName", SqlDbType.VarChar, 50);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 1].Text.Trim()))
+                            {
+                                RegionName.Value = "";
+                                break;
+                            }
+                            else
+                            {
+                                RegionName.Value = Convert.ToString(row[rowNumber, 1].Text).Trim();
+                            }
+
+                            RegionName.Direction = ParameterDirection.Input;
+
+                            SqlParameter RegionStatus = new SqlParameter("@RegionStatus", SqlDbType.Bit);
+
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 2].Text.ToLower()))
+                            {
+                                RegionStatus.Value = false;
+                            }
+                            else
+                            {
+                                if (row[rowNumber, 2].Text.ToLower().Equals("1"))
+                                {
+                                    RegionStatus.Value = true;
+                                }
+                                if (row[rowNumber, 2].Text.ToLower().Equals("0"))
+                                {
+                                    RegionStatus.Value = false;
+                                }
+                            }
+
+                            RegionStatus.Direction = ParameterDirection.Input;
 
 
-                    SqlParameter CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
-                    CountryName.Value = Convert.ToString(row[rowNumber, 3].Text);
-                    CountryName.Direction = ParameterDirection.Input;
+                            SqlParameter CountryName = new SqlParameter("@CountryName", SqlDbType.NVarChar, 50);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 3].Text.Trim()))
+                            {
+                                CountryName.Value = "";
+                            }
+                            else
+                            {
+                                CountryName.Value = Convert.ToString(row[rowNumber, 3].Text).Trim();
+                            }
+                            CountryName.Direction = ParameterDirection.Input;
 
-                    SqlParameter CountryStatus = new SqlParameter("@CountryStatus", SqlDbType.Bit);
-                    if (row[rowNumber, 4].Text.ToLower().Equals("1"))
-                    {
-                        CountryStatus.Value = true;
-                    }
-                    if (row[rowNumber, 4].Text.ToLower().Equals("0"))
-                    {
-                        CountryStatus.Value = false;
-                    }
+                            SqlParameter CountryStatus = new SqlParameter("@CountryStatus", SqlDbType.Bit);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 4].Text.ToLower()))
+                            {
+                                CountryStatus.Value = false;
+                            }
+                            else
+                            {
+                                if (row[rowNumber, 4].Text.ToLower().Equals("1"))
+                                {
+                                    CountryStatus.Value = true;
+                                }
+                                if (row[rowNumber, 4].Text.ToLower().Equals("0"))
+                                {
+                                    CountryStatus.Value = false;
+                                }
+                            }
+                            CountryStatus.Direction = ParameterDirection.Input;
 
-                    CountryStatus.Direction = ParameterDirection.Input;
+                            SqlParameter CityName = new SqlParameter("@CityName", SqlDbType.VarChar, 50);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 5].Text.Trim()))
+                            {
+                                CityName.Value = "";
+                            }
+                            else
+                            {
 
-                    SqlParameter CityName = new SqlParameter("@CityName", SqlDbType.NVarChar, 50);
-                    CityName.Value = Convert.ToString(row[rowNumber, 5].Text);
-                    CityName.Direction = ParameterDirection.Input;
+                                CityName.Value = Convert.ToString(row[rowNumber, 5].Text).Trim();
+                            }
 
-                    SqlParameter CityStatus = new SqlParameter("@CityStatus", SqlDbType.NVarChar, 50);
-                    if (row[rowNumber, 6].Text.ToLower().Equals("1"))
-                    {
-                        CityStatus.Value = true;
-                    }
-                    if (row[rowNumber, 6].Text.ToLower().Equals("0"))
-                    {
-                        CityStatus.Value = false;
-                    }
+                            CityName.Direction = ParameterDirection.Input;
 
+                            SqlParameter CityStatus = new SqlParameter("@CityStatus", SqlDbType.Bit);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 6].Text.ToLower()))
+                            {
+                                CityStatus.Value = false;
+                            }
+                            else
+                            {
+                                if (row[rowNumber, 6].Text.ToLower().Equals("1"))
+                                {
+                                    CityStatus.Value = true;
+                                }
+                                if (row[rowNumber, 6].Text.ToLower().Equals("0"))
+                                {
+                                    CityStatus.Value = false;
+                                }
+                            }
+                            CityStatus.Direction = ParameterDirection.Input;
 
-                    SqlParameter FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.NVarChar, 100);
-                    FreeZoneName.Value = Convert.ToString(row[rowNumber, 7].Text);
-                    FreeZoneName.Direction = ParameterDirection.Input;
+                            SqlParameter FreeZoneName = new SqlParameter("@FreeZoneName", SqlDbType.VarChar, 100);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 7].Text.Trim()))
+                            {
+                                FreeZoneName.Value = "";
+                            }
+                            else
+                            {
+                                FreeZoneName.Value = Convert.ToString(row[rowNumber, 7].Text).Trim();
+                            }
 
-                    SqlParameter FreeZoneStatus = new SqlParameter("@FreeZoneStatus", SqlDbType.Bit);
-                    if (row[rowNumber, 8].Text.ToLower().Equals("1"))
-                    {
-                        FreeZoneStatus.Value = true;
-                    }
-                    if (row[rowNumber, 8].Text.ToLower().Equals("0"))
-                    {
-                        FreeZoneStatus.Value = false;
-                    }
+                            FreeZoneName.Direction = ParameterDirection.Input;
 
-                    FreeZoneStatus.Direction = ParameterDirection.Input;
+                            SqlParameter FreeZoneStatus = new SqlParameter("@FreeZoneStatus", SqlDbType.Bit);
+                            if (string.IsNullOrWhiteSpace(row[rowNumber, 8].Text.ToLower()))
+                            {
+                                FreeZoneStatus.Value = false;
+                            }
+                            else
+                            {
+                                if (row[rowNumber, 8].Text.ToLower().Equals("1"))
+                                {
+                                    FreeZoneStatus.Value = true;
+                                }
+                                if (row[rowNumber, 8].Text.ToLower().Equals("0"))
+                                {
+                                    FreeZoneStatus.Value = false;
+                                }
+                            }
+                            FreeZoneStatus.Direction = ParameterDirection.Input;
 
-                    id = InSertDataGETID(con, "InsertUpdateSetupData", RegionName, RegionStatus, CountryName, CountryStatus, CityName, CityStatus, FreeZoneName, FreeZoneStatus, new_identity);
+                            id = InSertDataGETID(con, "InsertUpdateSetupData", RegionName, RegionStatus, CountryName, CountryStatus, CityName, CityStatus, FreeZoneName, FreeZoneStatus, new_identity);
+
+                        }
+                    }//end of file true
+                    else
+                        break;
+                    con.Close();
+                    con = null;
 
                 }
-                con.Close();
-                con = null;
 
             }
             catch (Exception ex)
@@ -1131,8 +1228,9 @@ namespace WFZO.FZSelector
         {
             try
             {
+
                 SqlConnection con = new SqlConnection();
-                con.ConnectionString = "Data Source=sharepoint;Initial Catalog=WFZO;Integrated Security=True";
+                con = new Connection().getConnection();
 
                 ExcelWorksheet workSheet = package.Workbook.Worksheets["Profile Data"];
                 DataTable table = new DataTable();
@@ -1375,10 +1473,10 @@ namespace WFZO.FZSelector
             }
             catch (Exception ex)
             {
-              //  if (con != null) con.Close();
-              //  throw;
+                //  if (con != null) con.Close();
+                //  throw;
                 error = "Error occure while inserting Country Data.Please make sure the data is in correct formate.";
-                WZFOUtility.LogException(ex, "InSertDataGETID SPName= " + SPName  + "", SPContext.Current.Site);
+                WZFOUtility.LogException(ex, "InSertDataGETID SPName= " + SPName + "", SPContext.Current.Site);
             }
 
             cmd = null;

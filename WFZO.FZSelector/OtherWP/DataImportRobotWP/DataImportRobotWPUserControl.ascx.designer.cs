@@ -31,22 +31,31 @@ namespace WFZO.FZSelector.OtherWP.DataImportRobotWP {
         protected global::System.Web.UI.WebControls.FileUpload FileUpload1;
         
         /// <summary>
-        /// Button1 control.
+        /// BtnCountryLevelImportID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button1;
+        protected global::System.Web.UI.WebControls.Button BtnCountryLevelImportID;
         
         /// <summary>
-        /// Button2 control.
+        /// BtnFreeZoneLevelImportID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button2;
+        protected global::System.Web.UI.WebControls.Button BtnFreeZoneLevelImportID;
+        
+        /// <summary>
+        /// BtnProfileData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BtnProfileData;
         
         /// <summary>
         /// btnSetupData control.
@@ -56,5 +65,14 @@ namespace WFZO.FZSelector.OtherWP.DataImportRobotWP {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSetupData;
+        
+        /// <summary>
+        /// lblerrorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblerrorMessage;
     }
 }

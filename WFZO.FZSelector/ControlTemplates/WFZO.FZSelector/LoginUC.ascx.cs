@@ -328,8 +328,9 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 {
                                     Response.Redirect(HttpContext.Current.Request.Url.ToString(), false);
                                 }
-                                /*else
-                                    Response.Redirect("/Pages/Dashboard.aspx", false);*/
+                                else
+                                    Response.Redirect("/", false);
+                                    /*Response.Redirect("/Pages/Dashboard.aspx", false);*/
                             }
                             else
                             {
