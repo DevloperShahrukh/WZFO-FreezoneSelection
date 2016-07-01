@@ -199,7 +199,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                             catch (Exception ex)
                             {
-                                WZFOUtility.LogException(ex, "Login getting the user", SPContext.Current.Site);
+                                WZFOUtility.LogException(ex, "Login getting the user: " + strUserName + " :: From: " + From.ToString(), SPContext.Current.Site);
                                 lblInvalidUser.Text = "Invalid User name or Password";
                                 lblInvalidUser.Visible = true;
                                 txtPassword.Text = "";
@@ -527,6 +527,9 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     string wToken = Request.QueryString["wToken"].ToString();
 
                     userId = Secure.getedecryptedToken(wToken);
+
+                    if (string.IsNullOrEmpty(userId))
+                        userId = "blank";
                 }
                 else
                 {

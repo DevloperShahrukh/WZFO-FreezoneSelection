@@ -26,11 +26,14 @@
                                         <i class="glyphicon glyphicon-user"></i>
                                         <%--<input id="email" type="email" class="form-control email" placeholder="Login ID" name="email" />--%>
                                         <asp:TextBox ID="txtUserID" runat="server" class="form-control email" placeholder="Login ID"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtUserID" Display="Dynamic" ForeColor="DarkRed" ErrorMessage="Please enter Login ID"/>
+                                        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="txtUserID" Display="Dynamic" ForeColor="DarkRed" ErrorMessage="Invalid characters" ValidationExpression="\w+([-+.']\w+)*(@\w+([-.]\w+)*\.\w+([-.]\w+)*)?"/>
                                     </div>
                                     <div class="inner-addon left-addon">
                                         <i class="fa fa-lock pw"></i>
                                         <%--<input id="password" type="password" class="form-control password" placeholder="......." name="password" />--%>
                                         <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" class="form-control password" placeholder="******"></asp:TextBox>
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPassword" Display="Dynamic" ForeColor="DarkRed" ErrorMessage="Please enter Password"/>
                                     </div>
                                     <div class="form-group">
                                         <%--<button class="btn user-login">LOG IN</button>--%>
