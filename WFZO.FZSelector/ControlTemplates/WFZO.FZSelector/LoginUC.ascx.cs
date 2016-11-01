@@ -13,6 +13,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using WFZO.FZSelector.Classes;
+using System.Linq;
+using Microsoft.SharePoint.Administration.Claims;
 
 namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 {
@@ -63,7 +65,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                         if (IfCookieExists())
                         {
 
-                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOPassword"].Value)),2);
+                            Login(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOPassword"].Value)), 2);
                         }
                     }
                     else
@@ -126,7 +128,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             }
             catch (Exception ex)
             {
-                
+
                 WZFOUtility.LogException(ex, "TopBarUC -  RemoveCookies", SPContext.Current.Site);
             }
         }
@@ -164,37 +166,264 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 int UserLoginNumber = 0;
                 SPListItem Item;
                 DateTime ActiveDate = DateTime.MaxValue;
+                bool existsInUserList = false, isSiteAdmin = false;
+                SPUser user;
+
+                SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    string reqType = "";
+                    SPSite fzmSite = new SPSite(SPContext.Current.Site.ID);
+
+                    //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
+
+                    using (SPSite wfzoSite1 = new SPSite(wfzoSiteUrl))
+                    {
+                        using (SPWeb wfzoWeb1 = wfzoSite1.OpenWeb())
+                        {
+                            SPList UserLst = wfzoWeb1.Lists["Users"];
+                            SPQuery query = new SPQuery();
+
+                            query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
+
+                            SPListItemCollection CurUser = UserLst.GetItems(query);
+
+                            if (CurUser.Count == 0)
+                            {
+                                WZFOUtility.LogMessage(strUserName + " does not exist in Users list as Active", "Login" + From.ToString(), fzmSite);
+                            }
+                            else
+                            {
+                                existsInUserList = true;
+                                int GraceDays = int.Parse(wfzoWeb1.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
+
+                                ActiveDate = Convert.ToDateTime(Convert.ToString(CurUser[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
+                                SPFieldLookupValue fieldLookupValue = new SPFieldLookupValue(CurUser[0]["RequestType"].ToString());
+                                reqType = fieldLookupValue.LookupValue;
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        using (SPWeb fzmWeb = fzmSite.OpenWeb())
+                        {
+                            fzmWeb.AllowUnsafeUpdates = true;
+                            if (existsInUserList)
+                                user = fzmWeb.EnsureUser(strUserName);
+                            else
+                            {
+                                string CheckuserName = "i:0#.f|fbamembershipprovider|" + strUserName;
+                                //string CheckuserName = WZFOUtility.GetAuthenticationProviderProvider(fzmSite, WZFOUtility.AuthenticationProviderType.MembershipProvider) + strUserName;
+                                user = fzmWeb.SiteUsers[CheckuserName];
+                            }
+
+                            if (user.IsSiteAdmin == false)
+                            {
+                               
+                                if (user.Groups.Cast<SPGroup>().Any(g => g.Name.Equals("WFZ Visitors")))
+                                {
+                                    // Console.WriteLine("User " + userName + " is a member of group " + groupName);
+                                }
+                                else
+                                {
+                                    WZFOUtility.LogMessage(user.LoginName + " user should be added", "fzmSite.OpenWeb()", fzmSite);
+
+                                    fzmWeb.Groups["WFZ Visitors"].AddUser(user);
+                                    fzmWeb.Update();
+                                    WZFOUtility.LogMessage(user.LoginName + " after add", "fzmSite.OpenWeb()", fzmSite);
+
+                                }
+                            }
+                            else
+                            {
+                                isSiteAdmin = true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        WZFOUtility.LogException(ex, "fzmSite.OpenWeb()", fzmSite);
+                        lblInvalidUser.Text = "Invalid User name or Password";
+                        lblInvalidUser.Visible = true;
+                        txtPassword.Text = "";
+                        liLogin.Attributes["class"] += " open";
+                        return; // return-1
+                    }
+
+                    WZFOUtility.LogMessage(" after return-1", "fzmSite.OpenWeb()", fzmSite);
+
+                    if (existsInUserList && isSiteAdmin == false && DateTime.Now.Date >= ActiveDate.Date)
+                    {
+                        if (reqType == "Renewal")
+                        {
+                            lblInvalidUser.Text = "Your application renewal is in process. Please wait for approval.";
+                            lblInvalidUser.Visible = true;
+                            txtUserID.Text = "";
+                            txtPassword.Text = "";
+                            liLogin.Attributes["class"] += " open";
+                            return;
+                        }
+
+                        string _renew = "<a href='" + wfzoSiteUrl + "/pages/MembershipRegistration.aspx?code=" + strUserName + "&rn=1' >Renew</a>";
+
+                        lblInvalidUser.Text = "Please renew your account to Login. \n " + _renew;
+                        lblInvalidUser.Visible = true;
+                        txtUserID.Text = "";
+                        txtPassword.Text = "";
+                        liLogin.Attributes["class"] += " open";
+                        return;
+                    }
+
+                    SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(fzmSite.Zone);
+
+                    SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
+
+                    SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
+
+                    if (null != token)
+                    {
+
+                        EstablishSessionWithToken(token);
+
+                        InsertEncryptedPassword();
+
+                        SetCookieForStaySignedIn();
+
+                        PlLogin.Visible = false;
+                        //Pllogout.Visible = true;
+
+                        if (user.IsSiteAdmin == false)
+                        {
+                            using (SPSite wfzoSite1 = new SPSite(wfzoSiteUrl))
+                            {
+                                using (SPWeb wfzoWeb1 = wfzoSite1.OpenWeb())
+                                {
+                                    SPList UserLst = wfzoWeb1.Lists["Users"];
+                                    SPQuery query = new SPQuery();
+
+                                    query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
+
+                                    SPListItemCollection CurUser = UserLst.GetItems(query);
+                                    if (CurUser != null)
+                                    {
+                                        Item = CurUser[0];
+                                        if (!string.IsNullOrEmpty(Convert.ToString(Item["UserLoginCount"])))
+                                        {
+                                            UserLoginNumber = Convert.ToInt32(Item["UserLoginCount"].ToString());
+                                        }
+                                        wfzoWeb1.AllowUnsafeUpdates = true;
+                                        Item["UserLoginCount"] = UserLoginNumber + 1;
+                                        Item.Update();
+
+                                        // Add into UserLoginLog list for login
+                                        SPList list = wfzoWeb1.Lists["UserLoginLog"];
+
+                                        //Add a new item in the List
+                                        SPListItem itemToAdd = list.Items.Add();
+
+                                        itemToAdd["User"] = new SPFieldLookupValue(Item.ID, Item.Title);
+
+                                        itemToAdd["LoginDate"] = DateTime.Now;
+                                        itemToAdd["LoginTime"] = DateTime.Now;
+
+                                        itemToAdd.Update();
+
+                                        wfzoWeb1.AllowUnsafeUpdates = false;
+                                    }
+                                }
+                            }
+
+                            if (UserLoginNumber == 0)
+                                Response.Redirect(wfzoSiteUrl + "/Pages/ChangePassword.aspx");
+                            else
+                                Response.Redirect("/Pages/Dashboard.aspx", false);
+                        }
+                        if (From == 1)
+                        {
+                            Response.Redirect(HttpContext.Current.Request.Url.ToString(), false);
+                        }
+                        else
+                            Response.Redirect("/", false);
+                        /*Response.Redirect("/Pages/Dashboard.aspx", false);*/
+                    }
+                    else
+                    {
+                        lblInvalidUser.Text = "Invalid User name or Password";
+                        lblInvalidUser.Visible = true;
+                        txtUserID.Text = "";
+                        txtPassword.Text = "";
+                        liLogin.Attributes["class"] += " open";
+                        // check if the user is blocked, then send 
+                    }
+
+                    MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
+                    if (p != null)
+                    {
+                        MembershipUser U = p.GetUser(strUserName, false);
+                        if (U != null)
+                        {
+                            if (U.IsLockedOut)
+                            {
+                                InformAdminForBlock(strUserName);
+                                lblInvalidUser.Text = "Account locked, Contact Administrator";
+                                btnInformAdmin.CommandArgument = strUserName;
+                                btnInformAdmin.Visible = true;
+                                btnUserLogin.Visible = false;
+                                liLogin.Attributes["class"] += " open";
+                            }
+                        }
+                    }
+
+                });
+
+            }
+
+            catch (Exception ex)
+            {
+
+                WZFOUtility.LogException(ex, "Login", SPContext.Current.Site);
+                lblInvalidUser.Visible = true;
+                txtUserID.Text = "";
+                txtPassword.Text = "";
+
+            }
+        }
+        /*protected void Login1(string strUserName, string strPassword, int From)
+        {
+            try
+            {
+                int UserLoginNumber = 0;
+                SPListItem Item;
+                DateTime ActiveDate = DateTime.MaxValue;
 
 
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
                     string reqType = "";
-                    SPSite wfzoSite = new SPSite(SPContext.Current.Site.ID);
+                    SPSite fzmSite = new SPSite(SPContext.Current.Site.ID);
 
 
                     //using (SPSite site = new SPSite(SPContext.Current.Site.ID, systemToken))
 
-                    using (SPSite site1 = new SPSite(wfzoSiteUrl))
+                    using (SPSite wfzoSite1 = new SPSite(wfzoSiteUrl))
                     {
-                        using (SPWeb web1 = site1.OpenWeb())
+                        using (SPWeb wfzoWeb1 = wfzoSite1.OpenWeb())
                         {
 
-                            web1.AllowUnsafeUpdates = true;
+                            wfzoWeb1.AllowUnsafeUpdates = true;
                             string CheckuserName = "i:0#.f|fbamembershipprovider|" + strUserName;
 
                             SPUser SU = null;
                             try
                             {
-                                using (SPSite CurrentSite = new SPSite(SPContext.Current.Web.Url))
+                                //using (SPSite CurrentSite = new SPSite(SPContext.Current.Web.Url))
+                                //{
+                                using (SPWeb fzmWeb = fzmSite.OpenWeb())
                                 {
-                                    using (SPWeb CurrentWeb = CurrentSite.OpenWeb())
-                                    {
-                                        CurrentWeb.AllowUnsafeUpdates = true;
-                                        SU = CurrentWeb.SiteUsers[CheckuserName];
-
-
-                                    }
+                                    fzmWeb.AllowUnsafeUpdates = true;
+                                    SU = fzmWeb.SiteUsers[CheckuserName];
                                 }
+                                //}
                             }
 
                             catch (Exception ex)
@@ -210,7 +439,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                             //if (SU.IsSiteAdmin == false && WZFOUtility.IsUserMemberOfGroup(SU, wfzoVisitorGrp) == false)
                             if (SU.IsSiteAdmin == false)
                             {
-                                SPList UserLst = web1.Lists["Users"];
+                                SPList UserLst = wfzoWeb1.Lists["Users"];
                                 SPQuery query = new SPQuery();
 
                                 query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
@@ -226,15 +455,43 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                     txtUserID.Text = "";
                                     txtPassword.Text = "";
                                     liLogin.Attributes["class"] += " open";
+                                    WZFOUtility.LogMessage(strUserName + " does not exist in Users list as Active", "Login" + From.ToString(), SPContext.Current.Site);
                                     return;
                                 }
-                                int GraceDays = int.Parse(web1.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
+
+
+                                int GraceDays = int.Parse(wfzoWeb1.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
 
                                 ActiveDate = Convert.ToDateTime(Convert.ToString(CurUser[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
                                 SPFieldLookupValue fieldLookupValue = new SPFieldLookupValue(CurUser[0]["RequestType"].ToString());
                                 reqType = fieldLookupValue.LookupValue;
 
                             }
+
+                            try
+                            {
+                                using (SPWeb fzmWeb = fzmSite.OpenWeb())
+                                {
+                                    fzmWeb.AllowUnsafeUpdates = true;
+                                    SPUser user = fzmWeb.EnsureUser(strUserName);
+                                    if (user.Groups.Cast<SPGroup>().Any(g => g.Name.Equals("WFZ Visitors")))
+                                    {
+                                        // Console.WriteLine("User " + userName + " is a member of group " + groupName);
+                                    }
+                                    else
+                                    {
+                                        WZFOUtility.LogMessage(user.LoginName + " user should be added", "fzmSite.OpenWeb()", SPContext.Current.Site);
+
+                                        fzmWeb.Groups["WFZ Visitors"].AddUser(user);
+                                        fzmWeb.Update();
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                WZFOUtility.LogException(ex, "fzmSite.OpenWeb()", SPContext.Current.Site);
+                            }
+
 
                             if (DateTime.Now.Date >= ActiveDate.Date)
                             {
@@ -259,6 +516,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
 
                             }
+
 
                             SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(Microsoft.SharePoint.SPContext.Current.Site.Zone);
 
@@ -285,7 +543,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 if (SU.IsSiteAdmin == false && WZFOUtility.IsUserMemberOfGroup(SU, wfzoVisitorGrp) == false)
                                 {
 
-                                    SPList UserLst = web1.Lists["Users"];
+                                    SPList UserLst = wfzoWeb1.Lists["Users"];
                                     SPQuery query = new SPQuery();
 
                                     query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
@@ -298,12 +556,12 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                         {
                                             UserLoginNumber = Convert.ToInt32(Item["UserLoginCount"].ToString());
                                         }
-                                        web1.AllowUnsafeUpdates = true;
+                                        wfzoWeb1.AllowUnsafeUpdates = true;
                                         Item["UserLoginCount"] = UserLoginNumber + 1;
                                         Item.Update();
 
                                         // Add into UserLoginLog list for login
-                                        SPList list = web1.Lists["UserLoginLog"];
+                                        SPList list = wfzoWeb1.Lists["UserLoginLog"];
 
                                         //Add a new item in the List
                                         SPListItem itemToAdd = list.Items.Add();
@@ -315,7 +573,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                                         itemToAdd.Update();
 
-                                        web1.AllowUnsafeUpdates = false;
+                                        wfzoWeb1.AllowUnsafeUpdates = false;
 
                                     }
 
@@ -330,7 +588,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                                 }
                                 else
                                     Response.Redirect("/", false);
-                                    /*Response.Redirect("/Pages/Dashboard.aspx", false);*/
+                                //Response.Redirect("/Pages/Dashboard.aspx", false);
                             }
                             else
                             {
@@ -374,7 +632,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 txtPassword.Text = "";
 
             }
-        }
+        }*/
 
         protected void lblogout_Click(object sender, EventArgs e)
         {
@@ -556,7 +814,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     return;
                 }
                 con.Close();
-                Login(userId, pwd,2);
+                Login(userId, pwd, 2);
 
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 
 namespace WFZO.FZSelector.Classes
 {
@@ -82,6 +83,43 @@ namespace WFZO.FZSelector.Classes
                                 itemToAdd.Update();
                                 web1.AllowUnsafeUpdates = false;
                             }
+
+
+                        }
+                    }
+                });
+
+
+
+            }
+            catch (Exception ex1)
+            {
+            }
+        }
+        public static void LogMessage(string detail, string MethodName, SPSite S)
+        {
+            try
+            {
+
+                SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+
+                    using (SPSite site1 = new SPSite(S.ID))
+                    {
+                        using (SPWeb web1 = site1.OpenWeb())
+                        {
+
+                                web1.AllowUnsafeUpdates = true;
+                                SPList list = web1.Lists[Constants.List.Exception.Name];
+
+                                //Add a new item in the List
+                                SPListItem itemToAdd = list.Items.Add();
+                                itemToAdd[Constants.List.BaseColumns.Title] = MethodName;
+
+                                itemToAdd[Constants.List.Exception.Fields.Detail] = detail;
+
+                                itemToAdd.Update();
+                                web1.AllowUnsafeUpdates = false;
 
 
                         }
@@ -412,5 +450,63 @@ namespace WFZO.FZSelector.Classes
         //    image.Dispose();
         //}
 
+        /*
+        public static string GetAuthenticationProviderProvider(SPSite site, AuthenticationProviderType authenticationProviderType)
+        {
+            // get membership provider of whichever zone in the web app is fba enabled 
+            SPIisSettings settings = GetFBAIisSettings(site);
+            if (authenticationProviderType == AuthenticationProviderType.MembershipProvider)
+                return settings.FormsClaimsAuthenticationProvider.MembershipProvider;
+            else if (authenticationProviderType == AuthenticationProviderType.RoleProvider)
+                return settings.FormsClaimsAuthenticationProvider.RoleProvider;
+            else
+                return string.Empty;
+        }
+
+        public static SPIisSettings GetFBAIisSettings(SPSite site)
+        {
+            SPIisSettings settings = null;
+
+            // try and get FBA IIS settings from current site zone
+            try
+            {
+                foreach (SPAlternateUrl alternateUrl in site.WebApplication.AlternateUrls)
+                {
+                    settings = site.WebApplication.IisSettings[alternateUrl.UrlZone];
+                    if (settings.AuthenticationMode == AuthenticationMode.Forms && settings.AllowAnonymous == true)
+                    {
+                        return settings;
+                    }
+                }
+            }
+            catch
+            {
+                // expecting errors here so do nothing                 
+            }
+
+            // check each zone type for an FBA enabled IIS site
+            foreach (SPUrlZone zone in Enum.GetValues(typeof(SPUrlZone)))
+            {
+                try
+                {
+                    settings = site.WebApplication.IisSettings[(SPUrlZone)zone];
+                    if (settings.AuthenticationMode == AuthenticationMode.Forms)
+                        return settings;
+                }
+                catch
+                {
+                    // expecting errors here so do nothing                 
+                }
+            }
+
+            // return null if FBA not enabled
+            return null;
+        }
+
+        public enum AuthenticationProviderType
+        {
+            MembershipProvider,
+            RoleProvider
+        }*/
     }
 }
