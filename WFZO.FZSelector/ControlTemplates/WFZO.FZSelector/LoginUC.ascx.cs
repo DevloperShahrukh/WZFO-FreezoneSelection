@@ -81,10 +81,100 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
             else
             {
                 dualLoginHandler();
+                ResetPasswordHandler();
             }
         }
 
+        protected void ResetPasswordHandler()
+        {
+            if (SPContext.Current.Web.CurrentUser != null)
+            {
+                CheckandLogoutAtPasswordReset();
+            }
 
+        }
+
+        protected void CheckandLogoutAtPasswordReset()
+        {
+            try
+            {
+                if (Request.Cookies.Get("WZFOUserName") != null && Request.Cookies.Get("WZFOPassword") != null)
+                {
+                    if (IfCookieExists())
+                    {
+                        if (Request.Cookies.Get("LoginDate") != null)
+                        {
+                            if (!Convert.ToString(Request.Cookies["LoginDate"].Value).Equals(string.Empty))
+                            {
+                                DateTime LastLoginDate = Convert.ToDateTime(Encryption.Decrypt(Convert.ToString(Request.Cookies["LoginDate"].Value)));
+
+                                SPSecurity.RunWithElevatedPrivileges(delegate()
+                                {
+                                    SPSite fzmSite = new SPSite(SPContext.Current.Site.ID);
+
+                                    SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(fzmSite.Zone);
+
+                                    SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
+
+                                    MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
+                                    if (p != null)
+                                    {
+                                        MembershipUser U = p.GetUser(Encryption.Decrypt(Convert.ToString(Request.Cookies["WZFOUserName"].Value)), false);
+
+                                        if (LastLoginDate < U.LastPasswordChangedDate)
+                                        {
+                                            Logout();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (Request.Cookies.Get("LoginDate") != null)
+                    {
+                        SPSecurity.RunWithElevatedPrivileges(delegate()
+                        {
+                            string LoginName;
+
+                            if (SPContext.Current.Web.CurrentUser.LoginName.Contains("i:0#.f|fbamembershipprovider|"))
+                            {
+                                LoginName = SPContext.Current.Web.CurrentUser.LoginName.Substring(29);
+                            }
+                            else
+                            {
+                                LoginName = SPContext.Current.Web.CurrentUser.LoginName;
+
+                            }
+                            SPSite fzmSite = new SPSite(SPContext.Current.Site.ID);
+
+                            SPIisSettings iisSettings = Microsoft.SharePoint.SPContext.Current.Site.WebApplication.GetIisSettingsWithFallback(fzmSite.Zone);
+
+                            SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
+
+                            DateTime LastLoginDate = Convert.ToDateTime(Encryption.Decrypt(Convert.ToString(Request.Cookies["LoginDate"].Value)));
+                            MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
+                            if (p != null)
+                            {
+                                MembershipUser U = p.GetUser(LoginName, false);
+
+                                if (LastLoginDate < U.LastPasswordChangedDate)
+                                {
+                                    Logout();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                WZFOUtility.LogException(ex, "Reset Password Handler ",  SPContext.Current.Site);
+            }
+        }
         protected void dualLoginHandler()
         {
             if (Request.QueryString["wToken"] != null)
@@ -96,7 +186,6 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 }
             }
         }
-
 
         protected void Logout()
         {
@@ -124,6 +213,11 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 {
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies["WZFOPassword"].Value = null;
+                }
+                if (Request.Cookies.Get("LoginDate") != null)
+                {
+                    Response.Cookies["LoginDate"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["LoginDate"].Value = null;
                 }
             }
             catch (Exception ex)
@@ -180,12 +274,16 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     {
                         using (SPWeb wfzoWeb1 = wfzoSite1.OpenWeb())
                         {
+
+                            WZFOUtility.LogMessage(strUserName + " trying to login", "Login" + From.ToString(), fzmSite);
+
                             SPList UserLst = wfzoWeb1.Lists["Users"];
                             SPQuery query = new SPQuery();
 
                             query.Query = "<Where><And><Eq><FieldRef Name='Active' /><Value Type='Bool'>true</Value></Eq><Eq><FieldRef Name='Title' /><Value Type='Text'>" + strUserName + "</Value></Eq></And></Where>";
 
                             SPListItemCollection CurUser = UserLst.GetItems(query);
+                            WZFOUtility.LogMessage("before if (CurUser.Count == 0)", "Login" + From.ToString(), fzmSite);
 
                             if (CurUser.Count == 0)
                             {
@@ -195,6 +293,8 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                             {
                                 existsInUserList = true;
                                 int GraceDays = int.Parse(wfzoWeb1.Lists["Membership Lenght"].GetItemById(1)["GraceDays"].ToString());
+
+                                WZFOUtility.LogMessage("GraceDays " + GraceDays.ToString(), "Login" + From.ToString(), fzmSite);
 
                                 ActiveDate = Convert.ToDateTime(Convert.ToString(CurUser[0]["Expiry_x0020_Date"])).AddDays(GraceDays);
                                 SPFieldLookupValue fieldLookupValue = new SPFieldLookupValue(CurUser[0]["RequestType"].ToString());
@@ -219,7 +319,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                             if (user.IsSiteAdmin == false)
                             {
-                               
+
                                 if (user.Groups.Cast<SPGroup>().Any(g => g.Name.Equals("WFZ Visitors")))
                                 {
                                     // Console.WriteLine("User " + userName + " is a member of group " + groupName);
@@ -242,7 +342,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     }
                     catch (Exception ex)
                     {
-                        WZFOUtility.LogException(ex, "fzmSite.OpenWeb()", fzmSite);
+                        WZFOUtility.LogException(ex, "fzmSite.OpenWeb() " + strUserName, fzmSite);
                         lblInvalidUser.Text = "Invalid User name or Password";
                         lblInvalidUser.Visible = true;
                         txtPassword.Text = "";
@@ -250,7 +350,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                         return; // return-1
                     }
 
-                    WZFOUtility.LogMessage(" after return-1", "fzmSite.OpenWeb()", fzmSite);
+                    //WZFOUtility.LogMessage(" after return-1", "fzmSite.OpenWeb()", fzmSite);
 
                     if (existsInUserList && isSiteAdmin == false && DateTime.Now.Date >= ActiveDate.Date)
                     {
@@ -278,7 +378,7 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                     SPFormsAuthenticationProvider formsClaimsAuthenticationProvider = iisSettings.FormsClaimsAuthenticationProvider;
 
-                    SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.PersistentSignInRequest);
+                    SecurityToken token = SPSecurityContext.SecurityTokenForFormsAuthentication(new Uri(SPContext.Current.Web.Url), formsClaimsAuthenticationProvider.MembershipProvider, formsClaimsAuthenticationProvider.RoleProvider, strUserName, strPassword, SPFormsAuthenticationOption.None);
 
                     if (null != token)
                     {
@@ -356,10 +456,21 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                         // check if the user is blocked, then send 
                     }
 
+                    if (Request.Cookies.Get("LoginDate") == null)
+                    {
+                        Response.Cookies.Add(new HttpCookie("LoginDate", Encryption.Encrypt(DateTime.Now.ToString())));
+                        Response.Cookies["LoginDate"].Expires = DateTime.Now.AddDays(30);
+                    }
+                    else
+                    {
+                        Response.Cookies["LoginDate"].Value = Encryption.Encrypt(DateTime.Now.ToString());
+                    }
+
                     MembershipProvider p = Membership.Providers[formsClaimsAuthenticationProvider.MembershipProvider];
                     if (p != null)
                     {
                         MembershipUser U = p.GetUser(strUserName, false);
+
                         if (U != null)
                         {
                             if (U.IsLockedOut)
@@ -666,7 +777,8 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                 //ULS.SendTraceTag(0x15d59d, ULSCat.msoulscat_WSS_ClaimsAuthentication, ULSTraceLevel.Verbose, this.LogPrefix + "Federated authentication module is missing for request '{0}'.", new object[] { SPAlternateUrl.ContextUri });
                 throw new InvalidOperationException();
             }
-            SPSecurity.RunWithElevatedPrivileges(() => fam.SetPrincipalAndWriteSessionToken(securityToken));
+
+            SPSecurity.RunWithElevatedPrivileges(() => fam.SetPrincipalAndWriteSessionToken(securityToken, SPSessionTokenWriteType.WriteSessionCookie));
 
         }
 
@@ -693,11 +805,13 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
 
                     Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(30);
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(30);
+
                 }
                 else
                 {
                     Response.Cookies["WZFOUserName"].Value = Encryption.Encrypt(txtUserID.Text);
                     Response.Cookies["WZFOPassword"].Value = Encryption.Encrypt(txtPassword.Text);
+                   
                 }
 
             }
@@ -708,11 +822,20 @@ namespace WFZO.FZSelector.ControlTemplates.WFZO.FZSelector
                     Response.Cookies["WZFOUserName"].Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies["WZFOUserName"].Value = null;
 
+
+
                 }
                 if (Request.Cookies.Get("WZFOPassword") != null)
                 {
                     Response.Cookies["WZFOPassword"].Expires = DateTime.Now.AddDays(-1);
                     Response.Cookies["WZFOPassword"].Value = null;
+
+                }
+                if (Request.Cookies.Get("LoginDate") != null)
+                {
+                    Response.Cookies["LoginDate"].Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies["LoginDate"].Value = null;
+
                 }
             }
         }
